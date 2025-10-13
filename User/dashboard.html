@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mission Control - WasteNaut</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./Resources/Styles/main.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+          <i class="bi bi-rocket-takeoff me-2"></i>WasteNaut
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="logout()">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <!-- Welcome Section -->
+          <div class="card border-0 bg-dark mb-4">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                  <i class="bi bi-person text-white fs-5"></i>
+                </div>
+                <div>
+                  <h2 class="h4 mb-1" id="welcomeMessage">Welcome!</h2>
+                  <p class="text-muted mb-0" id="userRole">Loading profile...</p>
+                </div>
+              </div>
+              <p class="text-muted">
+                Your profile has been created successfully. You can now start using Supply Connect to find resources or share what you have.
+              </p>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <div class="card border-0 bg-dark h-100">
+                <div class="card-body text-center p-4">
+                  <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-search text-white fs-4"></i>
+                  </div>
+                  <h5 class="card-title">Navigate Resources</h5>
+                  <p class="card-text text-muted">Launch your search for sustainable resources in your eco-zone.</p>
+                  <button class="btn btn-success" onclick="showComingSoon('Navigate Resources')">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Launch Search
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card border-0 bg-dark h-100">
+                <div class="card-body text-center p-4">
+                  <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-plus-circle text-white fs-4"></i>
+                  </div>
+                  <h5 class="card-title">Launch Resources</h5>
+                  <p class="card-text text-muted">Deploy your sustainable resources into the community eco-network.</p>
+                  <button class="btn btn-warning" onclick="showComingSoon('Launch Resources')">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Deploy Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="card border-0 bg-dark mb-4">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-clock-history me-2"></i>Recent Activity
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="text-center py-4">
+                <i class="bi bi-clock text-muted fs-1"></i>
+                <p class="text-muted mt-3">No recent activity yet</p>
+                <p class="small text-muted">Start by finding resources or creating a listing to see your activity here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Profile Summary -->
+          <div class="card border-0 bg-dark mb-4">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-person-circle me-2"></i>Profile Summary
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="profileSummary">
+                <div class="text-center py-3">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="card border-0 bg-dark mb-4">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up me-2"></i>Quick Stats
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3 text-center">
+                <div class="col-6">
+                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                    <i class="bi bi-heart text-white"></i>
+                  </div>
+                  <div class="small text-muted">Connections</div>
+                  <div class="fw-bold">0</div>
+                </div>
+                <div class="col-6">
+                  <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                    <i class="bi bi-check-circle text-white"></i>
+                  </div>
+                  <div class="small text-muted">Completed</div>
+                  <div class="fw-bold">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help & Support -->
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-question-circle me-2"></i>Need Help?
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="showComingSoon('Help Center')">
+                  <i class="bi bi-book me-2"></i>Help Center
+                </button>
+                <button class="btn btn-outline-info btn-sm" onclick="showComingSoon('Contact Support')">
+                  <i class="bi bi-envelope me-2"></i>Contact Support
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="showComingSoon('FAQ')">
+                  <i class="bi bi-chat-dots me-2"></i>FAQ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JS -->
+    <script src="./Resources/Scripts/main.js"></script>
+    <script>
+      // Dashboard functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        loadUserProfile();
+      });
+
+      function loadUserProfile() {
+        const profile = SupplyConnect.Utils.getUserProfile();
+        
+        if (!profile) {
+          // No profile found, redirect to role selection
+          window.location.href = 'role-selection.html';
+          return;
+        }
+
+        // Update welcome message
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const userRole = document.getElementById('userRole');
+        const profileSummary = document.getElementById('profileSummary');
+
+        if (profile.role === 'individual') {
+          welcomeMessage.textContent = `Welcome, ${profile.firstName}!`;
+          userRole.textContent = 'Individual Recipient';
+          displayIndividualProfile(profile, profileSummary);
+        } else if (profile.role === 'organization') {
+          welcomeMessage.textContent = `Welcome, ${profile.contactFirstName}!`;
+          userRole.textContent = `${profile.orgName} - Organization`;
+          displayOrganizationProfile(profile, profileSummary);
+        } else if (profile.role === 'donor') {
+          welcomeMessage.textContent = `Welcome, ${profile.firstName}!`;
+          userRole.textContent = profile.donorType === 'business' ? 'Business Donor' : 'Individual Donor';
+          displayDonorProfile(profile, profileSummary);
+        }
+      }
+
+      function displayIndividualProfile(profile, container) {
+        container.innerHTML = `
+          <div class="row g-2 small">
+            <div class="col-4 text-muted">Name:</div>
+            <div class="col-8">${profile.firstName} ${profile.lastName}</div>
+            <div class="col-4 text-muted">Location:</div>
+            <div class="col-8">${profile.city}, ${profile.zipCode}</div>
+            <div class="col-4 text-muted">Primary Need:</div>
+            <div class="col-8">${formatNeed(profile.primaryNeed)}</div>
+            <div class="col-4 text-muted">Household:</div>
+            <div class="col-8">${profile.householdSize} people</div>
+          </div>
+        `;
+      }
+
+      function displayOrganizationProfile(profile, container) {
+        container.innerHTML = `
+          <div class="row g-2 small">
+            <div class="col-4 text-muted">Organization:</div>
+            <div class="col-8">${profile.orgName}</div>
+            <div class="col-4 text-muted">Type:</div>
+            <div class="col-8">${formatOrgType(profile.orgType)}</div>
+            <div class="col-4 text-muted">Location:</div>
+            <div class="col-8">${profile.orgCity}, ${profile.orgZipCode}</div>
+            <div class="col-4 text-muted">Primary Need:</div>
+            <div class="col-8">${formatNeed(profile.primaryNeed)}</div>
+          </div>
+        `;
+      }
+
+      function displayDonorProfile(profile, container) {
+        const donorTypeText = profile.donorType === 'business' ? 'Business' : 'Individual';
+        const businessName = profile.businessName ? `<div class="col-4 text-muted">Business:</div><div class="col-8">${profile.businessName}</div>` : '';
+        
+        container.innerHTML = `
+          <div class="row g-2 small">
+            <div class="col-4 text-muted">Name:</div>
+            <div class="col-8">${profile.firstName} ${profile.lastName}</div>
+            ${businessName}
+            <div class="col-4 text-muted">Type:</div>
+            <div class="col-8">${donorTypeText}</div>
+            <div class="col-4 text-muted">Location:</div>
+            <div class="col-8">${profile.city}, ${profile.zipCode}</div>
+            <div class="col-4 text-muted">Donation Types:</div>
+            <div class="col-8">${profile.donationTypes ? profile.donationTypes.join(', ') : 'Not specified'}</div>
+          </div>
+        `;
+      }
+
+      function formatNeed(need) {
+        const needMap = {
+          'non-perishables': 'Non-Perishable Food',
+          'fresh-food': 'Fresh Food',
+          'sanitary-products': 'Sanitary Products',
+          'clothing': 'Clothing',
+          'hygiene-items': 'Hygiene Items',
+          'baby-supplies': 'Baby Supplies',
+          'medical-supplies': 'Medical Supplies',
+          'household-items': 'Household Items',
+          'other': 'Other'
+        };
+        return needMap[need] || need;
+      }
+
+      function formatOrgType(type) {
+        const typeMap = {
+          'non-profit': 'Non-Profit',
+          'shelter': 'Shelter',
+          'food-bank': 'Food Bank',
+          'community-center': 'Community Center',
+          'church': 'Church/Religious',
+          'school': 'School',
+          'health-clinic': 'Health Clinic',
+          'other': 'Other'
+        };
+        return typeMap[type] || type;
+      }
+
+      function showComingSoon(feature) {
+        SupplyConnect.Utils.showAlert(`${feature} feature coming soon!`, 'info');
+      }
+
+      function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          SupplyConnect.Utils.clearUserProfile();
+          window.location.href = 'index.html';
+        }
+      }
+    </script>
+  </body>
+</html>

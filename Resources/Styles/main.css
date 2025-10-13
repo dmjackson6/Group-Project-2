@@ -1,0 +1,463 @@
+/* WasteNaut - Space-Age Eco Theme */
+
+:root {
+  /* WasteNaut Color Palette */
+  --bs-primary: #00ff88;        /* Electric Green */
+  --bs-success: #00d4aa;       /* Eco Teal */
+  --bs-warning: #ffd700;       /* Solar Gold */
+  --bs-info: #00bfff;          /* Cyber Blue */
+  --bs-danger: #ff4757;        /* Alert Red */
+  --bs-dark: #0a0a0a;          /* Deep Space */
+  --bs-light: #f0fff0;         /* Mint Cream */
+  
+  /* WasteNaut Custom Colors */
+  --wastenaut-green: #00ff88;
+  --wastenaut-dark: #0a0a0a;
+  --wastenaut-darker: #050505;
+  --wastenaut-accent: #00d4aa;
+  --wastenaut-glow: #00ff88;
+  --wastenaut-bg: linear-gradient(135deg, #0a0a0a 0%, #0d1b0a 50%, #0a2a0a 100%);
+  --wastenaut-card: rgba(0, 255, 136, 0.05);
+  --wastenaut-border: rgba(0, 255, 136, 0.2);
+}
+
+/* Dark theme overrides */
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--wastenaut-dark);
+  --bs-body-color: #e9ecef;
+  --bs-emphasis-color: var(--wastenaut-green);
+  --bs-secondary-color: rgba(0, 255, 136, 0.75);
+  --bs-tertiary-color: rgba(0, 255, 136, 0.5);
+  --bs-border-color: var(--wastenaut-border);
+  --bs-border-color-translucent: rgba(0, 255, 136, 0.15);
+}
+
+/* Hero section gradient - Space-age eco theme */
+.hero-section {
+  background: var(--wastenaut-bg);
+  min-height: 60vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.min-vh-50 {
+  min-height: 50vh;
+}
+
+/* WasteNaut Space-Age Card Styles */
+.card {
+  background: var(--wastenaut-card);
+  border: 1px solid var(--wastenaut-border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--wastenaut-green), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 255, 136, 0.15),
+              0 0 20px rgba(0, 255, 136, 0.1);
+  border-color: var(--wastenaut-green);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Form styling */
+.form-control, .form-select {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-primary);
+  color: var(--bs-body-color);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+  color: var(--bs-body-color);
+  font-weight: 500;
+}
+
+/* WasteNaut Space-Age Button Styles */
+.btn-primary {
+  background: linear-gradient(45deg, var(--wastenaut-green), var(--wastenaut-accent));
+  border: 1px solid var(--wastenaut-green);
+  color: var(--wastenaut-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, var(--wastenaut-accent), var(--wastenaut-green));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4),
+              0 0 20px rgba(0, 255, 136, 0.2);
+  border-color: var(--wastenaut-green);
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-success {
+  background: linear-gradient(45deg, var(--wastenaut-accent), #00b894);
+  border: 1px solid var(--wastenaut-accent);
+  color: var(--wastenaut-dark);
+  font-weight: 600;
+}
+
+.btn-warning {
+  background: linear-gradient(45deg, var(--bs-warning), #fdcb6e);
+  border: 1px solid var(--bs-warning);
+  color: var(--wastenaut-dark);
+  font-weight: 600;
+}
+
+.btn-outline-light:hover {
+  background: var(--wastenaut-green);
+  border-color: var(--wastenaut-green);
+  color: var(--wastenaut-dark);
+}
+
+/* WasteNaut Navigation - Space-Age Style */
+.navbar {
+  background: rgba(10, 10, 10, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--wastenaut-border);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: var(--wastenaut-green) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.navbar-brand::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--wastenaut-green);
+  transition: width 0.3s ease;
+}
+
+.navbar-brand:hover::after {
+  width: 100%;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease;
+  position: relative;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--wastenaut-green);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover {
+  color: var(--wastenaut-green) !important;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.nav-link:hover::before {
+  width: 100%;
+}
+
+/* WasteNaut Space-Age Effects */
+.text-gradient {
+  background: linear-gradient(45deg, var(--wastenaut-green), var(--wastenaut-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient {
+  background: var(--wastenaut-bg);
+}
+
+/* Futuristic Glow Effects */
+.glow-effect {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* Space-age form inputs */
+.form-control:focus, .form-select:focus {
+  background-color: var(--wastenaut-dark);
+  border-color: var(--wastenaut-green);
+  color: var(--bs-body-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25),
+              0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+/* Animated background particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--wastenaut-green);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+}
+
+/* WasteNaut Logo Styling */
+.wastenaut-logo {
+  transition: transform 0.3s ease;
+}
+
+.wastenaut-logo:hover {
+  transform: scale(1.1);
+}
+
+.wastenaut-hero-logo {
+  animation: logoFloat 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3));
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.hero-logo {
+  position: relative;
+}
+
+.hero-logo::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* WasteBot AI Assistant Styling */
+.wastebot-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wastebot-svg {
+  animation: wastebotFloat 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.wastebot-svg:hover {
+  transform: scale(1.05);
+}
+
+@keyframes wastebotFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(1deg); }
+  50% { transform: translateY(-15px) rotate(0deg); }
+  75% { transform: translateY(-8px) rotate(-1deg); }
+}
+
+.wastebot-image::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  animation: wastebotPulse 6s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes wastebotPulse {
+  0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* WasteBot Features */
+.wastebot-features {
+  background: rgba(0, 255, 136, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+/* Icon styling */
+.bi {
+  transition: transform 0.2s ease;
+}
+
+.bi:hover {
+  transform: scale(1.1);
+}
+
+/* Custom spacing */
+.py-section {
+  padding: 4rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 50vh;
+    text-align: center;
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Success/Error states */
+.alert-success {
+  background-color: rgba(25, 135, 84, 0.1);
+  border-color: var(--bs-success);
+  color: var(--bs-success);
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-color: var(--bs-danger);
+  color: var(--bs-danger);
+}
+
+/* Form validation styles */
+.is-invalid {
+  border-color: var(--bs-danger);
+}
+
+.is-valid {
+  border-color: var(--bs-success);
+}
+
+.invalid-feedback {
+  color: var(--bs-danger);
+  font-size: 0.875rem;
+}
+
+.valid-feedback {
+  color: var(--bs-success);
+  font-size: 0.875rem;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bs-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bs-border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-secondary-color);
+}

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Mission Control - WasteNaut</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../Resources/Styles/main.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="../public/index.html">
+          <i class="bi bi-rocket-takeoff me-2"></i>WasteNaut
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="user-management.html">User Management</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="organization-management.html">Organizations</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="reports-management.html">Reports</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="logout()">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="bi bi-shield-check text-white fs-5"></i>
+            </div>
+            <div>
+              <h1 class="h3 mb-1 text-gradient">Admin Mission Control</h1>
+              <p class="text-muted mb-0">System oversight and management dashboard</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Performance Indicators -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                <i class="bi bi-people text-white fs-4"></i>
+              </div>
+              <div class="fw-bold fs-3" id="activeUsers">1,247</div>
+              <div class="small text-muted">Active Users</div>
+              <div class="small text-success">+12% this week</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                <i class="bi bi-building text-white fs-4"></i>
+              </div>
+              <div class="fw-bold fs-3" id="activeOrgs">89</div>
+              <div class="small text-muted">Active Organizations</div>
+              <div class="small text-success">+5 this week</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                <i class="bi bi-gift text-white fs-4"></i>
+              </div>
+              <div class="fw-bold fs-3" id="totalDonations">342</div>
+              <div class="small text-muted">Donations This Week</div>
+              <div class="small text-success">+18% this week</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                <i class="bi bi-recycle text-white fs-4"></i>
+              </div>
+              <div class="fw-bold fs-3" id="wasteReduced">2,847</div>
+              <div class="small text-muted">Lbs Waste Reduced</div>
+              <div class="small text-success">+25% this week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerts and Notifications -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-bell me-2"></i>System Alerts
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group list-group-flush">
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-danger rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-exclamation-triangle text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">High Priority: Food Safety Incident</h6>
+                      <p class="mb-1 small text-muted">Reported by Community Center - requires immediate attention</p>
+                      <small class="text-danger">2 minutes ago</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="handleAlert(1)">
+                      <i class="bi bi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-clock text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">Pending Approval: New Food Bank Registration</h6>
+                      <p class="mb-1 small text-muted">Green Valley Food Bank - awaiting verification</p>
+                      <small class="text-warning">1 hour ago</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-warning" onclick="handleAlert(2)">
+                      <i class="bi bi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-graph-up text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-1">Performance Alert: High Activity</h6>
+                      <p class="mb-1 small text-muted">Downtown Food Bank - 300% above average activity</p>
+                      <small class="text-info">3 hours ago</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-info" onclick="handleAlert(3)">
+                      <i class="bi bi-arrow-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-robot me-2"></i>AI Performance
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="text-center mb-3">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                  <i class="bi bi-cpu text-white fs-3"></i>
+                </div>
+                <h4 class="text-gradient">94.2%</h4>
+                <p class="text-muted small">AI Matching Accuracy</p>
+              </div>
+              <div class="row g-2 text-center">
+                <div class="col-6">
+                  <div class="bg-success rounded p-2">
+                    <div class="fw-bold">1,247</div>
+                    <div class="small">Successful Matches</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="bg-warning rounded p-2">
+                    <div class="fw-bold">73</div>
+                    <div class="small">Pending Reviews</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-lightning me-2"></i>Quick Actions
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-2">
+                  <button class="btn btn-outline-primary w-100" onclick="showComingSoon('User Management')">
+                    <i class="bi bi-people me-2"></i>Users
+                  </button>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-outline-success w-100" onclick="showComingSoon('Organization Management')">
+                    <i class="bi bi-building me-2"></i>Organizations
+                  </button>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-outline-warning w-100" onclick="showComingSoon('Reports')">
+                    <i class="bi bi-graph-up me-2"></i>Reports
+                  </button>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-outline-info w-100" onclick="showComingSoon('Broadcast Message')">
+                    <i class="bi bi-megaphone me-2"></i>Broadcast
+                  </button>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-outline-danger w-100" onclick="showComingSoon('Security Settings')">
+                    <i class="bi bi-shield me-2"></i>Security
+                  </button>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-outline-secondary w-100" onclick="showComingSoon('System Settings')">
+                    <i class="bi bi-gear me-2"></i>Settings
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-clock-history me-2"></i>Recent Activity
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group list-group-flush">
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-check text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <p class="mb-1">New user registration: Sarah Johnson</p>
+                      <small class="text-muted">5 minutes ago</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-building text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <p class="mb-1">Organization approved: Green Valley Food Bank</p>
+                      <small class="text-muted">1 hour ago</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-group-item bg-dark border-secondary">
+                  <div class="d-flex align-items-center">
+                    <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px;">
+                      <i class="bi bi-gift text-white small"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <p class="mb-1">Large donation processed: 500 lbs of food</p>
+                      <small class="text-muted">2 hours ago</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up me-2"></i>System Health
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-6">
+                  <div class="text-center">
+                    <div class="bg-success rounded p-3 mb-2">
+                      <i class="bi bi-server text-white fs-4"></i>
+                    </div>
+                    <div class="fw-bold">99.9%</div>
+                    <div class="small text-muted">Uptime</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="text-center">
+                    <div class="bg-info rounded p-3 mb-2">
+                      <i class="bi bi-speedometer2 text-white fs-4"></i>
+                    </div>
+                    <div class="fw-bold">45ms</div>
+                    <div class="small text-muted">Response Time</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="text-center">
+                    <div class="bg-warning rounded p-3 mb-2">
+                      <i class="bi bi-shield-check text-white fs-4"></i>
+                    </div>
+                    <div class="fw-bold">Secure</div>
+                    <div class="small text-muted">Security Status</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="text-center">
+                    <div class="bg-primary rounded p-3 mb-2">
+                      <i class="bi bi-database text-white fs-4"></i>
+                    </div>
+                    <div class="fw-bold">2.3GB</div>
+                    <div class="small text-muted">Data Processed</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JS -->
+    <script src="../Resources/Scripts/main.js"></script>
+    <script>
+      // Admin dashboard functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardData();
+        updateKPIs();
+      });
+
+      function loadDashboardData() {
+        // Load dashboard data (in real app, this would come from backend)
+        console.log('Loading admin dashboard data...');
+      }
+
+      function updateKPIs() {
+        // Update KPI values (in real app, this would be real-time data)
+        // Simulate real-time updates
+        setInterval(() => {
+          const activeUsers = document.getElementById('activeUsers');
+          const currentUsers = parseInt(activeUsers.textContent.replace(',', ''));
+          activeUsers.textContent = (currentUsers + Math.floor(Math.random() * 3)).toLocaleString();
+        }, 30000);
+      }
+
+      function handleAlert(alertId) {
+        showAlert(`Handling alert ${alertId}...`, 'info');
+        // In real app, this would open the specific alert for handling
+      }
+
+      function showComingSoon(feature) {
+        SupplyConnect.Utils.showAlert(`${feature} feature coming soon!`, 'info');
+      }
+
+      function logout() {
+        if (confirm('Are you sure you want to logout from admin panel?')) {
+          window.location.href = '../public/index.html';
+        }
+      }
+
+      function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alertDiv.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(alertDiv);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>
