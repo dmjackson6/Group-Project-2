@@ -35,10 +35,8 @@
                   <stop offset="100%" style="stop-color:#00d4aa;stop-opacity:1" />
                 </linearGradient>
               </defs>
-              <!-- Simple Spaceship Outline -->
-              <path d="M50 20 L70 50 L50 80 L30 50 Z" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
-              <!-- Simple Recycling Arrow -->
-              <path d="M75 30 L85 40 L80 50 L70 50 L65 40 Z" fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+              <!-- WasteNaut Logo -->
+              <image href="../Resources/Images/WasteNautV2.png" x="10" y="10" width="80" height="80"/>
             </svg>
           </div>
           <span class="text-gradient">WasteNaut</span>
@@ -75,7 +73,7 @@
             </div>
             <h1 class="display-5 fw-bold mb-3">Organization Profile</h1>
             <p class="lead text-muted">
-              Tell us about your organization so we can connect you with the resources you need to serve your community
+              Tell us about your food bank or organization so we can connect you with surplus food donations to serve your community
             </p>
           </div>
 
@@ -249,17 +247,17 @@
               <div class="card-body">
                 <div class="row g-3">
                   <div class="col-12">
-                    <label for="primaryNeed" class="form-label">What resources do you need most? *</label>
+                    <label for="primaryNeed" class="form-label">What type of food donations do you need most? *</label>
                     <select class="form-select" id="primaryNeed" name="primaryNeed" required>
-                      <option value="">Select your primary need</option>
-                      <option value="non-perishables">Non-Perishable Food</option>
-                      <option value="fresh-food">Fresh Food</option>
-                      <option value="sanitary-products">Sanitary Products</option>
-                      <option value="clothing">Clothing</option>
-                      <option value="hygiene-items">Hygiene Items</option>
-                      <option value="baby-supplies">Baby Supplies</option>
-                      <option value="medical-supplies">Medical Supplies</option>
-                      <option value="household-items">Household Items</option>
+                      <option value="">Select your primary food need</option>
+                      <option value="fresh-produce">Fresh Produce (fruits, vegetables)</option>
+                      <option value="dairy-products">Dairy Products (milk, cheese, yogurt)</option>
+                      <option value="meat-protein">Meat & Protein (chicken, beef, fish)</option>
+                      <option value="grains-bread">Grains & Bread</option>
+                      <option value="canned-goods">Canned Goods</option>
+                      <option value="frozen-foods">Frozen Foods</option>
+                      <option value="baby-food">Baby Food & Formula</option>
+                      <option value="prepared-meals">Prepared Meals</option>
                       <option value="other">Other</option>
                     </select>
                     <div class="invalid-feedback">Please select your primary need.</div>
@@ -269,8 +267,8 @@
                     <input type="text" class="form-control" id="otherNeed" name="otherNeed">
                   </div>
                   <div class="col-12">
-                    <label for="additionalNeeds" class="form-label">Additional Needs (Optional)</label>
-                    <textarea class="form-control" id="additionalNeeds" name="additionalNeeds" rows="3" placeholder="Tell us about any other needs your organization has..."></textarea>
+                    <label for="additionalNeeds" class="form-label">Additional Food Needs (Optional)</label>
+                    <textarea class="form-control" id="additionalNeeds" name="additionalNeeds" rows="3" placeholder="Tell us about any other food needs your organization has..."></textarea>
                   </div>
                   <div class="col-12">
                     <label for="servicesProvided" class="form-label">Services Your Organization Provides</label>

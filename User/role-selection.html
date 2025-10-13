@@ -35,10 +35,8 @@
                   <stop offset="100%" style="stop-color:#00d4aa;stop-opacity:1" />
                 </linearGradient>
               </defs>
-              <!-- Simple Spaceship Outline -->
-              <path d="M50 20 L70 50 L50 80 L30 50 Z" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
-              <!-- Simple Recycling Arrow -->
-              <path d="M75 30 L85 40 L80 50 L70 50 L65 40 Z" fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+              <!-- WasteNaut Logo -->
+              <image href="../Resources/Images/WasteNautV2.png" x="10" y="10" width="80" height="80"/>
             </svg>
           </div>
           <span class="text-gradient">WasteNaut</span>
@@ -69,7 +67,7 @@
           <div class="text-center mb-5">
             <h1 class="display-5 fw-bold mb-3 text-gradient">Choose Your Role</h1>
             <p class="lead text-muted">
-              Select how you'd like to participate in sustainable resource sharing
+              Select how you'd like to help fight food waste and feed your community
             </p>
           </div>
 
@@ -84,20 +82,20 @@
                   </div>
                   <h3 class="card-title h4 mb-3">Individual Recipient</h3>
                   <p class="card-text text-muted mb-4">
-                    Looking for resources for yourself or your family? Find food, supplies, and assistance in your community.
+                    Looking for fresh food for yourself or your family? Find nutritious meals and groceries from local food banks and donors.
                   </p>
                   <ul class="list-unstyled text-start mb-4">
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Find nearby resources
+                      Find nearby food banks
                     </li>
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Connect with local hubs
+                      Access fresh groceries
                     </li>
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Get personalized assistance
+                      Get nutritious meals
                     </li>
                   </ul>
                   <button class="btn btn-primary btn-lg w-100" onclick="selectRole('individual')">
@@ -116,20 +114,20 @@
                   </div>
                   <h3 class="card-title h4 mb-3">Organization Recipient</h3>
                   <p class="card-text text-muted mb-4">
-                    Representing a group that helps others? Access resources for your organization to distribute to those in need.
+                    Representing a food bank or organization? Access surplus food donations to distribute to your community.
                   </p>
                   <ul class="list-unstyled text-start mb-4">
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Access bulk resources
+                      Access surplus food donations
                     </li>
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Coordinate with donors
+                      Coordinate with food donors
                     </li>
                     <li class="mb-2">
                       <i class="bi bi-check-circle text-success me-2"></i>
-                      Manage distribution
+                      Distribute to community
                     </li>
                   </ul>
                   <button class="btn btn-success btn-lg w-100" onclick="selectRole('organization')">
@@ -148,9 +146,9 @@
                   <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
                     <i class="bi bi-gift text-white fs-4"></i>
                   </div>
-                  <h4 class="card-title mb-3">Want to Donate Resources?</h4>
+                  <h4 class="card-title mb-3">Want to Donate Food?</h4>
                   <p class="card-text text-muted mb-4">
-                    Have food, supplies, or other resources to share? Help your community by donating items to those in need.
+                    Have surplus food to share? Help fight food waste by donating fresh groceries and meals to your community.
                   </p>
                   <button class="btn btn-warning btn-lg" onclick="selectRole('donor')">
                     <i class="bi bi-gift me-2"></i>Start Donating
@@ -173,13 +171,13 @@
                     <div class="col-md-6">
                       <h6 class="text-primary">Individual Recipient</h6>
                       <p class="small text-muted mb-0">
-                        Choose this if you're looking for resources for yourself or your immediate family.
+                        Choose this if you're looking for fresh food for yourself or your immediate family.
                       </p>
                     </div>
                     <div class="col-md-6">
                       <h6 class="text-success">Organization Recipient</h6>
                       <p class="small text-muted mb-0">
-                        Choose this if you represent a group that distributes resources to others in need.
+                        Choose this if you represent a food bank or organization that distributes food to others in need.
                       </p>
                     </div>
                   </div>

@@ -35,10 +35,8 @@
                   <stop offset="100%" style="stop-color:#00d4aa;stop-opacity:1" />
                 </linearGradient>
               </defs>
-              <!-- Simple Spaceship Outline -->
-              <path d="M50 20 L70 50 L50 80 L30 50 Z" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
-              <!-- Simple Recycling Arrow -->
-              <path d="M75 30 L85 40 L80 50 L70 50 L65 40 Z" fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+              <!-- WasteNaut Logo -->
+              <image href="../Resources/Images/WasteNautV2.png" x="10" y="10" width="80" height="80"/>
             </svg>
           </div>
           <span class="text-gradient">WasteNaut</span>
@@ -75,7 +73,7 @@
             </div>
             <h1 class="display-5 fw-bold mb-3">Donor Profile</h1>
             <p class="lead text-muted">
-              Thank you for wanting to help! Tell us about yourself so we can connect you with those who need your support
+              Thank you for wanting to help fight food waste! Tell us about yourself so we can connect you with food banks and families who need your surplus food
             </p>
           </div>
 
@@ -211,38 +209,42 @@
               <div class="card-body">
                 <div class="row g-3">
                   <div class="col-12">
-                    <label for="donationTypes" class="form-label">What types of items can you donate? *</label>
+                    <label for="donationTypes" class="form-label">What types of food can you donate? *</label>
                     <div class="row g-2">
                       <div class="col-md-6">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationFood" name="donationTypes" value="food">
-                          <label class="form-check-label" for="donationFood">Food Items</label>
+                          <input class="form-check-input" type="checkbox" id="donationFresh" name="donationTypes" value="fresh-produce">
+                          <label class="form-check-label" for="donationFresh">Fresh Produce (fruits, vegetables)</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationClothing" name="donationTypes" value="clothing">
-                          <label class="form-check-label" for="donationClothing">Clothing</label>
+                          <input class="form-check-input" type="checkbox" id="donationDairy" name="donationTypes" value="dairy">
+                          <label class="form-check-label" for="donationDairy">Dairy Products</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationHygiene" name="donationTypes" value="hygiene">
-                          <label class="form-check-label" for="donationHygiene">Hygiene Items</label>
+                          <input class="form-check-input" type="checkbox" id="donationMeat" name="donationTypes" value="meat">
+                          <label class="form-check-label" for="donationMeat">Meat & Protein</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationMedical" name="donationTypes" value="medical">
-                          <label class="form-check-label" for="donationMedical">Medical Supplies</label>
+                          <input class="form-check-input" type="checkbox" id="donationBread" name="donationTypes" value="bread">
+                          <label class="form-check-label" for="donationBread">Bread & Grains</label>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationBaby" name="donationTypes" value="baby">
-                          <label class="form-check-label" for="donationBaby">Baby Supplies</label>
+                          <input class="form-check-input" type="checkbox" id="donationCanned" name="donationTypes" value="canned">
+                          <label class="form-check-label" for="donationCanned">Canned Goods</label>
                         </div>
                         <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="donationHousehold" name="donationTypes" value="household">
-                          <label class="form-check-label" for="donationHousehold">Household Items</label>
+                          <input class="form-check-input" type="checkbox" id="donationFrozen" name="donationTypes" value="frozen">
+                          <label class="form-check-label" for="donationFrozen">Frozen Foods</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="donationPrepared" name="donationTypes" value="prepared">
+                          <label class="form-check-label" for="donationPrepared">Prepared Meals</label>
                         </div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" id="donationOther" name="donationTypes" value="other">
-                          <label class="form-check-label" for="donationOther">Other</label>
+                          <label class="form-check-label" for="donationOther">Other Food Items</label>
                         </div>
                       </div>
                     </div>
@@ -270,7 +272,7 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <label for="donationFrequency" class="form-label">How often do you typically have items to donate?</label>
+                    <label for="donationFrequency" class="form-label">How often do you typically have surplus food to donate?</label>
                     <select class="form-select" id="donationFrequency" name="donationFrequency">
                       <option value="">Select frequency</option>
                       <option value="daily">Daily</option>
