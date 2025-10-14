@@ -36,7 +36,7 @@
                 </linearGradient>
               </defs>
               <!-- WasteNaut Logo -->
-              <image href="../Resources/Images/WasteNautV2.png" x="10" y="10" width="80" height="80"/>
+              <i class="bi bi-rocket-takeoff text-success" style="font-size: 60px; color: #00ff88; filter: drop-shadow(0 0 10px #00ff88);"></i>
             </svg>
           </div>
           <span class="text-gradient">WasteNaut</span>
@@ -86,25 +86,8 @@
             </div>
           </div>
           <div class="col-lg-6 text-center">
-            <div class="hero-logo mb-4">
-              <svg width="200" height="200" viewBox="0 0 100 100" class="wastenaut-hero-logo">
-                <defs>
-                  <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#00d4aa;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#00bfff;stop-opacity:1" />
-                  </linearGradient>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                    <feMerge> 
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                </defs>
-                <!-- WasteNaut Logo -->
-                <image href="../Resources/Images/WasteNautV2.png" x="25" y="25" width="150" height="150" filter="url(#glow)"/>
-              </svg>
+            <div class="hero-logo mb-4 text-center">
+              <i class="bi bi-rocket-takeoff" style="font-size: 120px; color: #00ff88; filter: drop-shadow(0 0 20px #00ff88); animation: logoFloat 6s ease-in-out infinite;"></i>
             </div>
             <h3 class="text-gradient mb-2">waste not, need not</h3>
             <p class="text-muted">Connecting surplus food with hungry communities</p>
@@ -126,7 +109,7 @@
           <div class="col-md-4">
             <div class="card h-100 border-0 bg-dark glow-effect">
               <div class="card-body text-center p-4">
-                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; background-color: var(--wastenaut-green-dark) !important;">
                   <i class="bi bi-rocket-takeoff text-white fs-4"></i>
                 </div>
                 <h5 class="card-title">1. Launch Your Mission</h5>
@@ -137,7 +120,7 @@
           <div class="col-md-4">
             <div class="card h-100 border-0 bg-dark glow-effect">
               <div class="card-body text-center p-4">
-                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; background-color: var(--wastenaut-teal) !important;">
                   <i class="bi bi-globe text-white fs-4"></i>
                 </div>
                 <h5 class="card-title">2. Navigate Your Sector</h5>
@@ -148,8 +131,8 @@
           <div class="col-md-4">
             <div class="card h-100 border-0 bg-dark glow-effect">
               <div class="card-body text-center p-4">
-                <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                  <i class="bi bi-satellite text-white fs-4"></i>
+                <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; background-color: var(--wastenaut-purple) !important;">
+                  <i class="bi bi-people-fill text-white fs-4"></i>
                 </div>
                 <h5 class="card-title">3. Establish Connection</h5>
                 <p class="card-text text-muted">Link with resources through our secure space-age communication network</p>

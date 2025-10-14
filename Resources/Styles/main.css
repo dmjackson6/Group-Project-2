@@ -2,16 +2,19 @@
 
 :root {
   /* WasteNaut Color Palette */
-  --bs-primary: #00ff88;        /* Electric Green */
-  --bs-success: #00d4aa;       /* Eco Teal */
-  --bs-warning: #ffd700;       /* Solar Gold */
-  --bs-info: #00bfff;          /* Cyber Blue */
+  --bs-primary: #00ff88;        /* WasteNaut Green */
+  --bs-success: #00d4aa;       /* WasteNaut Teal */
+  --bs-warning: #8b5cf6;       /* WasteNaut Purple */
+  --bs-info: #00d4aa;          /* WasteNaut Teal */
   --bs-danger: #ff4757;        /* Alert Red */
   --bs-dark: #0a0a0a;          /* Deep Space */
   --bs-light: #f0fff0;         /* Mint Cream */
   
   /* WasteNaut Custom Colors */
   --wastenaut-green: #00ff88;
+  --wastenaut-green-dark: #00cc6a;
+  --wastenaut-teal: #00d4aa;
+  --wastenaut-purple: #8b5cf6;
   --wastenaut-dark: #0a0a0a;
   --wastenaut-darker: #050505;
   --wastenaut-accent: #00d4aa;
@@ -146,15 +149,15 @@
 }
 
 .btn-success {
-  background: linear-gradient(45deg, var(--wastenaut-accent), #00b894);
-  border: 1px solid var(--wastenaut-accent);
+  background: linear-gradient(45deg, var(--wastenaut-teal), #00b894);
+  border: 1px solid var(--wastenaut-teal);
   color: var(--wastenaut-dark);
   font-weight: 600;
 }
 
 .btn-warning {
-  background: linear-gradient(45deg, var(--bs-warning), #fdcb6e);
-  border: 1px solid var(--bs-warning);
+  background: linear-gradient(45deg, var(--wastenaut-purple), #a855f7);
+  border: 1px solid var(--wastenaut-purple);
   color: var(--wastenaut-dark);
   font-weight: 600;
 }
