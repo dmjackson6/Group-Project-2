@@ -1,0 +1,24 @@
+{
+  "admins": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@wastenaut.test",
+      "role": "super_admin",
+      "permissions": ["all"],
+      "createdAt": "2024-01-01T00:00:00Z",
+      "lastLogin": "2024-01-20T10:30:00Z",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "Moderator User",
+      "email": "moderator@wastenaut.test",
+      "role": "moderator",
+      "permissions": ["users", "reports", "content"],
+      "createdAt": "2024-01-05T00:00:00Z",
+      "lastLogin": "2024-01-19T16:45:00Z",
+      "status": "active"
+    }
+  ]
+}
