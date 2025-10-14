@@ -26,8 +26,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="../public/index.html">
-          <div class="logo-container me-2">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+            <div class="logo-container me-2">
             <svg width="32" height="32" viewBox="0 0 100 100" class="wastenaut-logo">
               <defs>
                 <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -52,53 +52,54 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="../public/index.html">Home</a>
+              <a class="nav-link" href="index.html">Home</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <!-- Header -->
-          <div class="text-center mb-5">
-            <h1 class="display-5 fw-bold mb-3 text-gradient">Choose Your Role</h1>
-            <p class="lead text-muted">
-              Select how you'd like to help fight food waste and feed your community
-            </p>
-          </div>
+    <!-- Main Content with Background -->
+    <div class="page-background">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+              <h1 class="display-4 fw-bold mb-4 text-gradient">Choose Your Role</h1>
+              <p class="lead text-muted">
+                Select how you'd like to help fight food waste and feed your community
+              </p>
+            </div>
 
           <!-- Role Selection Cards -->
           <div class="row g-4">
             <!-- Individual Recipient -->
-            <div class="col-md-6">
+            <div class="col-lg-4 col-md-6">
               <div class="card h-100 border-0 bg-dark role-card" data-role="individual">
-                <div class="card-body text-center p-5">
-                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                    <i class="bi bi-person text-white fs-2"></i>
+                <div class="card-body text-center p-4">
+                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-person text-white fs-3"></i>
                   </div>
-                  <h3 class="card-title h4 mb-3">Individual Recipient</h3>
-                  <p class="card-text text-muted mb-4">
+                  <h3 class="card-title h5 mb-3">Individual Recipient</h3>
+                  <p class="card-text text-muted mb-3 small">
                     Looking for fresh food for yourself or your family? Find nutritious meals and groceries from local food banks and donors.
                   </p>
-                  <ul class="list-unstyled text-start mb-4">
-                    <li class="mb-2">
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Find nearby food banks
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Access fresh groceries
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Get nutritious meals
                     </li>
                   </ul>
-                  <button class="btn btn-primary btn-lg w-100" onclick="selectRole('individual')">
+                  <button class="btn btn-primary w-100" onclick="selectRole('individual')">
                     <i class="bi bi-arrow-right me-2"></i>Continue as Individual
                   </button>
                 </div>
@@ -106,51 +107,63 @@
             </div>
 
             <!-- Organization Recipient -->
-            <div class="col-md-6">
+            <div class="col-lg-4 col-md-6">
               <div class="card h-100 border-0 bg-dark role-card" data-role="organization">
-                <div class="card-body text-center p-5">
-                  <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                    <i class="bi bi-building text-white fs-2"></i>
+                <div class="card-body text-center p-4">
+                  <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-building text-white fs-3"></i>
                   </div>
-                  <h3 class="card-title h4 mb-3">Organization Recipient</h3>
-                  <p class="card-text text-muted mb-4">
+                  <h3 class="card-title h5 mb-3">Organization Recipient</h3>
+                  <p class="card-text text-muted mb-3 small">
                     Representing a food bank or organization? Access surplus food donations to distribute to your community.
                   </p>
-                  <ul class="list-unstyled text-start mb-4">
-                    <li class="mb-2">
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Access surplus food donations
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Coordinate with food donors
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-1">
                       <i class="bi bi-check-circle text-success me-2"></i>
                       Distribute to community
                     </li>
                   </ul>
-                  <button class="btn btn-success btn-lg w-100" onclick="selectRole('organization')">
+                  <button class="btn btn-success w-100" onclick="selectRole('organization')">
                     <i class="bi bi-arrow-right me-2"></i>Continue as Organization
                   </button>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Donor Option -->
-          <div class="row justify-content-center mt-5">
-            <div class="col-lg-8">
-              <div class="card border-0 bg-dark">
+            <!-- Donor Option -->
+            <div class="col-lg-4 col-md-12">
+              <div class="card h-100 border-0 bg-dark role-card" data-role="donor">
                 <div class="card-body text-center p-4">
-                  <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                    <i class="bi bi-gift text-white fs-4"></i>
+                  <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-gift text-white fs-3"></i>
                   </div>
-                  <h4 class="card-title mb-3">Want to Donate Food?</h4>
-                  <p class="card-text text-muted mb-4">
+                  <h3 class="card-title h5 mb-3">Want to Donate Food?</h3>
+                  <p class="card-text text-muted mb-3 small">
                     Have surplus food to share? Help fight food waste by donating fresh groceries and meals to your community.
                   </p>
-                  <button class="btn btn-warning btn-lg" onclick="selectRole('donor')">
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Donate surplus food
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Help reduce waste
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Support community
+                    </li>
+                  </ul>
+                  <button class="btn btn-warning w-100" onclick="selectRole('donor')">
                     <i class="bi bi-gift me-2"></i>Start Donating
                   </button>
                 </div>
