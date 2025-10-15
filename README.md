@@ -1,129 +1,187 @@
 # WasteNaut - Space-Age Resource Management Platform
 
-A futuristic, eco-friendly resource sharing platform built with HTML, CSS, JavaScript, and Bootstrap.
+A modernized, eco-friendly resource sharing platform with a clean frontend/backend architecture built with HTML, CSS, JavaScript, Bootstrap, and ASP.NET Core.
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-### **START HERE: Main Landing Page**
-```
-public/index.html
-```
-**This is your entry point!** Open this file in your browser to begin testing the application.
+### Prerequisites
+- .NET 8 SDK
+- MySQL 8.0+ (optional for full functionality)
+- Modern web browser
 
-## 📁 Folder Structure
+### Installation & Setup
+
+1. **Clone and navigate to the project:**
+   ```bash
+   cd Group-Project-2
+   ```
+
+2. **Start the backend server:**
+   ```bash
+   cd backend/server/aspnet/WasteNaut.Admin
+   dotnet restore
+   dotnet run
+   ```
+
+3. **Open your browser:**
+   ```
+   http://localhost:3000
+   ```
+
+The application will automatically serve the frontend and provide mock API endpoints for development.
+
+## 📁 New Project Structure
 
 ```
 WasteNaut/
-├── public/                    # Main landing page
-│   └── index.html            # 🎯 START HERE - Main landing page
-├── user/                     # User-facing pages
-│   ├── role-selection.html   # Choose your role (Individual/Organization/Donor)
-│   ├── individual-profile.html
-│   ├── organization-profile.html
-│   ├── donor-profile.html
-│   └── dashboard.html         # User dashboard
-├── admin/                    # Admin management pages
-│   ├── admin-dashboard.html  # Admin mission control
-│   ├── user-management.html  # User management
-│   └── organization-management.html
-├── foodbank/                 # Food bank specific pages
-│   ├── foodbank-registration.html
-│   ├── inventory-management.html
-│   ├── smart-matching.html
-│   └── communication-hub.html
-└── Resources/               # Shared resources
-    ├── Styles/
-    │   └── main.css         # Space-age eco theme
-    └── Scripts/
-        └── main.js          # Shared JavaScript
+├── frontend/                    # Frontend assets
+│   ├── html/                   # All HTML pages
+│   │   ├── index.html          # Main landing page
+│   │   ├── role-selection.html # User role selection
+│   │   ├── dashboard.html      # User dashboard
+│   │   ├── organization-foodbank-dashboard.html # Organization hub
+│   │   ├── admin-dashboard.html # Admin panel
+│   │   └── ...                 # Other pages
+│   └── resources/              # Static assets
+│       ├── images/             # All images
+│       ├── scripts/            # JavaScript files
+│       │   ├── main.js         # Main application logic
+│       │   ├── includes.js     # Client-side includes
+│       │   ├── header.html     # Shared header component
+│       │   └── footer.html     # Shared footer component
+│       └── styles/             # CSS files
+│           ├── main.css        # Main styles
+│           └── admin.css       # Admin-specific styles
+├── backend/                    # Backend services
+│   ├── server/                 # ASP.NET Core server
+│   │   └── aspnet/            # C# backend implementation
+│   └── mocks/                 # Mock data for development
+└── README.md                  # This file
 ```
 
-## 🎨 Theme & Design
+## 🎨 Features
 
-**WasteNaut** features a **space-age eco-friendly** design with:
-- **Electric Green** (#00ff88) primary color
-- **Eco Teal** (#00d4aa) for success states
-- **Solar Gold** (#ffd700) for warnings
-- **Deep Space** (#0a0a0a) backgrounds
-- **Futuristic terminology** throughout
+### Frontend Features
+- **Responsive Design**: Mobile-first approach with Bootstrap 5.3.3
+- **Shared Components**: Reusable header and footer with client-side includes
+- **Unified Navigation**: Consistent navigation across all pages with hamburger menu
+- **Space-age Theme**: Electric green (#00ff88) with dark mode throughout
+- **Organization Dashboard**: Dedicated food bank management interface
 
-## 🧪 Testing the Application
+### Backend Features
+- **ASP.NET Core API**: RESTful endpoints with JWT authentication
+- **Static File Serving**: Automatic frontend delivery
+- **Mock API Endpoints**: Development-ready mock data
+- **CORS Enabled**: Cross-origin requests supported
+- **Swagger Documentation**: Available at `/swagger`
 
-### 1. **Start with the Landing Page**
-Open `public/index.html` in your browser to see the main WasteNaut landing page.
+## 🔧 Development
 
-### 2. **User Flow Testing**
-1. Click "Get Started" → Role Selection
-2. Choose a role (Individual/Organization/Donor)
-3. Complete the profile form
-4. Access the dashboard
+### Available Endpoints
 
-### 3. **Admin Testing**
-- Access admin features via `admin/admin-dashboard.html`
-- Manage users, organizations, and system settings
+- **Frontend**: `http://localhost:3000` (serves HTML pages)
+- **API**: `http://localhost:3000/api/*` (REST endpoints)
+- **Swagger**: `http://localhost:3000/swagger` (API documentation)
 
-### 4. **Food Bank Testing**
-- Test food bank registration and management
-- Try inventory management and smart matching
-- Test communication hub features
+### Mock API Endpoints
 
-## 🔧 Technical Details
+- `GET /api/inventory` - Returns mock donation/inventory data
+- `GET /api/users` - Returns mock user data
+- `GET /api/requests` - Returns mock request/match data
 
-- **Frontend Only**: Pure HTML, CSS, JavaScript
-- **Bootstrap 5.3.3**: Via CDN
-- **Bootstrap Icons**: For consistent iconography
-- **Responsive Design**: Mobile-first approach
-- **Dark Mode**: Space-age theme throughout
-- **Local Storage**: Profile data persistence
-
-## 🚀 Features
-
-### User Features
-- Role-based registration (Individual, Organization, Donor)
-- Profile management with validation
-- Dashboard with personalized content
-- Space-age eco-friendly interface
-
-### Admin Features
-- System oversight and KPI monitoring
-- User management with role assignments
-- Organization approval workflows
-- Real-time alerts and notifications
-
-### Food Bank Features
-- Registration with verification workflow
-- Inventory management with real-time tracking
-- Smart matching with AI suggestions
-- Secure communication channels
-
-## 🌟 Key Pages
+### Key Pages
 
 | Page | Purpose | Path |
 |------|---------|------|
-| **Landing Page** | Main entry point | `public/index.html` |
-| **Role Selection** | Choose user type | `user/role-selection.html` |
-| **User Dashboard** | User control panel | `user/dashboard.html` |
-| **Admin Dashboard** | System management | `admin/admin-dashboard.html` |
-| **Food Bank Registration** | Food bank signup | `foodbank/foodbank-registration.html` |
-| **Inventory Management** | Resource tracking | `foodbank/inventory-management.html` |
-| **Smart Matching** | AI-powered matching | `foodbank/smart-matching.html` |
-| **Communication Hub** | Secure messaging | `foodbank/communication-hub.html` |
+| **Landing Page** | Main entry point | `/html/index.html` |
+| **Role Selection** | Choose user type | `/html/role-selection.html` |
+| **User Dashboard** | User control panel | `/html/dashboard.html` |
+| **Organization Hub** | Food bank management | `/html/organization-foodbank-dashboard.html` |
+| **Admin Dashboard** | System management | `/html/admin-dashboard.html` |
 
-## 🎯 Quick Start Guide
+## 🧪 Testing the Application
 
-1. **Open** `public/index.html` in your browser
-2. **Click** "Get Started" to begin the user flow
-3. **Choose** your role (Individual, Organization, or Donor)
-4. **Complete** the profile form
-5. **Explore** the dashboard and features
+### Manual Smoke Tests
 
-## 🔗 Navigation
+1. **Navigation Test:**
+   - Open `http://localhost:3000`
+   - Click hamburger menu on mobile/tablet
+   - Verify all navigation links work
+   - Test responsive behavior
 
-All pages include consistent navigation with:
-- **WasteNaut branding** with rocket icon
-- **Space-age terminology** throughout
-- **Responsive navigation** for mobile devices
-- **Consistent theming** across all pages
+2. **Page Loading Test:**
+   - Navigate to each major page
+   - Verify shared header/footer load correctly
+   - Check that all images and styles load
+
+3. **Organization Dashboard Test:**
+   - Navigate to Organization Hub
+   - Verify inventory summary displays
+   - Test quick action buttons
+   - Check KPI cards
+
+4. **API Test:**
+   - Visit `http://localhost:3000/swagger`
+   - Test mock API endpoints
+   - Verify JSON responses
+
+## 📝 Major Changes Made
+
+### 1. **Project Reorganization**
+- Created clear `frontend/` and `backend/` structure
+- Moved all HTML files to `frontend/html/`
+- Consolidated duplicate `index.html` files
+- Organized resources in `frontend/resources/`
+
+### 2. **Shared Components**
+- Implemented client-side includes for header/footer
+- Created reusable navigation with hamburger menu
+- Unified styling and branding across all pages
+
+### 3. **New Organization Dashboard**
+- Built comprehensive food bank management interface
+- Added inventory summary with low-stock alerts
+- Included volunteer/contacts management
+- Created pending requests queue
+- Added KPI tracking and quick actions
+
+### 4. **Backend Modernization**
+- Updated ASP.NET Core to serve static files
+- Added mock API endpoints for development
+- Configured CORS for cross-origin requests
+- Set up proper routing and port configuration
+
+### 5. **Development Experience**
+- Single command to start the application
+- Automatic frontend serving
+- Mock data integration
+- Swagger API documentation
+
+## 🔄 Migration Notes
+
+- **No destructive changes**: All original files preserved in new structure
+- **Backward compatibility**: Existing functionality maintained
+- **Mock data preserved**: All mock data moved to `backend/mocks/`
+- **Path updates**: All asset paths updated to new structure
+
+## 🚀 Production Deployment
+
+For production deployment:
+
+1. **Configure database connection** in `appsettings.json`
+2. **Set up SSL certificates** for HTTPS
+3. **Configure reverse proxy** (nginx/Apache)
+4. **Set up monitoring and logging**
+5. **Update CORS policies** for production domains
+
+## 📞 Support
+
+For questions or issues:
+
+1. **Check the Swagger docs** at `/swagger` for API details
+2. **Review the mock data** in `backend/mocks/` for expected formats
+3. **Test with the provided smoke tests** above
+4. **Check browser console** for any JavaScript errors
 
 ---
 

@@ -1,0 +1,353 @@
+/* Admin-specific styles for WasteNaut */
+
+/* Admin Layout */
+.admin-content {
+    padding-top: 80px;
+    min-height: 100vh;
+    background: var(--wastenaut-bg);
+}
+
+.admin-navbar {
+    background: rgba(10, 10, 10, 0.98) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--wastenaut-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Admin Login */
+.admin-login-container {
+    min-height: 100vh;
+    background: var(--wastenaut-bg);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.admin-login-card {
+    background: var(--wastenaut-card);
+    border: 1px solid var(--wastenaut-border);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+    position: relative;
+    z-index: 2;
+}
+
+/* KPI Cards */
+.kpi-card {
+    background: var(--wastenaut-card);
+    border: 1px solid var(--wastenaut-border);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--wastenaut-green), var(--wastenaut-accent));
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 255, 136, 0.2);
+    border-color: var(--wastenaut-green);
+}
+
+/* Admin Tables */
+.admin-content .table {
+    color: var(--bs-body-color);
+}
+
+.admin-content .table th {
+    border-color: var(--wastenaut-border);
+    background: rgba(0, 255, 136, 0.05);
+    color: var(--wastenaut-green);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.admin-content .table td {
+    border-color: var(--wastenaut-border);
+    vertical-align: middle;
+}
+
+.admin-content .table-hover tbody tr:hover {
+    background-color: rgba(0, 255, 136, 0.05);
+}
+
+/* Avatar Styles */
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+}
+
+.avatar-lg {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+}
+
+/* Progress Bars */
+.progress {
+    background-color: rgba(0, 255, 136, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(45deg, var(--wastenaut-green), var(--wastenaut-accent));
+    border-radius: 10px;
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Modal Styles */
+.modal-content {
+    background: var(--wastenaut-card);
+    border: 1px solid var(--wastenaut-border);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--wastenaut-border);
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--wastenaut-border);
+    background: rgba(0, 255, 136, 0.02);
+}
+
+/* Form Controls */
+.admin-content .form-control,
+.admin-content .form-select {
+    background-color: var(--wastenaut-dark);
+    border-color: var(--wastenaut-border);
+    color: var(--bs-body-color);
+    border-radius: 8px;
+}
+
+.admin-content .form-control:focus,
+.admin-content .form-select:focus {
+    background-color: var(--wastenaut-dark);
+    border-color: var(--wastenaut-green);
+    color: var(--bs-body-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25);
+}
+
+.admin-content .form-label {
+    color: var(--bs-body-color);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Input Groups */
+.input-group-text {
+    background-color: var(--wastenaut-dark);
+    border-color: var(--wastenaut-border);
+    color: var(--wastenaut-green);
+}
+
+/* Alert Styles */
+.alert {
+    border-radius: 8px;
+    border: 1px solid;
+    backdrop-filter: blur(10px);
+}
+
+.alert-success {
+    background-color: rgba(0, 255, 136, 0.1);
+    border-color: var(--wastenaut-green);
+    color: var(--wastenaut-green);
+}
+
+.alert-danger {
+    background-color: rgba(255, 71, 87, 0.1);
+    border-color: var(--bs-danger);
+    color: var(--bs-danger);
+}
+
+.alert-warning {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-color: var(--bs-warning);
+    color: var(--bs-warning);
+}
+
+.alert-info {
+    background-color: rgba(0, 191, 255, 0.1);
+    border-color: var(--bs-info);
+    color: var(--bs-info);
+}
+
+/* Card Styles */
+.admin-content .card {
+    background: var(--wastenaut-card);
+    border: 1px solid var(--wastenaut-border);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.admin-content .card-header {
+    background: rgba(0, 255, 136, 0.05);
+    border-bottom: 1px solid var(--wastenaut-border);
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.admin-content .card-title {
+    color: var(--wastenaut-green);
+    font-weight: 600;
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+    border-bottom: 1px solid var(--wastenaut-border);
+}
+
+.nav-tabs .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid transparent;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--wastenaut-green);
+    border-color: var(--wastenaut-border);
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--wastenaut-green);
+    background: var(--wastenaut-card);
+    border-color: var(--wastenaut-border) var(--wastenaut-border) var(--wastenaut-card);
+    border-bottom: 1px solid var(--wastenaut-card);
+}
+
+/* Button Styles */
+.admin-content .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.admin-content .btn-outline-primary {
+    color: var(--wastenaut-green);
+    border-color: var(--wastenaut-green);
+}
+
+.admin-content .btn-outline-primary:hover {
+    background-color: var(--wastenaut-green);
+    border-color: var(--wastenaut-green);
+    color: var(--wastenaut-dark);
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-online {
+    background-color: var(--wastenaut-green);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.status-offline {
+    background-color: var(--bs-danger);
+}
+
+.status-pending {
+    background-color: var(--bs-warning);
+}
+
+/* Loading States */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--wastenaut-border);
+    border-radius: 50%;
+    border-top-color: var(--wastenaut-green);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .admin-content {
+        padding-top: 70px;
+    }
+    
+    .admin-navbar .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .kpi-card .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Dark theme overrides for admin */
+[data-bs-theme="dark"] .admin-content {
+    background: var(--wastenaut-bg);
+}
+
+[data-bs-theme="dark"] .admin-content .card {
+    background: var(--wastenaut-card);
+    border-color: var(--wastenaut-border);
+}
+
+[data-bs-theme="dark"] .admin-content .table {
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .admin-content .form-control,
+[data-bs-theme="dark"] .admin-content .form-select {
+    background-color: var(--wastenaut-dark);
+    border-color: var(--wastenaut-border);
+    color: var(--bs-body-color);
+}
