@@ -56,7 +56,7 @@ class SmokeTester {
 
   // Test 1: Check if header partial exists
   async testHeaderPartialExists() {
-    const headerPath = path.join(__dirname, 'frontend', 'html', 'partials', 'header.html');
+    const headerPath = path.join(__dirname, 'frontend', 'client', 'partials', 'header.html');
     if (!fs.existsSync(headerPath)) {
       throw new Error('Header partial not found at expected location');
     }
@@ -69,7 +69,7 @@ class SmokeTester {
 
   // Test 2: Check if CSS variables are defined
   async testCSSVariables() {
-    const cssPath = path.join(__dirname, 'frontend', 'resources', 'styles', 'main.css');
+    const cssPath = path.join(__dirname, 'frontend', 'client', 'resources', 'styles', 'main.css');
     if (!fs.existsSync(cssPath)) {
       throw new Error('Main CSS file not found');
     }
@@ -91,7 +91,7 @@ class SmokeTester {
 
   // Test 3: Check if header JavaScript exists
   async testHeaderJavaScript() {
-    const headerJsPath = path.join(__dirname, 'frontend', 'resources', 'scripts', 'header.js');
+    const headerJsPath = path.join(__dirname, 'frontend', 'client', 'resources', 'scripts', 'header.js');
     if (!fs.existsSync(headerJsPath)) {
       throw new Error('Header JavaScript file not found');
     }
@@ -105,7 +105,7 @@ class SmokeTester {
   // Test 4: Check if pages include header system
   async testPagesIncludeHeader() {
     for (const page of TEST_CONFIG.testPages) {
-      const pagePath = path.join(__dirname, 'frontend', 'html', page);
+      const pagePath = path.join(__dirname, 'frontend', 'client', page);
       if (!fs.existsSync(pagePath)) {
         throw new Error(`Page ${page} not found`);
       }
@@ -119,7 +119,7 @@ class SmokeTester {
 
   // Test 5: Check authentication system
   async testAuthenticationSystem() {
-    const authPath = path.join(__dirname, 'frontend', 'resources', 'scripts', 'auth.js');
+    const authPath = path.join(__dirname, 'frontend', 'client', 'resources', 'scripts', 'auth.js');
     if (!fs.existsSync(authPath)) {
       throw new Error('Authentication system not found');
     }
@@ -132,7 +132,7 @@ class SmokeTester {
 
   // Test 6: Check notification system
   async testNotificationSystem() {
-    const headerPath = path.join(__dirname, 'frontend', 'resources', 'scripts', 'header.js');
+    const headerPath = path.join(__dirname, 'frontend', 'client', 'resources', 'scripts', 'header.js');
     const headerContent = fs.readFileSync(headerPath, 'utf8');
     
     if (!headerContent.includes('showNotification') || !headerContent.includes('app-notification')) {
@@ -142,7 +142,7 @@ class SmokeTester {
 
   // Test 7: Check responsive design
   async testResponsiveDesign() {
-    const cssPath = path.join(__dirname, 'frontend', 'resources', 'styles', 'main.css');
+    const cssPath = path.join(__dirname, 'frontend', 'client', 'resources', 'styles', 'main.css');
     const cssContent = fs.readFileSync(cssPath, 'utf8');
     
     if (!cssContent.includes('@media') || !cssContent.includes('app-nav-toggle')) {
@@ -152,14 +152,14 @@ class SmokeTester {
 
   // Test 8: Check accessibility features
   async testAccessibilityFeatures() {
-    const headerPath = path.join(__dirname, 'frontend', 'html', 'partials', 'header.html');
+    const headerPath = path.join(__dirname, 'frontend', 'client', 'partials', 'header.html');
     const headerContent = fs.readFileSync(headerPath, 'utf8');
     
     const accessibilityFeatures = [
       'aria-label',
       'role=',
       'aria-live',
-      'aria-controls'
+      'aria-hidden'
     ];
     
     for (const feature of accessibilityFeatures) {
