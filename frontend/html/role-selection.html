@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Choose Your Role - WasteNaut</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../resources/styles/main.css" />
+  </head>
+  <body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Main Content with Background -->
+    <div class="page-background">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+              <h1 class="display-4 fw-bold mb-4 text-gradient">Choose Your Role</h1>
+              <p class="lead text-muted">
+                Select how you'd like to help fight food waste and feed your community
+              </p>
+            </div>
+
+          <!-- Role Selection Cards -->
+          <div class="row g-4">
+            <!-- Individual Recipient -->
+            <div class="col-lg-4 col-md-6">
+              <div class="card h-100 border-0 bg-dark role-card" data-role="individual">
+                <div class="card-body text-center p-4">
+                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-person text-white fs-3"></i>
+                  </div>
+                  <h3 class="card-title h5 mb-3">Individual Recipient</h3>
+                  <p class="card-text text-muted mb-3 small">
+                    Seeking supplies for personal or family use? Connect with local food banks and donors to access fresh food and essential supplies.
+                  </p>
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Find nearby food banks and donors
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Access fresh food and supplies
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Coordinate pickup/delivery
+                    </li>
+                  </ul>
+                  <button class="btn btn-primary w-100" onclick="selectRole('individual')">
+                    <i class="bi bi-arrow-right me-2"></i>Continue as Individual
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Organization Recipient -->
+            <div class="col-lg-4 col-md-6">
+              <div class="card h-100 border-0 bg-dark role-card" data-role="organization">
+                <div class="card-body text-center p-4">
+                  <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-building text-white fs-3"></i>
+                  </div>
+                  <h3 class="card-title h5 mb-3">Organization Recipient</h3>
+                  <p class="card-text text-muted mb-3 small">
+                    Non-profit, shelter, or community group seeking supplies for distribution? Connect with donors and manage inventory for your community.
+                  </p>
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Access surplus food donations
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Manage inventory and distribution
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Serve your community
+                    </li>
+                  </ul>
+                  <button class="btn btn-success w-100" onclick="selectRole('organization')">
+                    <i class="bi bi-arrow-right me-2"></i>Continue as Organization
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Donor Option -->
+            <div class="col-lg-4 col-md-12">
+              <div class="card h-100 border-0 bg-dark role-card" data-role="donor">
+                <div class="card-body text-center p-4">
+                  <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <i class="bi bi-gift text-white fs-3"></i>
+                  </div>
+                  <h3 class="card-title h5 mb-3">Want to Donate Food?</h3>
+                  <p class="card-text text-muted mb-3 small">
+                    Individual or business with surplus food? Submit donation listings and coordinate with food banks to reduce waste and help your community.
+                  </p>
+                  <ul class="list-unstyled text-start mb-3 small">
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Submit donation listings
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Coordinate pickup/drop-off
+                    </li>
+                    <li class="mb-1">
+                      <i class="bi bi-check-circle text-success me-2"></i>
+                      Track donation status
+                    </li>
+                  </ul>
+                  <button class="btn btn-warning w-100" onclick="selectRole('donor')">
+                    <i class="bi bi-gift me-2"></i>Start Donating
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help Section -->
+          <div class="row justify-content-center mt-5">
+            <div class="col-lg-8">
+              <div class="card border-0 bg-dark">
+                <div class="card-body p-4">
+                  <h5 class="card-title mb-3">
+                    <i class="bi bi-question-circle text-info me-2"></i>
+                    Need Help Choosing?
+                  </h5>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <h6 class="text-primary">Individual Recipient</h6>
+                      <p class="small text-muted mb-0">
+                        Choose this if you're seeking supplies for personal or family use.
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <h6 class="text-success">Organization Recipient</h6>
+                      <p class="small text-muted mb-0">
+                        Choose this if you're a non-profit, shelter, or community group seeking supplies for distribution.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JS -->
+    <script src="../resources/scripts/main.js"></script>
+    <script src="../resources/scripts/auth.js"></script>
+    <script src="../resources/scripts/header-include.js"></script>
+    <script src="../resources/scripts/header.js"></script>
+    <script>
+      function selectRole(role) {
+        // Store role selection in localStorage
+        localStorage.setItem('selectedRole', role);
+        
+        // Redirect to appropriate page based on role
+        switch(role) {
+          case 'individual':
+            window.location.href = 'individual-profile.html';
+            break;
+          case 'organization':
+            window.location.href = 'organization-profile.html';
+            break;
+          case 'donor':
+            window.location.href = 'donor-profile.html';
+            break;
+          default:
+            window.location.href = 'login.html';
+        }
+      }
+
+      // Add hover effects to role cards
+      document.addEventListener('DOMContentLoaded', function() {
+        const roleCards = document.querySelectorAll('.role-card');
+        
+        roleCards.forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

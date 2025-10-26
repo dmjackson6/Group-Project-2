@@ -1,0 +1,69 @@
+{
+  "organizations": [
+    {
+      "id": 1,
+      "name": "Green Earth Foundation",
+      "type": "charity",
+      "status": "approved",
+      "registrationNumber": "REG-2024-001",
+      "address": "123 Green St, Eco City, EC 12345",
+      "contact": {
+        "name": "Jane Smith",
+        "email": "jane@greenearth.org",
+        "phone": "+1-555-0123"
+      },
+      "capacity": {
+        "max": 100,
+        "used": 75,
+        "notes": "Operating at 75% capacity"
+      },
+      "serviceAreas": ["Downtown", "Westside", "North District"],
+      "createdAt": "2024-01-15T10:30:00Z",
+      "approvedAt": "2024-01-16T14:20:00Z",
+      "description": "Environmental charity focused on sustainable practices"
+    },
+    {
+      "id": 2,
+      "name": "Community Food Bank",
+      "type": "foodbank",
+      "status": "pending",
+      "registrationNumber": "REG-2024-002",
+      "address": "456 Food Ave, Hunger City, HC 67890",
+      "contact": {
+        "name": "Bob Brown",
+        "email": "bob@foodbank.org",
+        "phone": "+1-555-0456"
+      },
+      "capacity": {
+        "max": 200,
+        "used": 120,
+        "notes": "Expanding operations"
+      },
+      "serviceAreas": ["Eastside", "South District"],
+      "createdAt": "2024-01-18T14:20:00Z",
+      "description": "Local food bank serving the community"
+    },
+    {
+      "id": 3,
+      "name": "Local Restaurant Chain",
+      "type": "restaurant",
+      "status": "approved",
+      "registrationNumber": "REG-2024-003",
+      "address": "789 Main St, Food City, FC 54321",
+      "contact": {
+        "name": "Alice Green",
+        "email": "alice@restaurant.com",
+        "phone": "+1-555-0789"
+      },
+      "capacity": {
+        "max": 50,
+        "used": 30,
+        "notes": "Regular food donations"
+      },
+      "serviceAreas": ["Central", "Downtown"],
+      "createdAt": "2024-01-12T11:15:00Z",
+      "approvedAt": "2024-01-13T09:30:00Z",
+      "description": "Restaurant chain committed to reducing food waste"
+    }
+  ]
+}

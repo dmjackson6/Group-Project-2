@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - WasteNaut Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../Resources/Styles/main.css" rel="stylesheet">
+    <link href="../Resources/Styles/admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Admin Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark admin-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-rocket-takeoff me-2"></i>WasteNaut Admin
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="adminNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="users.html">
+                            <i class="bi bi-people me-1"></i>Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orgs.html">
+                            <i class="bi bi-building me-1"></i>Organizations
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html">
+                            <i class="bi bi-flag me-1"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="matches.html">
+                            <i class="bi bi-diagram-3 me-1"></i>Matches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="bi bi-gear me-1"></i>Settings
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span id="adminUserName">Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="adminAPI.logout()">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="text-gradient">User Management</h1>
+                    <p class="text-muted">Manage user accounts, verification status, and permissions</p>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="userSearch" placeholder="Search users...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="verified">Verified</option>
+                        <option value="pending">Pending</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="individual">Individual</option>
+                        <option value="organization">Organization</option>
+                        <option value="donor">Donor</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-people me-2"></i>Users
+                        <span class="badge bg-primary ms-2" id="userCount">0</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-person me-2"></i>User Profile
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="userModalBody">
+                    <!-- User details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" id="suspendUserBtn">
+                        <i class="bi bi-pause-circle me-2"></i>Suspend
+                    </button>
+                    <button type="button" class="btn btn-success" id="verifyUserBtn">
+                        <i class="bi bi-check-circle me-2"></i>Verify
+                    </button>
+                    <button type="button" class="btn btn-info" id="impersonateUserBtn">
+                        <i class="bi bi-person-badge me-2"></i>Impersonate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../Resources/Scripts/main.js"></script>
+    <script src="admin-main.js"></script>
+    <script src="mock-api.js"></script>
+    <script>
+        let currentUser = null;
+        let allUsers = [];
+
+        // Check authentication
+        if (!localStorage.getItem('adminToken')) {
+            window.location.href = 'login.html';
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                allUsers = await adminAPI.getUsers();
+                renderUsers(allUsers);
+                document.getElementById('userCount').textContent = allUsers.length;
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showAlert('Error loading users', 'danger');
+            }
+        }
+
+        // Render users table
+        function renderUsers(users) {
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                ${user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="fw-bold">${user.name}</div>
+                                <small class="text-muted">ID: ${user.id}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="badge bg-${user.role === 'individual' ? 'info' : user.role === 'organization' ? 'success' : 'warning'}">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-${user.status === 'verified' ? 'success' : user.status === 'pending' ? 'warning' : 'danger'}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewUser(${user.id})">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // View user details
+        async function viewUser(userId) {
+            try {
+                currentUser = allUsers.find(u => u.id === userId);
+                if (!currentUser) return;
+
+                const userDetails = await adminAPI.getUser(userId);
+                
+                document.getElementById('userModalBody').innerHTML = `
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="avatar-lg bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                                    ${userDetails.name.charAt(0).toUpperCase()}
+                                </div>
+                                <h5>${userDetails.name}</h5>
+                                <p class="text-muted">${userDetails.email}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table table-sm">
+                                <tr>
+                                    <td><strong>Role:</strong></td>
+                                    <td><span class="badge bg-${userDetails.role === 'individual' ? 'info' : userDetails.role === 'organization' ? 'success' : 'warning'}">${userDetails.role}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td><span class="badge bg-${userDetails.status === 'verified' ? 'success' : userDetails.status === 'pending' ? 'warning' : 'danger'}">${userDetails.status}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Joined:</strong></td>
+                                    <td>${new Date(userDetails.createdAt).toLocaleString()}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Last Active:</strong></td>
+                                    <td>${new Date(userDetails.lastActive).toLocaleString()}</td>
+                                </tr>
+                                ${userDetails.organization ? `
+                                <tr>
+                                    <td><strong>Organization:</strong></td>
+                                    <td>${userDetails.organization.name}</td>
+                                </tr>
+                                ` : ''}
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                // Update action buttons
+                const verifyBtn = document.getElementById('verifyUserBtn');
+                const suspendBtn = document.getElementById('suspendUserBtn');
+                
+                verifyBtn.style.display = userDetails.status === 'pending' ? 'inline-block' : 'none';
+                suspendBtn.style.display = userDetails.status === 'verified' ? 'inline-block' : 'none';
+                suspendBtn.innerHTML = userDetails.status === 'suspended' ? 
+                    '<i class="bi bi-play-circle me-2"></i>Unsuspend' : 
+                    '<i class="bi bi-pause-circle me-2"></i>Suspend';
+
+                new bootstrap.Modal(document.getElementById('userModal')).show();
+            } catch (error) {
+                console.error('Error loading user details:', error);
+                showAlert('Error loading user details', 'danger');
+            }
+        }
+
+        // Verify user
+        document.getElementById('verifyUserBtn').addEventListener('click', async function() {
+            if (!currentUser) return;
+            
+            try {
+                await adminAPI.verifyUser(currentUser.id);
+                showAlert('User verified successfully', 'success');
+                loadUsers();
+                bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+            } catch (error) {
+                showAlert('Error verifying user: ' + error.message, 'danger');
+            }
+        });
+
+        // Suspend/Unsuspend user
+        document.getElementById('suspendUserBtn').addEventListener('click', async function() {
+            if (!currentUser) return;
+            
+            const action = currentUser.status === 'suspended' ? 'unsuspend' : 'suspend';
+            
+            try {
+                if (action === 'suspend') {
+                    await adminAPI.suspendUser(currentUser.id);
+                } else {
+                    await adminAPI.unsuspendUser(currentUser.id);
+                }
+                showAlert(`User ${action}ed successfully`, 'success');
+                loadUsers();
+                bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+            } catch (error) {
+                showAlert(`Error ${action}ing user: ` + error.message, 'danger');
+            }
+        });
+
+        // Impersonate user
+        document.getElementById('impersonateUserBtn').addEventListener('click', async function() {
+            if (!currentUser) return;
+            
+            if (confirm('Are you sure you want to impersonate this user?')) {
+                try {
+                    const result = await adminAPI.impersonateUser(currentUser.id);
+                    showAlert('Impersonation started. Redirecting...', 'info');
+                    // In a real app, this would redirect to user view with impersonation token
+                    setTimeout(() => {
+                        window.location.href = '../User/dashboard.html';
+                    }, 2000);
+                } catch (error) {
+                    showAlert('Error starting impersonation: ' + error.message, 'danger');
+                }
+            }
+        });
+
+        // Search and filter
+        document.getElementById('userSearch').addEventListener('input', function() {
+            filterUsers();
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            filterUsers();
+        });
+
+        document.getElementById('roleFilter').addEventListener('change', function() {
+            filterUsers();
+        });
+
+        function filterUsers() {
+            const search = document.getElementById('userSearch').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+            const role = document.getElementById('roleFilter').value;
+
+            const filtered = allUsers.filter(user => {
+                const matchesSearch = user.name.toLowerCase().includes(search) || 
+                                    user.email.toLowerCase().includes(search);
+                const matchesStatus = !status || user.status === status;
+                const matchesRole = !role || user.role === role;
+                
+                return matchesSearch && matchesStatus && matchesRole;
+            });
+
+            renderUsers(filtered);
+            document.getElementById('userCount').textContent = filtered.length;
+        }
+
+        // Load user info
+        const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+        document.getElementById('adminUserName').textContent = adminUser.name || 'Admin User';
+
+        // Initialize
+        loadUsers();
+    </script>
+</body>
+</html>
