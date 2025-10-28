@@ -26,13 +26,13 @@ class HeaderInclude {
                 headerContainer.innerHTML = headerHTML;
                 console.log('Header loaded successfully');
                 
-                // Initialize header manager after header is loaded
-                setTimeout(() => {
-                    if (window.headerManager) {
-                        window.headerManager.initializeNavigation();
-                        window.headerManager.updateLogoLink();
-                    }
-                }, 100);
+        // Initialize header manager after header is loaded
+        setTimeout(() => {
+            if (window.headerManager) {
+                window.headerManager.initializeNavigation();
+                window.headerManager.updateLogoLink();
+            }
+        }, 100);
             } else {
                 console.warn('Header container not found');
             }

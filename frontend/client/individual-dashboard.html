@@ -238,6 +238,11 @@
             
             // Load user data
             loadUserData();
+            
+            // Debug: Check if Utils is available
+            console.log('Utils available:', typeof Utils !== 'undefined');
+            console.log('SupplyConnect available:', typeof SupplyConnect !== 'undefined');
+            console.log('headerManager available:', typeof headerManager !== 'undefined');
         });
 
         function loadUserData() {
@@ -249,6 +254,30 @@
                 document.getElementById('primaryNeed').textContent = user.primaryNeed || 'Not specified';
                 document.getElementById('userLocation').textContent = user.address || 'No address provided';
             }
+            
+            // Restore requested items state
+            restoreRequestedItems();
+        }
+
+        function restoreRequestedItems() {
+            const requestedItems = JSON.parse(localStorage.getItem('requestedItems') || '[]');
+            const pendingCount = document.getElementById('pendingRequests');
+            
+            // Update pending requests count
+            if (pendingCount) {
+                pendingCount.textContent = requestedItems.length;
+            }
+            
+            // Restore button states
+            requestedItems.forEach(itemId => {
+                const button = document.querySelector(`button[onclick*="${itemId}"]`);
+                if (button) {
+                    button.innerHTML = 'Requested';
+                    button.className = 'btn btn-secondary btn-sm';
+                    button.disabled = true;
+                    button.onclick = null;
+                }
+            });
         }
 
         function editProfile() {
@@ -256,34 +285,42 @@
         }
 
         function requestItem(itemId) {
-            // Simulate requesting an item
-            showAlert('Request submitted successfully! You will be contacted soon.', 'success');
+            console.log('requestItem called with:', itemId);
+            
+            // Find the button that was clicked
+            const clickedButton = event.target;
+            
+            // Use Utils directly (defined in main.js)
+            if (typeof Utils !== 'undefined' && Utils.showAlert) {
+                console.log('Using Utils.showAlert');
+                Utils.showAlert('Request submitted successfully! You will be contacted soon.', 'success');
+            } else if (typeof headerManager !== 'undefined' && headerManager.showNotification) {
+                console.log('Using headerManager.showNotification');
+                headerManager.showNotification('Request submitted successfully! You will be contacted soon.', 'success');
+            } else {
+                console.error('No notification system available!');
+            }
+            
+            // Store the requested item in localStorage
+            const requestedItems = JSON.parse(localStorage.getItem('requestedItems') || '[]');
+            if (!requestedItems.includes(itemId)) {
+                requestedItems.push(itemId);
+                localStorage.setItem('requestedItems', JSON.stringify(requestedItems));
+            }
+            
+            // Replace the button with "Requested" button
+            clickedButton.innerHTML = 'Requested';
+            clickedButton.className = 'btn btn-secondary btn-sm';
+            clickedButton.disabled = true;
+            clickedButton.onclick = null; // Remove the onclick handler
             
             // Update pending requests count
             const pendingCount = document.getElementById('pendingRequests');
-            const currentCount = parseInt(pendingCount.textContent);
-            pendingCount.textContent = currentCount + 1;
+            if (pendingCount) {
+                pendingCount.textContent = requestedItems.length;
+            }
         }
 
-        function showAlert(message, type = 'info') {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-            alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            
-            // Insert at the top of the main content
-            const mainContent = document.querySelector('.container');
-            mainContent.insertBefore(alertDiv, mainContent.firstChild);
-            
-            // Auto-dismiss after 5 seconds
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
-                }
-            }, 5000);
-        }
     </script>
 </body>
 </html>

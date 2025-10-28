@@ -14,6 +14,8 @@ namespace WasteNaut.Admin.Data
         public DbSet<AdminModel> Admins { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Volunteer> Volunteers { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public DbSet<Donation> Donations { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Match> Matches { get; set; }
@@ -53,6 +55,25 @@ namespace WasteNaut.Admin.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.RegistrationNumber).IsUnique();
+            });
+
+            modelBuilder.Entity<Volunteer>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasOne(e => e.Organization)
+                      .WithMany()
+                      .HasForeignKey(e => e.OrganizationId)
+                      .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<Request>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Organization)
+                      .WithMany()
+                      .HasForeignKey(e => e.OrganizationId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<Donation>(entity =>

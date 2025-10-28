@@ -1,0 +1,68 @@
+<!-- WasteNaut Shared Header -->
+<nav class="navbar navbar-expand-lg navbar-dark app-header" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <!-- Logo/Home Link (Top-Left) -->
+    <a class="navbar-brand app-logo" href="index.html" aria-label="WasteNaut Home" id="wastenaut-logo">
+      <button 
+        class="btn app-back-btn me-2" 
+        onclick="goBack()" 
+        aria-label="Go back to previous page"
+        title="Go back"
+        id="back-button"
+        style="display: none;"
+      >
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+      </button>
+      <div class="logo-container me-2">
+        <svg width="32" height="32" viewBox="0 0 100 100" class="wastenaut-logo" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00d4aa;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <!-- WasteNaut Logo -->
+          <image href="/resources/images/WasteNautV2.png" x="10" y="10" width="80" height="80"/>
+        </svg>
+      </div>
+      <span class="text-gradient">WasteNaut</span>
+    </a>
+
+    <!-- Navigation Menu with Scrollable Arrows -->
+    <div class="navbar-nav-container ms-auto">
+      <!-- Left Arrow (for scrolling navigation) -->
+      <button class="btn nav-scroll-btn nav-scroll-left" id="nav-scroll-left" style="display: none;">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      
+      <!-- Navigation Menu -->
+      <div class="nav-scroll-container">
+        <ul class="navbar-nav app-nav-menu ms-auto" id="navigation-menu" role="menubar">
+          <!-- Navigation items will be populated by JavaScript based on user role -->
+        </ul>
+      </div>
+      
+      <!-- Right Arrow (for scrolling navigation) -->
+      <button class="btn nav-scroll-btn nav-scroll-right" id="nav-scroll-right" style="display: none;">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+      
+      <!-- Action Buttons (Top-Right) -->
+      <div class="app-nav-actions">
+        <button 
+          class="btn app-logout-btn" 
+          onclick="confirmLogout()" 
+          aria-label="Logout from WasteNaut"
+          title="Logout"
+          id="logout-button"
+          style="display: none;"
+        >
+          <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Notification Area -->
+<div id="notification-area" class="app-notification-area" aria-live="polite" aria-atomic="true"></div>

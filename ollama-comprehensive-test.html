@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama API Comprehensive Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .status {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Ollama API Comprehensive Test</h1>
+        
+        <div class="test-section">
+            <h3>1. Connection Test</h3>
+            <p>Test if Ollama service is running and accessible.</p>
+            <button onclick="testConnection()">Test Connection</button>
+            <div id="connectionResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Available Models Test</h3>
+            <p>List all available models in your Ollama installation.</p>
+            <button onclick="testModels()">List Models</button>
+            <div id="modelsResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Simple Chat Test</h3>
+            <p>Test basic chat functionality with your installed model.</p>
+            <input type="text" id="chatInput" placeholder="Enter your message here..." value="Hello, how are you?">
+            <button onclick="testChat()">Send Message</button>
+            <div id="chatResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. WasteNaut-Specific Test</h3>
+            <p>Test AI responses for food donation matching scenarios.</p>
+            <input type="text" id="wastenautInput" placeholder="Ask about food donations..." value="I need help finding fresh vegetables for my family">
+            <button onclick="testWasteNaut()">Test WasteNaut AI</button>
+            <div id="wastenautResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Performance Test</h3>
+            <p>Test response time and model performance.</p>
+            <button onclick="testPerformance()">Run Performance Test</button>
+            <div id="performanceResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>6. Error Handling Test</h3>
+            <p>Test how the system handles errors and edge cases.</p>
+            <button onclick="testErrorHandling()">Test Error Handling</button>
+            <div id="errorResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const OLLAMA_ENDPOINT = 'http://localhost:11434/api/generate';
+        const MODEL_NAME = 'gemma3:4b';
+
+        function showResult(elementId, content, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${type}`;
+            element.textContent = content;
+        }
+
+        async function testConnection() {
+            showResult('connectionResult', 'Testing connection...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:11434/api/tags', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('connectionResult', 
+                        `✅ Connection successful!\n\nOllama is running and accessible.\nFound ${data.models ? data.models.length : 0} models.`, 
+                        'success');
+                } else {
+                    showResult('connectionResult', 
+                        `❌ Connection failed!\nHTTP Status: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error');
+                }
+            } catch (error) {
+                showResult('connectionResult', 
+                    `❌ Connection error!\n\nError: ${error.message}\n\nPossible causes:\n- Ollama is not running\n- Port 11434 is blocked\n- CORS issues`, 
+                    'error');
+            }
+        }
+
+        async function testModels() {
+            showResult('modelsResult', 'Fetching models...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:11434/api/tags');
+                const data = await response.json();
+                
+                if (data.models && data.models.length > 0) {
+                    let result = `✅ Found ${data.models.length} models:\n\n`;
+                    data.models.forEach((model, index) => {
+                        result += `${index + 1}. ${model.name}\n`;
+                        result += `   Size: ${(model.size / (1024*1024*1024)).toFixed(2)} GB\n`;
+                        result += `   Modified: ${new Date(model.modified_at).toLocaleString()}\n\n`;
+                    });
+                    showResult('modelsResult', result, 'success');
+                } else {
+                    showResult('modelsResult', '⚠️ No models found. Run: ollama pull llama3.1:8b', 'error');
+                }
+            } catch (error) {
+                showResult('modelsResult', `❌ Error fetching models:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testChat() {
+            const input = document.getElementById('chatInput').value;
+            if (!input.trim()) {
+                showResult('chatResult', 'Please enter a message to test.', 'error');
+                return;
+            }
+
+            showResult('chatResult', 'Sending message...', 'info');
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch(OLLAMA_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: MODEL_NAME,
+                        prompt: input,
+                        stream: false,
+                        options: {
+                            temperature: 0.7,
+                            max_tokens: 200
+                        }
+                    })
+                });
+
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+
+                if (response.ok) {
+                    const data = await response.json();
+                    let result = `✅ Chat test successful!\n\n`;
+                    result += `Your message: "${input}"\n\n`;
+                    result += `AI Response: "${data.response}"\n\n`;
+                    result += `Response time: ${responseTime}ms\n`;
+                    result += `Model used: ${MODEL_NAME}`;
+                    showResult('chatResult', result, 'success');
+                } else {
+                    showResult('chatResult', 
+                        `❌ Chat test failed!\nHTTP Status: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error');
+                }
+            } catch (error) {
+                showResult('chatResult', `❌ Chat error:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testWasteNaut() {
+            const input = document.getElementById('wastenautInput').value;
+            if (!input.trim()) {
+                showResult('wastenautResult', 'Please enter a WasteNaut-related question.', 'error');
+                return;
+            }
+
+            showResult('wastenautResult', 'Testing WasteNaut AI...', 'info');
+            
+            const wasteNautPrompt = `You are an AI assistant for WasteNaut, a food donation matching platform.
+
+User Query: "${input}"
+
+Please provide a helpful response that:
+1. Directly addresses the user's query
+2. Suggests relevant food donation options
+3. Explains matching criteria
+4. Is encouraging and supportive
+5. Keeps response under 150 words
+
+Response:`;
+
+            try {
+                const startTime = Date.now();
+                const response = await fetch(OLLAMA_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: MODEL_NAME,
+                        prompt: wasteNautPrompt,
+                        stream: false,
+                        options: {
+                            temperature: 0.7,
+                            max_tokens: 300
+                        }
+                    })
+                });
+
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+
+                if (response.ok) {
+                    const data = await response.json();
+                    let result = `✅ WasteNaut AI test successful!\n\n`;
+                    result += `Query: "${input}"\n\n`;
+                    result += `AI Response:\n"${data.response}"\n\n`;
+                    result += `Response time: ${responseTime}ms`;
+                    showResult('wastenautResult', result, 'success');
+                } else {
+                    showResult('wastenautResult', 
+                        `❌ WasteNaut AI test failed!\nHTTP Status: ${response.status}`, 
+                        'error');
+                }
+            } catch (error) {
+                showResult('wastenautResult', `❌ WasteNaut AI error:\n${error.message}`, 'error');
+            }
+        }
+
+        async function testPerformance() {
+            showResult('performanceResult', 'Running performance test...', 'info');
+            
+            const testPrompts = [
+                "Hello",
+                "What is food donation?",
+                "I need help with matching",
+                "Tell me about WasteNaut",
+                "How does AI matching work?"
+            ];
+
+            let results = [];
+            let totalTime = 0;
+
+            for (let i = 0; i < testPrompts.length; i++) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(OLLAMA_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: MODEL_NAME,
+                            prompt: testPrompts[i],
+                            stream: false,
+                            options: {
+                                temperature: 0.7,
+                                max_tokens: 100
+                            }
+                        })
+                    });
+
+                    const endTime = Date.now();
+                    const responseTime = endTime - startTime;
+                    totalTime += responseTime;
+
+                    if (response.ok) {
+                        results.push(`✅ Test ${i + 1}: ${responseTime}ms`);
+                    } else {
+                        results.push(`❌ Test ${i + 1}: Failed (${response.status})`);
+                    }
+                } catch (error) {
+                    results.push(`❌ Test ${i + 1}: Error - ${error.message}`);
+                }
+            }
+
+            const avgTime = totalTime / testPrompts.length;
+            let result = `📊 Performance Test Results:\n\n`;
+            result += results.join('\n');
+            result += `\n\nAverage response time: ${avgTime.toFixed(0)}ms`;
+            result += `\nTotal time: ${totalTime}ms`;
+            result += `\nModel: ${MODEL_NAME}`;
+
+            showResult('performanceResult', result, avgTime < 5000 ? 'success' : 'info');
+        }
+
+        async function testErrorHandling() {
+            showResult('errorResult', 'Testing error handling...', 'info');
+            
+            const errorTests = [
+                {
+                    name: "Invalid Model",
+                    test: () => fetch(OLLAMA_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: 'nonexistent-model',
+                            prompt: 'test',
+                            stream: false
+                        })
+                    })
+                },
+                {
+                    name: "Empty Prompt",
+                    test: () => fetch(OLLAMA_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: MODEL_NAME,
+                            prompt: '',
+                            stream: false
+                        })
+                    })
+                },
+                {
+                    name: "Malformed JSON",
+                    test: () => fetch(OLLAMA_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: '{"invalid": json}'
+                    })
+                }
+            ];
+
+            let results = [];
+
+            for (const test of errorTests) {
+                try {
+                    const response = await test.test();
+                    if (response.ok) {
+                        results.push(`⚠️ ${test.name}: Unexpected success`);
+                    } else {
+                        results.push(`✅ ${test.name}: Properly handled (${response.status})`);
+                    }
+                } catch (error) {
+                    results.push(`✅ ${test.name}: Properly caught error`);
+                }
+            }
+
+            showResult('errorResult', 
+                `🛡️ Error Handling Test Results:\n\n${results.join('\n')}\n\nAll error cases should be properly handled.`, 
+                'info');
+        }
+
+        // Auto-run connection test on page load
+        window.onload = function() {
+            setTimeout(testConnection, 500);
+        };
+    </script>
+</body>
+</html>

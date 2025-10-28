@@ -109,27 +109,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Serve static files from frontend
+// Serve static files from wwwroot
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Serve frontend HTML files
-app.UseStaticFiles(new StaticFileOptions
+// Only redirect to HTTPS in production
+if (!app.Environment.IsDevelopment())
 {
-    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "../../../../frontend/client")),
-    RequestPath = "/client"
-});
-
-// Serve frontend resources
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "../../../../frontend/client/resources")),
-    RequestPath = "/resources"
-});
-
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowAll");
 
@@ -137,7 +125,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Route root to frontend index.html
-app.MapGet("/", () => Results.Redirect("/client/index.html"));
+app.MapGet("/", () => Results.Redirect("/index.html"));
 
 
 app.MapControllers();
@@ -151,5 +139,59 @@ if (app.Environment.IsDevelopment())
         context.Database.EnsureCreated();
     }
 }
+
+// Start Ollama service if available
+try
+{
+    Console.WriteLine("🤖 Checking for Ollama...");
+    
+    // Check if Ollama is installed
+    var ollamaCheck = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+    {
+        FileName = "ollama",
+        Arguments = "--version",
+        UseShellExecute = false,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        CreateNoWindow = true
+    });
+    
+    if (ollamaCheck != null)
+    {
+        ollamaCheck.WaitForExit();
+        if (ollamaCheck.ExitCode == 0)
+        {
+            Console.WriteLine("✅ Ollama found! Starting Ollama service...");
+            
+            // Start Ollama serve in background
+            var ollamaProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "ollama",
+                Arguments = "serve",
+                UseShellExecute = false,
+                CreateNoWindow = true
+            });
+            
+            if (ollamaProcess != null)
+            {
+                Console.WriteLine("✅ Ollama service started on localhost:11434");
+                Console.WriteLine("⚠️  Note: Make sure you have downloaded a model (e.g., ollama pull llama3.2:3b) for AI features to work.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("⚠️  Ollama not found. Project will run without AI features.");
+            Console.WriteLine("   To enable AI features, install Ollama from: https://ollama.ai/download");
+        }
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"⚠️  Ollama check failed: {ex.Message}");
+    Console.WriteLine("   Project will run without AI features.");
+}
+
+Console.WriteLine();
+Console.WriteLine("🚀 Starting WasteNaut application...");
 
 app.Run();
