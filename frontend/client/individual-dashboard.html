@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Dashboard - WasteNaut</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../resources/styles/main.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-gradient">Individual Dashboard</h1>
+                <p class="text-muted">Find fresh food and supplies from local food banks and donors</p>
+            </div>
+        </div>
+
+        <!-- Profile Summary -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-4">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-person-circle me-2"></i>Profile Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="bi bi-person text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0" id="userName">Loading...</h6>
+                                <small class="text-muted" id="userEmail">Loading...</small>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Primary Need:</strong>
+                            <span class="text-info" id="primaryNeed">Loading...</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Location:</strong>
+                            <span class="text-muted" id="userLocation">Loading...</span>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm w-100" onclick="editProfile()">
+                            <i class="bi bi-pencil me-1"></i>Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-dark text-center">
+                            <div class="card-body">
+                                <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-shop text-white"></i>
+                                </div>
+                                <h5 class="mb-0" id="nearbyFoodBanks">3</h5>
+                                <small class="text-muted">Nearby Food Banks</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-dark text-center">
+                            <div class="card-body">
+                                <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-gift text-white"></i>
+                                </div>
+                                <h5 class="mb-0" id="availableDonations">12</h5>
+                                <small class="text-muted">Available Donations</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-dark text-center">
+                            <div class="card-body">
+                                <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-clock text-white"></i>
+                                </div>
+                                <h5 class="mb-0" id="pendingRequests">2</h5>
+                                <small class="text-muted">Pending Requests</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Resources -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-search me-2"></i>Available Resources Near You
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3" id="availableResources">
+                            <!-- Resources will be populated by JavaScript -->
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-secondary">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-0">Fresh Produce Box</h6>
+                                            <span class="badge bg-success">Available</span>
+                                        </div>
+                                        <p class="text-muted small mb-2">Community Food Bank - 2.3 miles away</p>
+                                        <p class="small mb-3">Mixed vegetables, fruits, and bread. Pickup available today.</p>
+                                        <button class="btn btn-primary btn-sm" onclick="requestItem('produce_box_001')">
+                                            <i class="bi bi-hand-thumbs-up me-1"></i>Request Item
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-secondary">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-0">Non-Perishable Groceries</h6>
+                                            <span class="badge bg-success">Available</span>
+                                        </div>
+                                        <p class="text-muted small mb-2">Local Church Pantry - 1.8 miles away</p>
+                                        <p class="small mb-3">Canned goods, pasta, rice, and cereal. Multiple boxes available.</p>
+                                        <button class="btn btn-primary btn-sm" onclick="requestItem('groceries_002')">
+                                            <i class="bi bi-hand-thumbs-up me-1"></i>Request Item
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i>Recent Requests
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Fresh Produce Box</h6>
+                                        <small class="text-muted">Community Food Bank</small>
+                                    </div>
+                                    <span class="badge bg-warning">Pending</span>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Bread & Pastries</h6>
+                                        <small class="text-muted">Local Bakery</small>
+                                    </div>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-geo-alt me-2"></i>Nearby Food Banks
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Community Food Bank</h6>
+                                        <small class="text-muted">2.3 miles away</small>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm">View</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Local Church Pantry</h6>
+                                        <small class="text-muted">1.8 miles away</small>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm">View</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent border-0 px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Community Center</h6>
+                                        <small class="text-muted">3.1 miles away</small>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Custom JS -->
+    <script src="../resources/scripts/main.js"></script>
+    <script src="../resources/scripts/auth.js"></script>
+    <script src="../resources/scripts/header-include.js"></script>
+    <script src="../resources/scripts/header.js"></script>
+    <script>
+        // Individual dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Protect this page - only individual users can access
+            if (!authManager.protectPage('individual')) {
+                return;
+            }
+            
+            // Load user data
+            loadUserData();
+            
+            // Debug: Check if Utils is available
+            console.log('Utils available:', typeof Utils !== 'undefined');
+            console.log('SupplyConnect available:', typeof SupplyConnect !== 'undefined');
+            console.log('headerManager available:', typeof headerManager !== 'undefined');
+        });
+
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('wastenaut_user') || '{}');
+            
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userEmail').textContent = user.email || 'No email provided';
+                document.getElementById('primaryNeed').textContent = user.primaryNeed || 'Not specified';
+                document.getElementById('userLocation').textContent = user.address || 'No address provided';
+            }
+            
+            // Restore requested items state
+            restoreRequestedItems();
+        }
+
+        function restoreRequestedItems() {
+            const requestedItems = JSON.parse(localStorage.getItem('requestedItems') || '[]');
+            const pendingCount = document.getElementById('pendingRequests');
+            
+            // Update pending requests count
+            if (pendingCount) {
+                pendingCount.textContent = requestedItems.length;
+            }
+            
+            // Restore button states
+            requestedItems.forEach(itemId => {
+                const button = document.querySelector(`button[onclick*="${itemId}"]`);
+                if (button) {
+                    button.innerHTML = 'Requested';
+                    button.className = 'btn btn-secondary btn-sm';
+                    button.disabled = true;
+                    button.onclick = null;
+                }
+            });
+        }
+
+        function editProfile() {
+            window.location.href = 'individual-profile.html';
+        }
+
+        function requestItem(itemId) {
+            console.log('requestItem called with:', itemId);
+            
+            // Find the button that was clicked
+            const clickedButton = event.target;
+            
+            // Use Utils directly (defined in main.js)
+            if (typeof Utils !== 'undefined' && Utils.showAlert) {
+                console.log('Using Utils.showAlert');
+                Utils.showAlert('Request submitted successfully! You will be contacted soon.', 'success');
+            } else if (typeof headerManager !== 'undefined' && headerManager.showNotification) {
+                console.log('Using headerManager.showNotification');
+                headerManager.showNotification('Request submitted successfully! You will be contacted soon.', 'success');
+            } else {
+                console.error('No notification system available!');
+            }
+            
+            // Store the requested item in localStorage
+            const requestedItems = JSON.parse(localStorage.getItem('requestedItems') || '[]');
+            if (!requestedItems.includes(itemId)) {
+                requestedItems.push(itemId);
+                localStorage.setItem('requestedItems', JSON.stringify(requestedItems));
+            }
+            
+            // Replace the button with "Requested" button
+            clickedButton.innerHTML = 'Requested';
+            clickedButton.className = 'btn btn-secondary btn-sm';
+            clickedButton.disabled = true;
+            clickedButton.onclick = null; // Remove the onclick handler
+            
+            // Update pending requests count
+            const pendingCount = document.getElementById('pendingRequests');
+            if (pendingCount) {
+                pendingCount.textContent = requestedItems.length;
+            }
+        }
+
+    </script>
+</body>
+</html>

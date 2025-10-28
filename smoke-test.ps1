@@ -30,7 +30,7 @@ function Write-TestResult {
 
 # Test 1: Check if header partial exists
 try {
-    $headerPath = "frontend\html\partials\header.html"
+    $headerPath = "frontend\client\partials\header.html"
     if (Test-Path $headerPath) {
         $headerContent = Get-Content $headerPath -Raw
         if ($headerContent -match "app-header" -and $headerContent -match "navigation-menu") {
@@ -167,7 +167,7 @@ try {
 
 # Test 8: Check accessibility features
 try {
-    $headerPath = "frontend\html\partials\header.html"
+    $headerPath = "frontend\client\partials\header.html"
     if (Test-Path $headerPath) {
         $headerContent = Get-Content $headerPath -Raw
         $accessibilityFeatures = @("aria-label", "role=", "aria-live", "aria-controls")

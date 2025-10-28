@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inventory Command Center - WasteNaut</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../resources/styles/main.css" />
+  </head>
+  <body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="bi bi-boxes text-white fs-5"></i>
+            </div>
+            <div>
+              <h1 class="h3 mb-1 text-gradient">Inventory Command Center</h1>
+              <p class="text-muted mb-0">Manage your sustainable resource inventory</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                <i class="bi bi-box text-white"></i>
+              </div>
+              <div class="fw-bold fs-4" id="totalItems">0</div>
+              <div class="small text-muted">Total Items</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                <i class="bi bi-check-circle text-white"></i>
+              </div>
+              <div class="fw-bold fs-4" id="availableItems">0</div>
+              <div class="small text-muted">Available</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                <i class="bi bi-clock text-white"></i>
+              </div>
+              <div class="fw-bold fs-4" id="expiringItems">0</div>
+              <div class="small text-muted">Expiring Soon</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 bg-dark glow-effect">
+            <div class="card-body text-center p-3">
+              <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                <i class="bi bi-arrow-up text-white"></i>
+              </div>
+              <div class="fw-bold fs-4" id="distributedItems">0</div>
+              <div class="small text-muted">Distributed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex gap-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
+              <i class="bi bi-plus-circle me-2"></i>Add New Item
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="card border-0 bg-dark">
+        <div class="card-header bg-dark border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-list-ul me-2"></i>Inventory Items
+            </h5>
+            <div class="d-flex gap-2">
+              <select class="form-select form-select-sm" id="statusFilter" style="width: auto;">
+                <option value="">All Status</option>
+                <option value="available">Available</option>
+                <option value="distributed">Distributed</option>
+                <option value="expiring-soon">Expiring Soon</option>
+                <option value="expired">Expired</option>
+              </select>
+              <select class="form-select form-select-sm" id="categoryFilter" style="width: auto;">
+                <option value="">All Categories</option>
+                <option value="perishable">Perishable</option>
+                <option value="non-perishable">Non-Perishable</option>
+                <option value="frozen">Frozen</option>
+                <option value="dairy">Dairy</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th>Quantity</th>
+                  <th>Expiration</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody">
+                <!-- Sample data -->
+                <tr>
+                  <td>Canned Vegetables</td>
+                  <td><span class="badge bg-info">Non-Perishable</span></td>
+                  <td>50 cans</td>
+                  <td>2024-12-15</td>
+                  <td><span class="badge bg-success">Available</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem(1)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success me-1" onclick="distributeItem(1)">
+                      <i class="bi bi-check"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(1)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fresh Bread</td>
+                  <td><span class="badge bg-warning">Perishable</span></td>
+                  <td>25 loaves</td>
+                  <td>2024-01-20</td>
+                  <td><span class="badge bg-warning">Expiring Soon</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem(2)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success me-1" onclick="distributeItem(2)">
+                      <i class="bi bi-check"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(2)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Milk</td>
+                  <td><span class="badge bg-primary">Dairy</span></td>
+                  <td>30 gallons</td>
+                  <td>2024-01-18</td>
+                  <td><span class="badge bg-success">Available</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem(3)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success me-1" onclick="distributeItem(3)">
+                      <i class="bi bi-check"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(3)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark border-0">
+          <div class="modal-header border-bottom">
+            <h5 class="modal-title">
+              <i class="bi bi-plus-circle me-2"></i>Add New Inventory Item
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addItemForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="itemName" class="form-label">Item Name *</label>
+                  <input type="text" class="form-control" id="itemName" name="itemName" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="itemCategory" class="form-label">Category *</label>
+                  <select class="form-select" id="itemCategory" name="itemCategory" required>
+                    <option value="">Select category</option>
+                    <option value="perishable">Perishable</option>
+                    <option value="non-perishable">Non-Perishable</option>
+                    <option value="frozen">Frozen</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="meat">Meat</option>
+                    <option value="produce">Produce</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="itemQuantity" class="form-label">Quantity *</label>
+                  <input type="number" class="form-control" id="itemQuantity" name="itemQuantity" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="itemUnit" class="form-label">Unit</label>
+                  <select class="form-select" id="itemUnit" name="itemUnit">
+                    <option value="pieces">Pieces</option>
+                    <option value="lbs">Pounds</option>
+                    <option value="gallons">Gallons</option>
+                    <option value="boxes">Boxes</option>
+                    <option value="bags">Bags</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="expirationDate" class="form-label">Expiration Date *</label>
+                  <input type="date" class="form-control" id="expirationDate" name="expirationDate" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="itemStatus" class="form-label">Status *</label>
+                  <select class="form-select" id="itemStatus" name="itemStatus" required>
+                    <option value="available">Available</option>
+                    <option value="distributed">Distributed</option>
+                    <option value="expired">Expired</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="itemNotes" class="form-label">Notes</label>
+                  <textarea class="form-control" id="itemNotes" name="itemNotes" rows="3" placeholder="Any additional notes about this item..."></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="addItem()">
+              <i class="bi bi-plus-circle me-2"></i>Add Item
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JS -->
+    <script src="./Resources/Scripts/main.js"></script>
+    <script>
+      // Inventory management functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        updateStats();
+        loadInventory();
+        setupFilters();
+      });
+      
+      function setupFilters() {
+        // Add event listeners to filter dropdowns
+        const statusFilter = document.getElementById('statusFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        
+        if (statusFilter) {
+          statusFilter.addEventListener('change', applyFilters);
+        }
+        
+        if (categoryFilter) {
+          categoryFilter.addEventListener('change', applyFilters);
+        }
+      }
+      
+      function applyFilters() {
+        const statusFilter = document.getElementById('statusFilter').value;
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        
+        console.log('Applying filters - Status:', statusFilter, 'Category:', categoryFilter);
+        
+        const tableBody = document.getElementById('inventoryTableBody');
+        const allRows = tableBody.querySelectorAll('tr');
+        
+        allRows.forEach(row => {
+          let showRow = true;
+          
+          // Check status filter
+          if (statusFilter) {
+            const statusBadge = row.querySelector('td:nth-child(5) .badge');
+            if (statusBadge) {
+              const statusText = statusBadge.textContent.toLowerCase();
+              const expectedStatus = statusFilter.toLowerCase();
+              
+              // Map display text to filter values
+              const statusMap = {
+                'available': 'available',
+                'distributed': 'distributed', 
+                'expired': 'expired',
+                'expiring soon': 'expiring-soon' // Sample item shows "Expiring Soon"
+              };
+              
+              const actualStatus = statusMap[statusText] || statusText;
+              if (actualStatus !== expectedStatus) {
+                showRow = false;
+              }
+            }
+          }
+          
+          // Check category filter
+          if (categoryFilter && showRow) {
+            const categoryBadge = row.querySelector('td:nth-child(2) .badge');
+            if (categoryBadge) {
+              const categoryText = categoryBadge.textContent.toLowerCase();
+              const expectedCategory = categoryFilter.toLowerCase();
+              
+              // Map display text to filter values
+              const categoryMap = {
+                'non-perishable': 'non-perishable',
+                'perishable': 'perishable',
+                'frozen': 'frozen',
+                'dairy': 'dairy',
+                'meat': 'meat',
+                'produce': 'produce'
+              };
+              
+              const actualCategory = categoryMap[categoryText] || categoryText;
+              if (actualCategory !== expectedCategory) {
+                showRow = false;
+              }
+            }
+          }
+          
+          // Show or hide the row
+          if (showRow) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        
+        console.log('Filters applied');
+      }
+
+      function updateStats() {
+        // Get inventory items from localStorage
+        const inventoryItems = JSON.parse(localStorage.getItem('inventoryItems') || '[]');
+        
+        // Count remaining sample items in the DOM
+        const tableBody = document.getElementById('inventoryTableBody');
+        const sampleRows = tableBody.querySelectorAll('tr:not([data-item-id])');
+        const sampleItemCount = sampleRows.length;
+        
+        console.log('Sample items remaining:', sampleItemCount);
+        console.log('localStorage items:', inventoryItems.length);
+        
+        // Calculate stats for localStorage items
+        const localStorageTotal = inventoryItems.length;
+        const localStorageAvailable = inventoryItems.filter(item => item.status === 'available').length;
+        const localStorageDistributed = inventoryItems.filter(item => item.status === 'distributed').length;
+        
+        // Check for expiring items (within 7 days) in localStorage
+        const today = new Date();
+        const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const localStorageExpiring = inventoryItems.filter(item => {
+          const expirationDate = new Date(item.expirationDate);
+          return expirationDate <= sevenDaysFromNow && item.status === 'available';
+        }).length;
+        
+        // For sample items, we'll assume they're all available (since we can't track their status)
+        const totalItems = localStorageTotal + sampleItemCount;
+        const availableItems = localStorageAvailable + sampleItemCount; // Assume all sample items are available
+        const distributedItems = localStorageDistributed;
+        const expiringItems = localStorageExpiring + (sampleItemCount > 0 ? 1 : 0); // Assume at least 1 sample item is expiring
+        
+        console.log('Final stats - Total:', totalItems, 'Available:', availableItems, 'Expiring:', expiringItems, 'Distributed:', distributedItems);
+        
+        // Update stats display
+        document.getElementById('totalItems').textContent = totalItems.toString();
+        document.getElementById('availableItems').textContent = availableItems.toString();
+        document.getElementById('expiringItems').textContent = expiringItems.toString();
+        document.getElementById('distributedItems').textContent = distributedItems.toString();
+      }
+
+      function loadInventory() {
+        // Load inventory items from localStorage
+        console.log('Checking localStorage for inventoryItems...');
+        const rawData = localStorage.getItem('inventoryItems');
+        console.log('Raw localStorage data:', rawData);
+        
+        const inventoryItems = JSON.parse(rawData || '[]');
+        console.log('Parsed inventory items:', inventoryItems);
+        console.log('Found', inventoryItems.length, 'items to display');
+        
+        const tableBody = document.getElementById('inventoryTableBody');
+        console.log('Table body element:', tableBody);
+        
+        // Clear existing rows (except the sample data)
+        const existingRows = tableBody.querySelectorAll('tr');
+        console.log('Existing rows before clearing:', existingRows.length);
+        
+        existingRows.forEach(row => {
+          // Remove only the dynamically added rows (they have data-item-id attribute)
+          if (row.getAttribute('data-item-id')) {
+            console.log('Removing row with ID:', row.getAttribute('data-item-id'));
+            row.remove();
+          }
+        });
+        
+        console.log('Loading inventory from localStorage:', inventoryItems);
+        console.log('Found', inventoryItems.length, 'items to display');
+        
+        // Add items from localStorage
+        inventoryItems.forEach(item => {
+          console.log('Creating row for item:', item);
+          const row = createInventoryRow(item);
+          tableBody.appendChild(row);
+        });
+        
+        console.log('Loaded inventory:', inventoryItems.length, 'items');
+        
+        // Update stats
+        updateStats();
+      }
+      
+      function createInventoryRow(item) {
+        const row = document.createElement('tr');
+        row.setAttribute('data-item-id', item.id);
+        
+        // Format category badge
+        const categoryBadge = getCategoryBadge(item.category);
+        
+        // Format status badge
+        const statusBadge = getStatusBadge(item.status);
+        
+        // Format expiration date
+        const expirationDate = new Date(item.expirationDate).toLocaleDateString();
+        
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>${categoryBadge}</td>
+          <td>${item.quantity} ${item.unit}</td>
+          <td>${expirationDate}</td>
+          <td>${statusBadge}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem('${item.id}')">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success me-1" onclick="distributeItem('${item.id}')">
+              <i class="bi bi-check"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('${item.id}')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        
+        return row;
+      }
+      
+      function getCategoryBadge(category) {
+        const badgeClasses = {
+          'perishable': 'bg-warning',
+          'non-perishable': 'bg-info',
+          'frozen': 'bg-primary',
+          'dairy': 'bg-secondary',
+          'meat': 'bg-danger',
+          'produce': 'bg-success'
+        };
+        
+        const className = badgeClasses[category] || 'bg-secondary';
+        const displayName = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ');
+        
+        return `<span class="badge ${className}">${displayName}</span>`;
+      }
+      
+      function getStatusBadge(status) {
+        const badgeClasses = {
+          'available': 'bg-success',
+          'distributed': 'bg-info',
+          'expired': 'bg-danger'
+        };
+        
+        const className = badgeClasses[status] || 'bg-secondary';
+        const displayName = status.charAt(0).toUpperCase() + status.slice(1);
+        
+        return `<span class="badge ${className}">${displayName}</span>`;
+      }
+
+      function addItem() {
+        const form = document.getElementById('addItemForm');
+        const formData = new FormData(form);
+        const itemData = Object.fromEntries(formData);
+        
+        // Validate required fields
+        if (!itemData.itemName || !itemData.itemCategory || !itemData.itemQuantity || !itemData.expirationDate || !itemData.itemStatus) {
+          showAlert('Please fill in all required fields', 'error');
+          return;
+        }
+        
+        // Generate unique ID for the item
+        const itemId = 'item_' + Date.now();
+        
+        // Create item object with additional properties
+        const newItem = {
+          id: itemId,
+          name: itemData.itemName,
+          category: itemData.itemCategory,
+          quantity: itemData.itemQuantity,
+          unit: itemData.itemUnit || 'pieces',
+          expirationDate: itemData.expirationDate,
+          status: itemData.itemStatus,
+          notes: itemData.itemNotes || '',
+          addedDate: new Date().toISOString()
+        };
+        
+        // Get existing inventory from localStorage
+        const existingInventory = JSON.parse(localStorage.getItem('inventoryItems') || '[]');
+        console.log('Existing inventory before adding:', existingInventory);
+        
+        // Add new item to inventory
+        existingInventory.push(newItem);
+        console.log('Inventory after adding new item:', existingInventory);
+        
+        // Save back to localStorage
+        localStorage.setItem('inventoryItems', JSON.stringify(existingInventory));
+        console.log('Saved to localStorage. Verifying...');
+        console.log('Verification - localStorage now contains:', localStorage.getItem('inventoryItems'));
+        
+        console.log('Item added:', newItem);
+        console.log('Updated inventory:', existingInventory);
+        
+        // Close modal and refresh
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addItemModal'));
+        modal.hide();
+        
+        // Clear form
+        form.reset();
+        
+        showAlert('Item added successfully!', 'success');
+        loadInventory();
+      }
+
+      function editItem(itemId) {
+        showComingSoon('Edit Item');
+      }
+
+      function distributeItem(itemId) {
+        showComingSoon('Distribute Item');
+      }
+
+      function deleteItem(itemId) {
+        console.log('Attempting to delete item with ID:', itemId);
+        
+        // Check if this is a sample item (hardcoded IDs 1, 2, 3)
+        if (itemId === 1 || itemId === 2 || itemId === 3) {
+          console.log('Deleting sample item:', itemId);
+          // Find and remove the sample item row directly from DOM
+          const tableBody = document.getElementById('inventoryTableBody');
+          const rows = tableBody.querySelectorAll('tr');
+          
+          rows.forEach(row => {
+            const deleteButton = row.querySelector(`button[onclick="deleteItem(${itemId})"]`);
+            if (deleteButton) {
+              console.log('Found sample item row, removing it');
+              row.remove();
+            }
+          });
+          
+          // Update stats after removing sample item
+          updateStats();
+          return;
+        }
+        
+        // Handle localStorage items
+        console.log('Deleting localStorage item:', itemId);
+        const existingInventory = JSON.parse(localStorage.getItem('inventoryItems') || '[]');
+        console.log('Current inventory before deletion:', existingInventory);
+        
+        // Remove item with matching ID
+        const updatedInventory = existingInventory.filter(item => item.id !== itemId);
+        console.log('Updated inventory after deletion:', updatedInventory);
+        
+        // Save back to localStorage
+        localStorage.setItem('inventoryItems', JSON.stringify(updatedInventory));
+        
+        // Reload inventory display
+        loadInventory();
+      }
+
+      function showComingSoon(feature) {
+        SupplyConnect.Utils.showAlert(`${feature} feature coming soon!`, 'info');
+      }
+      
+      // Debug function to check localStorage
+      function debugLocalStorage() {
+        console.log('=== LOCALSTORAGE DEBUG ===');
+        console.log('All localStorage keys:', Object.keys(localStorage));
+        console.log('inventoryItems value:', localStorage.getItem('inventoryItems'));
+        console.log('Parsed inventoryItems:', JSON.parse(localStorage.getItem('inventoryItems') || '[]'));
+        console.log('========================');
+      }
+      
+      // Make debug function available globally
+      window.debugLocalStorage = debugLocalStorage;
+    </script>
+
+    <!-- Shared Header Scripts -->
+    <script src="../resources/scripts/auth.js"></script>
+    <script src="../resources/scripts/header-include.js"></script>
+    <script src="../resources/scripts/header.js"></script>
+    
+    <!-- Page Protection -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Protect this page - allow both individual and organization users
+        if (!authManager.isAuthenticated()) {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        const userRole = authManager.currentUser.role;
+        if (userRole !== 'individual' && userRole !== 'org') {
+          // Redirect to appropriate dashboard for other roles
+          authManager.redirectToDashboard();
+          return;
+        }
+      });
+    </script>
+  </body>
+</html>

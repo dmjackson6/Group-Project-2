@@ -1,0 +1,2001 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smart Matching Interface - WasteNaut</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    
+    <!-- Custom Styles -->
+    <style>
+      .chat-container {
+        border: 1px solid #444;
+      }
+      
+      .chat-message {
+        animation: fadeIn 0.3s ease-in;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .message-bubble {
+        max-width: 80%;
+        word-wrap: break-word;
+      }
+      
+      .user-message .message-bubble {
+        background-color: #28a745 !important;
+        margin-left: auto;
+      }
+      
+      .ai-message .message-bubble {
+        background-color: #007bff !important;
+      }
+      
+      .ai-avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #007bff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #28a745;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      
+      .profile-item {
+        background-color: #495057;
+        border-radius: 5px;
+        padding: 8px 12px;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+      
+      .profile-item i {
+        color: #28a745;
+        margin-right: 8px;
+      }
+      
+      .typing-indicator {
+        display: none;
+      }
+      
+      .typing-indicator.show {
+        display: block;
+      }
+      
+      .typing-dots {
+        display: inline-block;
+        animation: typing 1.4s infinite;
+      }
+      
+      @keyframes typing {
+        0%, 60%, 100% { opacity: 0.3; }
+        30% { opacity: 1; }
+      }
+    </style>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../resources/styles/main.css" />
+  </head>
+  <body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="bi bi-diagram-3 text-white fs-5"></i>
+            </div>
+            <div>
+              <h1 class="h3 mb-1 text-gradient">Smart Matching Interface</h1>
+              <p class="text-muted mb-0">AI-powered resource optimization and matching</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI-Powered Smart Matching -->
+      <div class="card border-0 bg-dark mb-4">
+        <div class="card-header bg-dark border-bottom">
+          <h5 class="mb-0">
+            <i class="bi bi-robot me-2 text-primary"></i>AI-Powered Smart Matching
+            <span class="badge bg-success ms-2">Conversational AI</span>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Chat Interface -->
+            <div class="col-lg-8">
+              <div class="chat-container bg-dark rounded p-3 mb-3" style="height: 400px; overflow-y: auto;" id="chatContainer">
+                <div class="chat-message ai-message mb-3">
+                  <div class="d-flex align-items-start">
+                    <div class="ai-avatar me-3">
+                      <i class="bi bi-robot text-primary fs-4"></i>
+                    </div>
+                    <div class="message-content">
+                      <div class="message-bubble bg-primary text-white p-3 rounded">
+                        <strong>AI Assistant:</strong> Hi! I'm here to help you find the perfect food matches. Let's start with the basics - what type of food assistance are you looking for today?
+                      </div>
+                      <small class="text-muted mt-1 d-block">Just now</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Input Area -->
+              <div class="input-group">
+                <input type="text" class="form-control" id="userInput" placeholder="Type your response here..." onkeypress="handleKeyPress(event)">
+                <button class="btn btn-primary" onclick="sendUserMessage()">
+                  <i class="bi bi-send me-1"></i>Send
+                </button>
+              </div>
+              
+            </div>
+            
+            <!-- Dynamic Profile Display -->
+            <div class="col-lg-4">
+              <div class="card bg-secondary border-0">
+                <div class="card-header bg-secondary border-bottom">
+                  <h6 class="mb-0">
+                    <i class="bi bi-person-circle me-2"></i>Your Profile
+                    <span class="badge bg-info ms-2" id="profileCompleteness">0%</span>
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div id="dynamicProfile">
+                    <div class="text-center text-muted py-3">
+                      <i class="bi bi-person-plus fs-1 mb-2"></i>
+                      <p class="small">Your profile will build as we chat!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- AI Service Selector -->
+              <div class="mt-3">
+                <label for="aiServiceSelect" class="form-label small">AI Service:</label>
+                <select class="form-select form-select-sm" id="aiServiceSelect" onchange="changeAIService()">
+                  <option value="OLLAMA">🤖 Ollama (Local - FREE)</option>
+                  <option value="HUGGINGFACE">🌐 Hugging Face (Cloud)</option>
+                  <option value="LOCAL_AI">💻 Demo Mode</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="card border-0 bg-dark h-100">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up me-2"></i>AI Insights & Analytics
+                <span class="badge bg-primary ms-2">Live</span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="aiInsights">
+                <div class="row text-center mb-3">
+                  <div class="col-4">
+                    <div class="h4 text-primary" id="aiMatchAccuracy">92%</div>
+                    <small class="text-muted">Match Accuracy</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="h4 text-success" id="aiSuccessRate">87%</div>
+                    <small class="text-muted">Success Rate</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="h4 text-warning" id="aiSatisfaction">4.8/5</div>
+                    <small class="text-muted">User Satisfaction</small>
+                  </div>
+                </div>
+                <hr class="my-3">
+                <div class="small">
+                  <h6 class="text-primary mb-2">
+                    <i class="bi bi-lightbulb me-1"></i>AI Recommendations
+                  </h6>
+                  <div id="aiRecommendations">
+                    <div class="alert alert-info py-2 mb-2">
+                      <small><strong>💡 Tip:</strong> Based on your preferences, consider expanding your search radius to 15 miles for 3x more matches.</small>
+                    </div>
+                    <div class="alert alert-success py-2 mb-2">
+                      <small><strong>🎯 Insight:</strong> Users with vegetarian preferences find 40% more matches in the morning hours.</small>
+                    </div>
+                    <div class="alert alert-warning py-2">
+                      <small><strong>⚡ Optimization:</strong> Your profile is 95% complete. Add dietary restrictions for better matches.</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <button class="btn btn-sm btn-outline-primary" onclick="generateAIInsights()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh Insights
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Suggestions -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card border-0 bg-dark">
+            <div class="card-header bg-dark border-bottom">
+              <h5 class="mb-0">
+                <i class="bi bi-robot me-2"></i>AI Optimization Suggestions
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="card border-0 bg-dark glow-effect">
+                    <div class="card-body text-center p-3">
+                      <i class="bi bi-lightning text-warning fs-3 mb-2"></i>
+                      <h6 class="card-title">Priority Match</h6>
+                      <p class="card-text small text-muted">Fresh Produce Donation → Family of 4</p>
+                      <button class="btn btn-sm btn-warning" onclick="executeSuggestion(1)">
+                        <i class="bi bi-arrow-right me-1"></i>Execute
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card border-0 bg-dark glow-effect">
+                    <div class="card-body text-center p-3">
+                      <i class="bi bi-graph-up text-success fs-3 mb-2"></i>
+                      <h6 class="card-title">Efficiency Boost</h6>
+                      <p class="card-text small text-muted">Combine 3 nearby pickups</p>
+                      <button class="btn btn-sm btn-success" onclick="executeSuggestion(2)">
+                        <i class="bi bi-arrow-right me-1"></i>Execute
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card border-0 bg-dark glow-effect">
+                    <div class="card-body text-center p-3">
+                      <i class="bi bi-shield-check text-info fs-3 mb-2"></i>
+                      <h6 class="card-title">Risk Mitigation</h6>
+                      <p class="card-text small text-muted">Backup plan for expiring items</p>
+                      <button class="btn btn-sm btn-info" onclick="executeSuggestion(3)">
+                        <i class="bi bi-arrow-right me-1"></i>Execute
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JS -->
+    <script src="../resources/scripts/main.js"></script>
+    <script>
+      // Conversational AI System
+      let conversationState = {
+        step: 0,
+        profile: {
+          needs: [],
+          preferences: [],
+          location: '',
+          urgency: 'medium',
+          maxDistance: 10,
+          familySize: 1,
+          dietaryRestrictions: []
+        },
+        conversationHistory: []
+      };
+
+      const conversationFlow = [
+        {
+          question: "Hi! I'm here to help you find the perfect food matches. Let's start with the basics - what type of food assistance are you looking for today?",
+          keywords: ['food', 'help', 'assistance', 'need'],
+          nextStep: 'needs'
+        },
+        {
+          question: "Great! What specific types of food do you need? (e.g., fresh vegetables, protein, dairy, canned goods)",
+          keywords: ['vegetables', 'protein', 'dairy', 'canned', 'fresh', 'meat', 'grains'],
+          nextStep: 'location'
+        },
+        {
+          question: "Perfect! Now, what's your location? You can give me your address, ZIP code, or just the city name.",
+          keywords: ['address', 'zip', 'city', 'location', 'live', 'near'],
+          nextStep: 'urgency'
+        },
+        {
+          question: "Got it! How urgent is your need? Are you looking for food today, this week, or can you wait a bit?",
+          keywords: ['today', 'urgent', 'emergency', 'week', 'wait', 'soon'],
+          nextStep: 'preferences'
+        },
+        {
+          question: "Almost done! Do you have any dietary preferences or restrictions? (vegetarian, gluten-free, halal, etc.)",
+          keywords: ['vegetarian', 'vegan', 'gluten', 'halal', 'kosher', 'allergy', 'diet'],
+          nextStep: 'complete'
+        }
+      ];
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadMatchingData();
+        initializeConversationalAI();
+      });
+
+      function initializeConversationalAI() {
+        // Set up event listeners
+        document.getElementById('userInput').addEventListener('keypress', handleKeyPress);
+        
+        // Initialize profile display
+        updateProfileDisplay();
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+          sendUserMessage();
+        }
+      }
+
+      function sendUserMessage() {
+        const userInput = document.getElementById('userInput');
+        const message = userInput.value.trim();
+        
+        if (!message) return;
+        
+        // Add user message to chat
+        addMessageToChat(message, 'user');
+        
+        // Clear input
+        userInput.value = '';
+        
+        // Process the message
+        processUserMessage(message);
+      }
+
+      function addMessageToChat(message, sender) {
+        const chatContainer = document.getElementById('chatContainer');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message mb-3`;
+        
+        const avatarClass = sender === 'user' ? 'user-avatar' : 'ai-avatar';
+        const avatarIcon = sender === 'user' ? 'bi-person' : 'bi-robot';
+        
+        messageDiv.innerHTML = `
+          <div class="d-flex align-items-start ${sender === 'user' ? 'flex-row-reverse' : ''}">
+            <div class="${avatarClass} ${sender === 'user' ? 'ms-3' : 'me-3'}">
+              <i class="bi ${avatarIcon} text-white fs-6"></i>
+            </div>
+            <div class="message-content ${sender === 'user' ? 'text-end' : ''}">
+              <div class="message-bubble text-white p-3 rounded">
+                <strong>${sender === 'user' ? 'You' : 'AI Assistant'}:</strong> ${message}
+              </div>
+              <small class="text-muted mt-1 d-block">${new Date().toLocaleTimeString()}</small>
+            </div>
+          </div>
+        `;
+        
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Store in conversation history
+        conversationState.conversationHistory.push({
+          sender: sender,
+          message: message,
+          timestamp: new Date()
+        });
+      }
+
+      function processUserMessage(message) {
+        const currentStep = conversationState.step;
+        const lowerMessage = message.toLowerCase();
+        
+        // Extract information based on current step
+        switch (currentStep) {
+          case 0: // Initial needs
+            extractNeeds(message);
+            break;
+          case 1: // Specific food types
+            extractFoodTypes(message);
+            break;
+          case 2: // Location
+            extractLocation(message);
+            break;
+          case 3: // Urgency
+            extractUrgency(message);
+            break;
+          case 4: // Preferences
+            extractPreferences(message);
+            break;
+        }
+        
+        // Move to next step
+        conversationState.step++;
+        
+        if (conversationState.step < conversationFlow.length) {
+          // Show typing indicator
+          showTypingIndicator();
+          
+          // Ask next question after delay
+          setTimeout(() => {
+            hideTypingIndicator();
+            const nextQuestion = conversationFlow[conversationState.step].question;
+            addMessageToChat(nextQuestion, 'ai');
+            updateProfileDisplay();
+          }, 1500);
+        } else {
+          // Conversation complete
+          setTimeout(() => {
+            hideTypingIndicator();
+            addMessageToChat("Perfect! I have all the information I need. Let me find the best matches for you!", 'ai');
+            updateProfileDisplay();
+          }, 1500);
+        }
+      }
+
+      function extractNeeds(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('family') || lowerMessage.includes('children')) {
+          conversationState.profile.familySize = 4;
+        } else if (lowerMessage.includes('couple')) {
+          conversationState.profile.familySize = 2;
+        } else if (lowerMessage.includes('single')) {
+          conversationState.profile.familySize = 1;
+        }
+        
+        if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
+          conversationState.profile.urgency = 'critical';
+        }
+      }
+
+      function extractFoodTypes(message) {
+        const lowerMessage = message.toLowerCase();
+        const foodTypes = [];
+        
+        if (lowerMessage.includes('vegetable') || lowerMessage.includes('produce')) {
+          foodTypes.push('fresh-produce');
+        }
+        if (lowerMessage.includes('protein') || lowerMessage.includes('meat')) {
+          foodTypes.push('protein');
+        }
+        if (lowerMessage.includes('dairy') || lowerMessage.includes('milk')) {
+          foodTypes.push('dairy');
+        }
+        if (lowerMessage.includes('canned') || lowerMessage.includes('non-perishable')) {
+          foodTypes.push('canned-goods');
+        }
+        if (lowerMessage.includes('grain') || lowerMessage.includes('bread')) {
+          foodTypes.push('grains');
+        }
+        
+        conversationState.profile.needs = [...new Set([...conversationState.profile.needs, ...foodTypes])];
+      }
+
+      function extractLocation(message) {
+        // Simple location extraction - in a real app, you'd use geocoding
+        conversationState.profile.location = message;
+      }
+
+      function extractUrgency(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('today') || lowerMessage.includes('now') || lowerMessage.includes('urgent')) {
+          conversationState.profile.urgency = 'critical';
+        } else if (lowerMessage.includes('week') || lowerMessage.includes('soon')) {
+          conversationState.profile.urgency = 'high';
+        } else if (lowerMessage.includes('wait') || lowerMessage.includes('flexible')) {
+          conversationState.profile.urgency = 'low';
+        }
+      }
+
+      function extractPreferences(message) {
+        const lowerMessage = message.toLowerCase();
+        const preferences = [];
+        
+        if (lowerMessage.includes('vegetarian')) preferences.push('vegetarian');
+        if (lowerMessage.includes('vegan')) preferences.push('vegan');
+        if (lowerMessage.includes('gluten')) preferences.push('gluten-free');
+        if (lowerMessage.includes('halal')) preferences.push('halal');
+        if (lowerMessage.includes('kosher')) preferences.push('kosher');
+        if (lowerMessage.includes('organic')) preferences.push('organic');
+        
+        conversationState.profile.preferences = [...new Set([...conversationState.profile.preferences, ...preferences])];
+      }
+
+      function showTypingIndicator() {
+        const chatContainer = document.getElementById('chatContainer');
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-message ai-message mb-3 typing-indicator show';
+        typingDiv.innerHTML = `
+          <div class="d-flex align-items-start">
+            <div class="ai-avatar me-3">
+              <i class="bi bi-robot text-primary fs-4"></i>
+            </div>
+            <div class="message-content">
+              <div class="message-bubble bg-primary text-white p-3 rounded">
+                <strong>AI Assistant:</strong> <span class="typing-dots">...</span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        chatContainer.appendChild(typingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      function hideTypingIndicator() {
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+
+      function updateProfileDisplay() {
+        const profileDiv = document.getElementById('dynamicProfile');
+        const completenessDiv = document.getElementById('profileCompleteness');
+        
+        const profile = conversationState.profile;
+        let completeness = 0;
+        let profileHTML = '';
+        
+        // Calculate completeness
+        if (profile.needs.length > 0) completeness += 20;
+        if (profile.location) completeness += 20;
+        if (profile.urgency !== 'medium') completeness += 20;
+        if (profile.preferences.length > 0) completeness += 20;
+        if (profile.familySize > 1) completeness += 20;
+        
+        completenessDiv.textContent = `${completeness}%`;
+        
+        // Build profile display
+        if (profile.needs.length > 0) {
+          profileHTML += `<div class="profile-item"><i class="bi bi-basket"></i>Needs: ${profile.needs.join(', ')}</div>`;
+        }
+        
+        if (profile.location) {
+          profileHTML += `<div class="profile-item"><i class="bi bi-geo-alt"></i>Location: ${profile.location}</div>`;
+        }
+        
+        if (profile.urgency !== 'medium') {
+          profileHTML += `<div class="profile-item"><i class="bi bi-clock"></i>Urgency: ${profile.urgency}</div>`;
+        }
+        
+        if (profile.preferences.length > 0) {
+          profileHTML += `<div class="profile-item"><i class="bi bi-heart"></i>Preferences: ${profile.preferences.join(', ')}</div>`;
+        }
+        
+        if (profile.familySize > 1) {
+          profileHTML += `<div class="profile-item"><i class="bi bi-people"></i>Family Size: ${profile.familySize}</div>`;
+        }
+        
+        if (profileHTML === '') {
+          profileHTML = `
+            <div class="text-center text-muted py-3">
+              <i class="bi bi-person-plus fs-1 mb-2"></i>
+              <p class="small">Your profile will build as we chat!</p>
+            </div>
+          `;
+        }
+        
+        profileDiv.innerHTML = profileHTML;
+      }
+
+
+
+      function quickStart(type) {
+        const quickMessages = {
+          'family': "I need food for my family of 4",
+          'emergency': "I have an emergency need for food today",
+          'specific': "I'm looking for specific food items",
+          'donate': "I want to donate food to help others"
+        };
+        
+        document.getElementById('userInput').value = quickMessages[type];
+        sendUserMessage();
+      }
+
+      // Smart matching functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        loadMatchingData();
+      });
+
+      // Sample data for matching
+      const sampleDonations = [
+        {
+          id: 1,
+          title: "Fresh Organic Vegetables",
+          description: "50 lbs of mixed organic vegetables from local farm",
+          category: "fresh-produce",
+          location: "456 Farm Road, City, State 12345",
+          distance: 0.8,
+          urgency: "high",
+          expires: "Tomorrow",
+          preferences: ["organic", "vegetarian"],
+          quantity: "50 lbs",
+          donor: "Green Valley Farm"
+        },
+        {
+          id: 2,
+          title: "Canned Protein Collection",
+          description: "100 cans of beans, tuna, and chicken",
+          category: "protein",
+          location: "789 Community St, City, State 12345",
+          distance: 2.1,
+          urgency: "low",
+          expires: "Long shelf life",
+          preferences: ["gluten-free"],
+          quantity: "100 cans",
+          donor: "Community Food Bank"
+        },
+        {
+          id: 3,
+          title: "Fresh Bakery Items",
+          description: "30 loaves of artisan bread and pastries",
+          category: "baked-goods",
+          location: "321 Main St, City, State 12345",
+          distance: 1.5,
+          urgency: "high",
+          expires: "Today",
+          preferences: ["vegetarian"],
+          quantity: "30 items",
+          donor: "Downtown Bakery"
+        },
+        {
+          id: 4,
+          title: "Dairy Products",
+          description: "Fresh milk, cheese, and yogurt",
+          category: "dairy",
+          location: "654 Dairy Lane, City, State 12345",
+          distance: 3.2,
+          urgency: "medium",
+          expires: "2 days",
+          preferences: ["organic"],
+          quantity: "25 items",
+          donor: "Local Dairy Farm"
+        }
+      ];
+
+      const sampleRequests = [
+        {
+          id: 1,
+          title: "Family Food Assistance",
+          description: "Family of 4 needs fresh vegetables and dairy",
+          needs: ["fresh-produce", "dairy"],
+          location: "123 Main St, City, State 12345",
+          distance: 0.5,
+          urgency: "critical",
+          type: "Individual",
+          preferences: ["vegetarian"],
+          familySize: 4
+        },
+        {
+          id: 2,
+          title: "Community Center Distribution",
+          description: "Need non-perishables for weekly distribution",
+          needs: ["canned-goods", "grains"],
+          location: "987 Center Ave, City, State 12345",
+          distance: 1.2,
+          urgency: "medium",
+          type: "Organization",
+          preferences: ["halal"],
+          familySize: 50
+        },
+        {
+          id: 3,
+          title: "Senior Nutrition Program",
+          description: "Low-sodium, diabetic-friendly items needed",
+          needs: ["fresh-produce", "protein"],
+          location: "555 Senior Blvd, City, State 12345",
+          distance: 2.8,
+          urgency: "low",
+          type: "Organization",
+          preferences: ["low-sodium", "organic"],
+          familySize: 25
+        }
+      ];
+
+      function loadMatchingData() {
+        console.log('Loading smart matching data...');
+        
+        // Load sample data
+        loadDonations();
+        loadRequests();
+        updateStatistics();
+        
+        // Restore claimed state for previously claimed donations
+        restoreItemStates();
+      }
+
+      function loadDonations() {
+        const donationsList = document.getElementById('donationsList');
+        donationsList.innerHTML = '';
+        
+        sampleDonations.forEach(donation => {
+          const donationItem = createDonationItem(donation);
+          donationsList.appendChild(donationItem);
+        });
+      }
+
+      function loadRequests() {
+        const requestsList = document.getElementById('requestsList');
+        requestsList.innerHTML = '';
+        
+        sampleRequests.forEach(request => {
+          const requestItem = createRequestItem(request);
+          requestsList.appendChild(requestItem);
+        });
+      }
+
+      function createDonationItem(donation) {
+        const item = document.createElement('div');
+        item.className = 'list-group-item bg-dark border-secondary';
+        
+        const urgencyClass = getUrgencyClass(donation.urgency);
+        const distanceClass = getDistanceClass(donation.distance);
+        
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-1">${donation.title}</h6>
+              <p class="mb-1 text-muted">${donation.description}</p>
+              <div class="mb-1">
+                <span class="badge bg-secondary me-1">${donation.category}</span>
+                <span class="badge bg-info me-1">${donation.quantity}</span>
+                <span class="badge bg-primary">${donation.donor}</span>
+              </div>
+              <small class="${urgencyClass}">Expires: ${donation.expires}</small>
+            </div>
+            <div class="text-end">
+              <span class="badge ${distanceClass} mb-2">${donation.distance} miles</span>
+              <br>
+              <button class="btn btn-sm btn-primary" onclick="claimDonation(${donation.id})">
+                <i class="bi bi-download me-1"></i>Claim
+              </button>
+            </div>
+          </div>
+        `;
+        
+        return item;
+      }
+
+      function createRequestItem(request) {
+        const item = document.createElement('div');
+        item.className = 'list-group-item bg-dark border-secondary';
+        
+        const urgencyClass = getUrgencyClass(request.urgency);
+        const distanceClass = getDistanceClass(request.distance);
+        
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-1">${request.title}</h6>
+              <p class="mb-1 text-muted">${request.description}</p>
+              <div class="mb-1">
+                <span class="badge bg-secondary me-1">${request.type}</span>
+                <span class="badge bg-info me-1">${request.familySize} people</span>
+                <span class="badge bg-primary">${request.needs.join(', ')}</span>
+              </div>
+              <small class="${urgencyClass}">Urgency: ${request.urgency}</small>
+            </div>
+            <div class="text-end">
+              <span class="badge ${distanceClass} mb-2">${request.distance} miles</span>
+              <br>
+              <button class="btn btn-sm btn-success" onclick="fulfillRequest(${request.id})">
+                <i class="bi bi-check-circle me-1"></i>Fulfill
+              </button>
+            </div>
+          </div>
+        `;
+        
+        return item;
+      }
+
+      function getUrgencyClass(urgency) {
+        switch(urgency) {
+          case 'critical': return 'text-danger';
+          case 'high': return 'text-warning';
+          case 'medium': return 'text-info';
+          case 'low': return 'text-success';
+          default: return 'text-muted';
+        }
+      }
+
+      function getDistanceClass(distance) {
+        if (distance <= 1) return 'bg-success';
+        if (distance <= 3) return 'bg-info';
+        if (distance <= 5) return 'bg-warning';
+        return 'bg-secondary';
+      }
+
+      function updateStatistics() {
+        document.getElementById('totalDonations').textContent = sampleDonations.length;
+        document.getElementById('totalRequests').textContent = sampleRequests.length;
+        document.getElementById('matchScore').textContent = '0%';
+      }
+
+      // AI-Powered Functions with Ollama Integration
+      const AI_SERVICES = {
+        // Ollama Local AI (FREE!)
+        OLLAMA: {
+          name: 'Ollama Local AI',
+          endpoint: 'http://localhost:11434/api/generate',
+          model: 'gemma3:4b', // Updated to use model that fits available memory
+          description: '100% Free local AI - no API costs!'
+        },
+        // Alternative free services
+        HUGGINGFACE: {
+          name: 'Hugging Face Inference API',
+          endpoint: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
+          freeRequests: 1000,
+          description: 'Free inference API with 1000 requests/month'
+        },
+        LOCAL_AI: {
+          name: 'Local AI Simulation',
+          endpoint: 'local',
+          description: 'Simulated AI responses for demo'
+        }
+      };
+
+      let currentAIService = AI_SERVICES.OLLAMA; // Default to Ollama
+
+      function changeAIService() {
+        const serviceSelect = document.getElementById('aiServiceSelect');
+        const selectedService = serviceSelect.value;
+        
+        currentAIService = AI_SERVICES[selectedService];
+        
+        console.log('Switched to AI service:', currentAIService.name);
+        
+        // Show service status
+        const statusMessage = selectedService === 'OLLAMA' ? 
+          '🤖 Using Ollama (Local AI - 100% Free)' :
+          selectedService === 'HUGGINGFACE' ?
+          '🌐 Using Hugging Face (Cloud API)' :
+          '💻 Using Demo Mode (Simulated AI)';
+        
+        if (window.showNotification) {
+          window.showNotification(statusMessage, 'info');
+        }
+      }
+
+      async function testOllamaConnection() {
+        const testButton = event.target;
+        const originalText = testButton.innerHTML;
+        
+        // Show loading state
+        testButton.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Testing...';
+        testButton.disabled = true;
+        
+        try {
+          const response = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'llama3.2:3b',
+              prompt: 'Hello, this is a connection test.',
+              stream: false,
+              options: {
+                max_tokens: 10
+              }
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            testButton.innerHTML = '<i class="bi bi-check-circle me-1"></i>Connected!';
+            testButton.className = 'btn btn-success btn-sm';
+            
+            if (window.showNotification) {
+              window.showNotification('✅ Ollama connection successful! AI is ready to use.', 'success');
+            } else {
+              alert('✅ Ollama connection successful! AI is ready to use.');
+            }
+          } else {
+            throw new Error(`HTTP ${response.status}`);
+          }
+        } catch (error) {
+          console.error('Ollama connection test failed:', error);
+          testButton.innerHTML = '<i class="bi bi-x-circle me-1"></i>Failed';
+          testButton.className = 'btn btn-danger btn-sm';
+          
+          if (window.showNotification) {
+            window.showNotification('❌ Ollama connection failed. Make sure Ollama is running on localhost:11434', 'error');
+          } else {
+            alert('❌ Ollama connection failed. Make sure Ollama is running on localhost:11434');
+          }
+        }
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+          testButton.innerHTML = originalText;
+          testButton.className = 'btn btn-primary btn-sm';
+          testButton.disabled = false;
+        }, 3000);
+      }
+
+      async function askAI() {
+        const query = document.getElementById('aiQuery').value.trim();
+        if (!query) {
+          alert('Please enter a question for the AI assistant.');
+          return;
+        }
+
+        console.log('AI Query:', query);
+        showAILoading();
+
+        try {
+          let response;
+          
+          if (currentAIService === AI_SERVICES.OLLAMA) {
+            // Use Ollama API
+            response = await callOllamaAPI(query);
+          } else if (currentAIService === AI_SERVICES.HUGGINGFACE) {
+            // Use Hugging Face API
+            response = await callHuggingFaceAPI(query);
+          } else {
+            // Use local simulation
+            response = generateAIResponse(query);
+          }
+          
+          displayAIResponse(response);
+        } catch (error) {
+          console.error('AI Error:', error);
+          // Fallback to local simulation
+          const fallbackResponse = generateAIResponse(query);
+          displayAIResponse(fallbackResponse + '\n\n⚠️ Note: Using fallback response - Ollama may not be running.\n\nTo enable AI features:\n1. Install Ollama from https://ollama.ai/download\n2. Run: ollama serve\n3. Run: ollama pull llama3.2:3b\n4. Refresh this page');
+        }
+      }
+
+      async function callOllamaAPI(query) {
+        const prompt = `You are an AI assistant for WasteNaut, a food donation matching platform.
+
+User Query: "${query}"
+
+User Profile:
+- Needs: ${conversationState.profile.needs.join(', ') || 'Not specified'}
+- Food Types: ${conversationState.profile.foodTypes.join(', ') || 'Not specified'}
+- Location: ${conversationState.profile.location || 'Not specified'}
+- Urgency: ${conversationState.profile.urgency || 'Not specified'}
+- Dietary Restrictions: ${conversationState.profile.dietaryRestrictions.join(', ') || 'Not specified'}
+
+Available Donations:
+${JSON.stringify(sampleDonations, null, 2)}
+
+Available Requests:
+${JSON.stringify(sampleRequests, null, 2)}
+
+Please provide a helpful, personalized response that:
+1. Directly addresses the user's query
+2. Suggests specific matches based on their profile
+3. Explains why certain options are good matches
+4. Is encouraging and supportive
+5. Keeps response under 200 words
+
+Response:`;
+
+        const response = await fetch(currentAIService.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: currentAIService.model,
+            prompt: prompt,
+            stream: false,
+            options: {
+              temperature: 0.7,
+              top_p: 0.9,
+              max_tokens: 300
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Ollama API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.response || 'Sorry, I had trouble processing your request.';
+      }
+
+      async function callHuggingFaceAPI(query) {
+        const response = await fetch(currentAIService.endpoint, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${currentAIService.apiKey || 'demo'}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            inputs: query,
+            parameters: {
+              max_length: 200,
+              temperature: 0.7
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Hugging Face API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data[0]?.generated_text || 'Sorry, I had trouble processing your request.';
+      }
+
+      function generateAIResponse(query) {
+        const userPreferences = Array.from(document.getElementById('userPreferences').selectedOptions).map(opt => opt.value);
+        const userNeeds = Array.from(document.getElementById('userNeeds').selectedOptions).map(opt => opt.value);
+        const userUrgency = document.getElementById('urgencyLevel').value;
+        const maxDistance = parseInt(document.getElementById('maxDistance').value);
+
+        // AI-powered response generation
+        const responses = {
+          // Food matching queries
+          'vegetarian': `Based on your vegetarian preferences, I found ${sampleDonations.filter(d => d.preferences.includes('vegetarian')).length} excellent matches! The Fresh Organic Vegetables from Green Valley Farm (0.8 miles) is your best match with a 95% compatibility score.`,
+          
+          'family': `For your family needs, I recommend the Family Food Assistance program (0.5 miles) which specifically helps families of 4. They need fresh vegetables and dairy, matching perfectly with available donations.`,
+          
+          'urgent': `Given your ${userUrgency} urgency level, I've prioritized nearby options. The Fresh Bakery Items (1.5 miles) expires today and matches your needs perfectly.`,
+          
+          'distance': `Within your ${maxDistance}-mile radius, I found ${sampleDonations.filter(d => d.distance <= maxDistance).length} available donations and ${sampleRequests.filter(r => r.distance <= maxDistance).length} requests you can help with.`,
+          
+          'recommendation': `Based on your profile, here are my top 3 AI-powered recommendations:
+1. 🥇 Fresh Organic Vegetables (95% match) - Perfect for your vegetarian preferences
+2. 🥈 Family Food Assistance (90% match) - Close distance, high impact
+3. 🥉 Community Center Distribution (85% match) - Great for helping others`,
+          
+          'help': `I'm here to help! I can:
+• Find the best food matches based on your preferences
+• Suggest optimal search strategies
+• Analyze your profile for better recommendations
+• Provide insights on local food availability
+• Help you help others in need
+
+What would you like to know?`,
+          
+          'default': `I understand you're looking for "${query}". Based on your preferences (${userPreferences.join(', ')}) and needs (${userNeeds.join(', ')}), I recommend running our smart matching algorithm to find personalized results. Your ${userUrgency} urgency level and ${maxDistance}-mile search radius will help me find the best matches for you.`
+        };
+
+        // Find the best matching response
+        const queryLower = query.toLowerCase();
+        for (const [key, response] of Object.entries(responses)) {
+          if (queryLower.includes(key) || queryLower.includes('help') || queryLower.includes('what')) {
+            return response;
+          }
+        }
+
+        return responses.default;
+      }
+
+      function showAILoading() {
+        const responseDiv = document.getElementById('aiResponse');
+        const responseText = document.getElementById('aiResponseText');
+        
+        responseDiv.style.display = 'block';
+        responseDiv.className = 'alert alert-secondary';
+        responseText.innerHTML = `
+          <div class="d-flex align-items-center">
+            <div class="spinner-border spinner-border-sm me-2" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            AI is thinking...
+          </div>
+        `;
+      }
+
+      function displayAIResponse(response) {
+        const responseDiv = document.getElementById('aiResponse');
+        const responseText = document.getElementById('aiResponseText');
+        
+        responseDiv.className = 'alert alert-info';
+        responseText.innerHTML = response;
+        
+        // Add typing effect
+        let index = 0;
+        const fullText = response;
+        responseText.innerHTML = '';
+        
+        function typeText() {
+          if (index < fullText.length) {
+            responseText.innerHTML += fullText.charAt(index);
+            index++;
+            setTimeout(typeText, 20);
+          }
+        }
+        
+        typeText();
+      }
+
+      function generateAIInsights() {
+        console.log('Generating AI insights...');
+        
+        // Simulate AI analysis
+        const insights = [
+          {
+            type: 'tip',
+            message: 'Based on your preferences, consider expanding your search radius to 15 miles for 3x more matches.',
+            icon: '💡'
+          },
+          {
+            type: 'insight',
+            message: 'Users with vegetarian preferences find 40% more matches in the morning hours.',
+            icon: '🎯'
+          },
+          {
+            type: 'optimization',
+            message: 'Your profile is 95% complete. Add dietary restrictions for better matches.',
+            icon: '⚡'
+          },
+          {
+            type: 'prediction',
+            message: 'AI predicts 12 new donations will be available in your area within 24 hours.',
+            icon: '🔮'
+          },
+          {
+            type: 'trend',
+            message: 'Fresh produce donations increase by 60% on weekends in your area.',
+            icon: '📈'
+          }
+        ];
+
+        const recommendationsDiv = document.getElementById('aiRecommendations');
+        recommendationsDiv.innerHTML = '';
+
+        // Show 3 random insights
+        const selectedInsights = insights.sort(() => 0.5 - Math.random()).slice(0, 3);
+        
+        selectedInsights.forEach(insight => {
+          const alertClass = insight.type === 'tip' ? 'alert-info' : 
+                           insight.type === 'insight' ? 'alert-success' : 
+                           insight.type === 'optimization' ? 'alert-warning' : 'alert-primary';
+          
+          const insightDiv = document.createElement('div');
+          insightDiv.className = `alert ${alertClass} py-2 mb-2`;
+          insightDiv.innerHTML = `<small><strong>${insight.icon} ${insight.type.charAt(0).toUpperCase() + insight.type.slice(1)}:</strong> ${insight.message}</small>`;
+          
+          recommendationsDiv.appendChild(insightDiv);
+        });
+
+        // Update AI metrics with slight variations
+        const accuracy = document.getElementById('aiMatchAccuracy');
+        const successRate = document.getElementById('aiSuccessRate');
+        const satisfaction = document.getElementById('aiSatisfaction');
+        
+        if (accuracy) accuracy.textContent = `${90 + Math.floor(Math.random() * 10)}%`;
+        if (successRate) successRate.textContent = `${85 + Math.floor(Math.random() * 10)}%`;
+        if (satisfaction) satisfaction.textContent = `${(4.5 + Math.random() * 0.5).toFixed(1)}/5`;
+      }
+
+      function runAIPoweredMatching() {
+        console.log('Running AI-powered matching...');
+        
+        // Use conversational profile instead of form inputs
+        const profile = conversationState.profile;
+        
+        // AI-enhanced scoring
+        const aiEnhancedMatches = calculateAIEnhancedMatches(
+          profile.preferences, 
+          profile.needs, 
+          profile.maxDistance, 
+          profile.urgency
+        );
+        
+        // Display AI-powered results
+        displayAIPoweredMatches(aiEnhancedMatches);
+        updateAIStatistics(aiEnhancedMatches);
+        
+        // Generate AI insights
+        generateAIInsights();
+        
+        // Add AI message about results
+        addMessageToChat(`Great! I found ${aiEnhancedMatches.length} perfect matches for you. Check out the results below!`, 'ai');
+        
+        if (window.showNotification) {
+          window.showNotification(`AI found ${aiEnhancedMatches.length} optimized matches with 92% accuracy!`, 'success');
+        } else {
+          alert(`AI found ${aiEnhancedMatches.length} optimized matches with 92% accuracy!`);
+        }
+      }
+
+      function calculateAIEnhancedMatches(userPreferences, userNeeds, maxDistance, userUrgency) {
+        const matches = [];
+        
+        // AI-enhanced scoring with machine learning simulation
+        sampleDonations.forEach(donation => {
+          if (donation.distance <= maxDistance) {
+            const baseScore = calculateMatchScore(donation, userPreferences, userNeeds, userUrgency);
+            
+            // AI enhancement factors
+            const aiEnhancement = calculateAIEnhancement(donation, userPreferences, userNeeds, userUrgency);
+            const finalScore = Math.min(100, baseScore + aiEnhancement);
+            
+            if (finalScore > 0) {
+              matches.push({
+                type: 'donation',
+                item: donation,
+                score: finalScore,
+                baseScore: baseScore,
+                aiEnhancement: aiEnhancement,
+                reasons: getAIEnhancedReasons(donation, userPreferences, userNeeds, userUrgency, aiEnhancement)
+              });
+            }
+          }
+        });
+
+        sampleRequests.forEach(request => {
+          if (request.distance <= maxDistance) {
+            const baseScore = calculateRequestMatchScore(request, userPreferences, userNeeds, userUrgency);
+            const aiEnhancement = calculateAIEnhancement(request, userPreferences, userNeeds, userUrgency);
+            const finalScore = Math.min(100, baseScore + aiEnhancement);
+            
+            if (finalScore > 0) {
+              matches.push({
+                type: 'request',
+                item: request,
+                score: finalScore,
+                baseScore: baseScore,
+                aiEnhancement: aiEnhancement,
+                reasons: getAIEnhancedReasons(request, userPreferences, userNeeds, userUrgency, aiEnhancement)
+              });
+            }
+          }
+        });
+
+        return matches.sort((a, b) => b.score - a.score);
+      }
+
+      function calculateAIEnhancement(item, userPreferences, userNeeds, userUrgency) {
+        let enhancement = 0;
+        
+        // AI pattern recognition simulation
+        const patterns = {
+          'vegetarian': userPreferences.includes('vegetarian') ? 8 : 0,
+          'organic': userPreferences.includes('organic') ? 6 : 0,
+          'fresh-produce': userNeeds.includes('fresh-produce') ? 7 : 0,
+          'high-urgency': userUrgency === 'high' && item.urgency === 'high' ? 10 : 0,
+          'critical-need': item.urgency === 'critical' ? 12 : 0,
+          'close-distance': item.distance <= 1 ? 5 : 0
+        };
+
+        // Apply AI enhancements
+        Object.entries(patterns).forEach(([pattern, value]) => {
+          if (pattern === 'vegetarian' && item.preferences?.includes('vegetarian')) enhancement += value;
+          if (pattern === 'organic' && item.preferences?.includes('organic')) enhancement += value;
+          if (pattern === 'fresh-produce' && item.category === 'fresh-produce') enhancement += value;
+          if (pattern === 'high-urgency') enhancement += value;
+          if (pattern === 'critical-need') enhancement += value;
+          if (pattern === 'close-distance') enhancement += value;
+        });
+
+        return Math.min(20, enhancement); // Cap at 20 points
+      }
+
+      function getAIEnhancedReasons(item, userPreferences, userNeeds, userUrgency, aiEnhancement) {
+        const reasons = getMatchReasons(item, userPreferences, userNeeds, userUrgency);
+        
+        if (aiEnhancement > 0) {
+          reasons.push(`AI Enhanced (+${aiEnhancement} points)`);
+        }
+        
+        if (item.urgency === 'critical') {
+          reasons.push('🚨 Critical Priority Match');
+        }
+        
+        if (item.distance <= 1) {
+          reasons.push('📍 Ultra-Close Location');
+        }
+        
+        return reasons;
+      }
+
+      function displayAIPoweredMatches(matches) {
+        const personalizedMatches = document.getElementById('personalizedMatches');
+        const matchCount = document.getElementById('matchCount');
+        
+        if (matchCount) matchCount.textContent = `${matches.length} AI matches`;
+        
+        if (!personalizedMatches) return;
+        
+        if (matches.length === 0) {
+          personalizedMatches.innerHTML = `
+            <div class="text-center text-muted py-4">
+              <i class="bi bi-exclamation-triangle fs-1 mb-3"></i>
+              <p>AI found no matches with your current preferences.</p>
+              <p class="small">Try asking our AI assistant for personalized recommendations!</p>
+            </div>
+          `;
+          return;
+        }
+        
+        personalizedMatches.innerHTML = '';
+        
+        matches.forEach((match, index) => {
+          const matchItem = createAIPoweredMatchItem(match, index + 1);
+          personalizedMatches.appendChild(matchItem);
+        });
+      }
+
+      function createAIPoweredMatchItem(match, rank) {
+        const item = document.createElement('div');
+        item.className = 'list-group-item bg-dark border-secondary mb-2';
+        
+        const scoreColor = match.score >= 90 ? 'success' : match.score >= 75 ? 'warning' : 'info';
+        const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🤖';
+        
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center mb-2">
+                <span class="me-2">${rankIcon}</span>
+                <h6 class="mb-0">${match.item.title}</h6>
+                <span class="badge bg-${scoreColor} ms-2">${match.score}% AI</span>
+                ${match.aiEnhancement > 0 ? `<span class="badge bg-primary ms-1">+${match.aiEnhancement}</span>` : ''}
+              </div>
+              <p class="mb-1 text-muted">${match.item.description}</p>
+              <div class="mb-2">
+                ${match.reasons.map(reason => `<span class="badge bg-secondary me-1">${reason}</span>`).join('')}
+              </div>
+              <small class="text-muted">
+                <i class="bi bi-geo-alt me-1"></i>${match.item.distance} miles away
+                ${match.type === 'donation' ? 
+                  `<span class="ms-2"><i class="bi bi-clock me-1"></i>Expires: ${match.item.expires}</span>` :
+                  `<span class="ms-2"><i class="bi bi-people me-1"></i>${match.item.familySize} people</span>`
+                }
+                <span class="ms-2"><i class="bi bi-cpu me-1"></i>AI Optimized</span>
+              </small>
+            </div>
+            <div class="text-end">
+              ${match.type === 'donation' ? 
+                `<button class="btn btn-sm btn-primary" onclick="claimDonation(${match.item.id})">
+                  <i class="bi bi-download me-1"></i>Claim
+                </button>` :
+                `<button class="btn btn-sm btn-success" onclick="fulfillRequest(${match.item.id})">
+                  <i class="bi bi-check-circle me-1"></i>Fulfill
+                </button>`
+              }
+            </div>
+          </div>
+        `;
+        
+        return item;
+      }
+
+      function updateAIStatistics(matches) {
+        const avgScore = matches.length > 0 ? 
+          Math.round(matches.reduce((sum, match) => sum + match.score, 0) / matches.length) : 0;
+        
+        const matchScore = document.getElementById('matchScore');
+        if (matchScore) matchScore.textContent = `${avgScore}% AI`;
+        
+        // Update AI metrics
+        const accuracy = document.getElementById('aiMatchAccuracy');
+        const successRate = document.getElementById('aiSuccessRate');
+        const satisfaction = document.getElementById('aiSatisfaction');
+        
+        if (accuracy) accuracy.textContent = `${90 + Math.floor(Math.random() * 10)}%`;
+        if (successRate) successRate.textContent = `${85 + Math.floor(Math.random() * 10)}%`;
+        if (satisfaction) satisfaction.textContent = `${(4.5 + Math.random() * 0.5).toFixed(1)}/5`;
+      }
+
+      function calculateMatches(userPreferences, userNeeds, maxDistance, userUrgency) {
+        const matches = [];
+        
+        // Calculate matches for donations
+        sampleDonations.forEach(donation => {
+          if (donation.distance <= maxDistance) {
+            const matchScore = calculateMatchScore(donation, userPreferences, userNeeds, userUrgency);
+            if (matchScore > 0) {
+              matches.push({
+                type: 'donation',
+                item: donation,
+                score: matchScore,
+                reasons: getMatchReasons(donation, userPreferences, userNeeds, userUrgency)
+              });
+            }
+          }
+        });
+
+        // Calculate matches for requests (if user wants to help others)
+        sampleRequests.forEach(request => {
+          if (request.distance <= maxDistance) {
+            const matchScore = calculateRequestMatchScore(request, userPreferences, userNeeds, userUrgency);
+            if (matchScore > 0) {
+              matches.push({
+                type: 'request',
+                item: request,
+                score: matchScore,
+                reasons: getRequestMatchReasons(request, userPreferences, userNeeds, userUrgency)
+              });
+            }
+          }
+        });
+
+        // Sort by match score (highest first)
+        return matches.sort((a, b) => b.score - a.score);
+      }
+
+      function calculateMatchScore(donation, userPreferences, userNeeds, userUrgency) {
+        let score = 0;
+        
+        // Distance score (40% weight)
+        const distanceScore = Math.max(0, 100 - (donation.distance * 20));
+        score += distanceScore * 0.4;
+        
+        // Category match score (35% weight)
+        const categoryMatch = userNeeds.includes(donation.category) ? 100 : 0;
+        score += categoryMatch * 0.35;
+        
+        // Preference match score (15% weight)
+        const preferenceMatches = donation.preferences.filter(pref => userPreferences.includes(pref)).length;
+        const preferenceScore = (preferenceMatches / Math.max(donation.preferences.length, 1)) * 100;
+        score += preferenceScore * 0.15;
+        
+        // Urgency alignment (10% weight)
+        const urgencyScore = getUrgencyAlignmentScore(donation.urgency, userUrgency);
+        score += urgencyScore * 0.1;
+        
+        return Math.round(score);
+      }
+
+      function calculateRequestMatchScore(request, userPreferences, userNeeds, userUrgency) {
+        let score = 0;
+        
+        // Distance score (40% weight)
+        const distanceScore = Math.max(0, 100 - (request.distance * 20));
+        score += distanceScore * 0.4;
+        
+        // Need overlap score (35% weight)
+        const needMatches = request.needs.filter(need => userNeeds.includes(need)).length;
+        const needScore = (needMatches / Math.max(request.needs.length, 1)) * 100;
+        score += needScore * 0.35;
+        
+        // Preference match score (15% weight)
+        const preferenceMatches = request.preferences.filter(pref => userPreferences.includes(pref)).length;
+        const preferenceScore = (preferenceMatches / Math.max(request.preferences.length, 1)) * 100;
+        score += preferenceScore * 0.15;
+        
+        // Urgency alignment (10% weight)
+        const urgencyScore = getUrgencyAlignmentScore(request.urgency, userUrgency);
+        score += urgencyScore * 0.1;
+        
+        return Math.round(score);
+      }
+
+      function getUrgencyAlignmentScore(itemUrgency, userUrgency) {
+        const urgencyLevels = { 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
+        const itemLevel = urgencyLevels[itemUrgency] || 1;
+        const userLevel = urgencyLevels[userUrgency] || 2;
+        
+        // Higher score for matching urgency levels
+        const diff = Math.abs(itemLevel - userLevel);
+        return Math.max(0, 100 - (diff * 25));
+      }
+
+      function getMatchReasons(donation, userPreferences, userNeeds, userUrgency) {
+        const reasons = [];
+        
+        if (donation.distance <= 1) {
+          reasons.push('Very close to you');
+        } else if (donation.distance <= 3) {
+          reasons.push('Close distance');
+        }
+        
+        if (userNeeds.includes(donation.category)) {
+          reasons.push('Matches your needs');
+        }
+        
+        const preferenceMatches = donation.preferences.filter(pref => userPreferences.includes(pref));
+        if (preferenceMatches.length > 0) {
+          reasons.push(`Matches preferences: ${preferenceMatches.join(', ')}`);
+        }
+        
+        if (donation.urgency === 'high' && userUrgency === 'high') {
+          reasons.push('High urgency match');
+        }
+        
+        return reasons;
+      }
+
+      function getRequestMatchReasons(request, userPreferences, userNeeds, userUrgency) {
+        const reasons = [];
+        
+        if (request.distance <= 1) {
+          reasons.push('Very close to you');
+        } else if (request.distance <= 3) {
+          reasons.push('Close distance');
+        }
+        
+        const needMatches = request.needs.filter(need => userNeeds.includes(need));
+        if (needMatches.length > 0) {
+          reasons.push(`Matches your needs: ${needMatches.join(', ')}`);
+        }
+        
+        const preferenceMatches = request.preferences.filter(pref => userPreferences.includes(pref));
+        if (preferenceMatches.length > 0) {
+          reasons.push(`Matches preferences: ${preferenceMatches.join(', ')}`);
+        }
+        
+        if (request.urgency === 'critical') {
+          reasons.push('Critical need - immediate help needed');
+        }
+        
+        return reasons;
+      }
+
+      function showMatchingProgress() {
+        console.log('showMatchingProgress called');
+        const personalizedMatches = document.getElementById('personalizedMatches');
+        
+        if (!personalizedMatches) {
+          console.error('personalizedMatches element not found');
+          return;
+        }
+        
+        personalizedMatches.innerHTML = `
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary mb-3" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h6>Analyzing your preferences...</h6>
+            <p class="text-muted">Finding the best matches based on your location, needs, and preferences.</p>
+          </div>
+        `;
+        
+        console.log('Loading state displayed');
+      }
+
+      function displayPersonalizedMatches(matches) {
+        console.log('displayPersonalizedMatches called with:', matches);
+        
+        const personalizedMatches = document.getElementById('personalizedMatches');
+        const matchCount = document.getElementById('matchCount');
+        
+        if (!personalizedMatches) {
+          console.error('personalizedMatches element not found');
+          return;
+        }
+        
+        if (matchCount) {
+          matchCount.textContent = `${matches.length} matches`;
+        }
+        
+        if (matches.length === 0) {
+          personalizedMatches.innerHTML = `
+            <div class="text-center text-muted py-4">
+              <i class="bi bi-exclamation-triangle fs-1 mb-3"></i>
+              <p>No matches found with your current preferences.</p>
+              <p class="small">Try adjusting your distance or preferences to see more options.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        personalizedMatches.innerHTML = '';
+        
+        matches.forEach((match, index) => {
+          const matchItem = createPersonalizedMatchItem(match, index + 1);
+          personalizedMatches.appendChild(matchItem);
+        });
+        
+        console.log('Personalized matches displayed successfully');
+      }
+
+      function createPersonalizedMatchItem(match, rank) {
+        const item = document.createElement('div');
+        item.className = 'list-group-item bg-dark border-secondary mb-2';
+        
+        const scoreColor = match.score >= 80 ? 'success' : match.score >= 60 ? 'warning' : 'info';
+        const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '⭐';
+        
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center mb-2">
+                <span class="me-2">${rankIcon}</span>
+                <h6 class="mb-0">${match.item.title}</h6>
+                <span class="badge bg-${scoreColor} ms-2">${match.score}% match</span>
+              </div>
+              <p class="mb-1 text-muted">${match.item.description}</p>
+              <div class="mb-2">
+                ${match.reasons.map(reason => `<span class="badge bg-secondary me-1">${reason}</span>`).join('')}
+              </div>
+              <small class="text-muted">
+                <i class="bi bi-geo-alt me-1"></i>${match.item.distance} miles away
+                ${match.type === 'donation' ? 
+                  `<span class="ms-2"><i class="bi bi-clock me-1"></i>Expires: ${match.item.expires}</span>` :
+                  `<span class="ms-2"><i class="bi bi-people me-1"></i>${match.item.familySize} people</span>`
+                }
+              </small>
+            </div>
+            <div class="text-end">
+              ${match.type === 'donation' ? 
+                `<button class="btn btn-sm btn-primary" onclick="claimDonation(${match.item.id})">
+                  <i class="bi bi-download me-1"></i>Claim
+                </button>` :
+                `<button class="btn btn-sm btn-success" onclick="fulfillRequest(${match.item.id})">
+                  <i class="bi bi-check-circle me-1"></i>Fulfill
+                </button>`
+              }
+            </div>
+          </div>
+        `;
+        
+        return item;
+      }
+
+      function updateMatchStatistics(matches) {
+        const avgScore = matches.length > 0 ? 
+          Math.round(matches.reduce((sum, match) => sum + match.score, 0) / matches.length) : 0;
+        
+        document.getElementById('matchScore').textContent = `${avgScore}%`;
+        
+        // Update weights based on user preferences
+        const userUrgency = document.getElementById('urgencyLevel').value;
+        if (userUrgency === 'critical') {
+          document.getElementById('urgencyWeight').textContent = '40%';
+          document.getElementById('distanceWeight').textContent = '30%';
+          document.getElementById('preferenceWeight').textContent = '30%';
+        } else {
+          document.getElementById('distanceWeight').textContent = '40%';
+          document.getElementById('preferenceWeight').textContent = '35%';
+          document.getElementById('urgencyWeight').textContent = '25%';
+        }
+      }
+
+      function claimDonation(donationId) {
+        // Get the button that was clicked
+        const button = event.target.closest('button');
+        
+        // Change button to claimed state
+        button.innerHTML = '<i class="bi bi-check-circle me-1"></i>Claimed';
+        button.className = 'btn btn-sm btn-secondary';
+        button.disabled = true;
+        button.onclick = null; // Remove click functionality
+        
+        // Store claimed state in localStorage
+        const claimedItems = JSON.parse(localStorage.getItem('claimedDonations') || '[]');
+        if (!claimedItems.includes(donationId)) {
+          claimedItems.push(donationId);
+          localStorage.setItem('claimedDonations', JSON.stringify(claimedItems));
+        }
+        
+        // Show success notification
+        if (window.showNotification) {
+          window.showNotification('Donation claimed successfully! Communication channel opened.', 'success');
+        } else {
+        showAlert('Donation claimed successfully! Communication channel opened.', 'success');
+        }
+      }
+
+      function fulfillRequest(requestId) {
+        // Get the button that was clicked
+        const button = event.target.closest('button');
+        
+        // Change button to fulfilled state
+        button.innerHTML = '<i class="bi bi-check-circle me-1"></i>Fulfilled';
+        button.className = 'btn btn-sm btn-secondary';
+        button.disabled = true;
+        button.onclick = null; // Remove click functionality
+        
+        // Store fulfilled state in localStorage
+        const fulfilledItems = JSON.parse(localStorage.getItem('fulfilledRequests') || '[]');
+        if (!fulfilledItems.includes(requestId)) {
+          fulfilledItems.push(requestId);
+          localStorage.setItem('fulfilledRequests', JSON.stringify(fulfilledItems));
+        }
+        
+        // Show success notification
+        if (window.showNotification) {
+          window.showNotification('Request fulfilled successfully! Communication channel opened.', 'success');
+        } else {
+          showAlert('Request fulfilled successfully! Communication channel opened.', 'success');
+        }
+      }
+
+      function testMatching() {
+        console.log('Test button clicked');
+        alert('Test button works! The Find My Matches button should work too.');
+        
+        // Test if all required elements exist
+        const elements = [
+          'userLocation', 'userPreferences', 'userNeeds', 'maxDistance', 'urgencyLevel',
+          'personalizedMatches', 'matchCount', 'totalDonations', 'totalRequests', 'matchScore'
+        ];
+        
+        const missingElements = elements.filter(id => !document.getElementById(id));
+        
+        if (missingElements.length > 0) {
+          console.error('Missing elements:', missingElements);
+          alert(`Missing elements: ${missingElements.join(', ')}`);
+        } else {
+          console.log('All required elements found');
+          alert('All required elements found! Try the Find My Matches button.');
+        }
+      }
+
+      function executeSuggestion(suggestionId) {
+        showAlert('AI suggestion executed! Optimizing resource flow...', 'success');
+        // In real app, this would execute the AI suggestion
+      }
+
+      function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alertDiv.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(alertDiv);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      }
+    </script>
+
+    <!-- Shared Header Scripts -->
+    <script src="../resources/scripts/auth.js"></script>
+    <script src="../resources/scripts/header-include.js"></script>
+    <script src="../resources/scripts/header.js"></script>
+    
+    <!-- Page Protection -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Protect this page - allow both individual and organization users
+        if (!authManager.isAuthenticated()) {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        const userRole = authManager.currentUser.role;
+        if (userRole !== 'individual' && userRole !== 'org') {
+          // Redirect to appropriate dashboard for other roles
+          authManager.redirectToDashboard();
+          return;
+        }
+      });
+    </script>
+
+    <!-- Ollama Setup Modal -->
+    <div class="modal fade" id="ollamaSetupModal" tabindex="-1" aria-labelledby="ollamaSetupModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title" id="ollamaSetupModalLabel">
+              <i class="bi bi-robot me-2 text-primary"></i>Ollama AI Setup Guide
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-info-circle me-2"></i>What is Ollama?
+                </h6>
+                <p class="small text-muted mb-3">
+                  Ollama is a free, local AI platform that runs on your computer. It provides:
+                </p>
+                <ul class="small text-muted mb-4">
+                  <li><i class="bi bi-check-circle text-success me-2"></i>100% Free - No API costs</li>
+                  <li><i class="bi bi-check-circle text-success me-2"></i>Complete Privacy - Data stays local</li>
+                  <li><i class="bi bi-check-circle text-success me-2"></i>No Rate Limits - Unlimited requests</li>
+                  <li><i class="bi bi-check-circle text-success me-2"></i>Offline Capable - Works without internet</li>
+                </ul>
+
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-download me-2"></i>Quick Setup
+                </h6>
+                <div class="card bg-secondary mb-3">
+                  <div class="card-body p-3">
+                    <h6 class="card-title small mb-2">Step 1: Install Ollama</h6>
+                    <div class="small">
+                      <strong>Windows:</strong><br>
+                      <code class="text-warning">Download from ollama.ai</code><br><br>
+                      <strong>Mac/Linux:</strong><br>
+                      <code class="text-warning">curl -fsSL https://ollama.ai/install.sh | sh</code>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="card bg-secondary mb-3">
+                  <div class="card-body p-3">
+                    <h6 class="card-title small mb-2">Step 2: Start Ollama</h6>
+                    <code class="text-warning">ollama serve</code>
+                  </div>
+                </div>
+                
+                <div class="card bg-secondary mb-3">
+                  <div class="card-body p-3">
+                    <h6 class="card-title small mb-2">Step 3: Download Model</h6>
+                    <code class="text-warning">ollama pull llama3.2:3b</code>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-link-45deg me-2"></i>Helpful Links
+                </h6>
+                <div class="list-group list-group-flush">
+                  <a href="https://ollama.ai/download" target="_blank" class="list-group-item list-group-item-action bg-dark text-light border-secondary">
+                    <i class="bi bi-download me-2"></i>Download Ollama
+                  </a>
+                  <a href="https://ollama.ai/library" target="_blank" class="list-group-item list-group-item-action bg-dark text-light border-secondary">
+                    <i class="bi bi-collection me-2"></i>Available Models
+                  </a>
+                  <a href="https://github.com/ollama/ollama" target="_blank" class="list-group-item list-group-item-action bg-dark text-light border-secondary">
+                    <i class="bi bi-github me-2"></i>GitHub Repository
+                  </a>
+                  <a href="https://ollama.ai/docs" target="_blank" class="list-group-item list-group-item-action bg-dark text-light border-secondary">
+                    <i class="bi bi-book me-2"></i>Documentation
+                  </a>
+                </div>
+
+                <h6 class="text-primary mb-3 mt-4">
+                  <i class="bi bi-gear me-2"></i>Model Recommendations
+                </h6>
+                <div class="table-responsive">
+                  <table class="table table-dark table-sm">
+                    <thead>
+                      <tr>
+                        <th>Model</th>
+                        <th>Size</th>
+                        <th>Speed</th>
+                        <th>Quality</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-success">
+                        <td><strong>llama3.2:3b</strong></td>
+                        <td>2GB</td>
+                        <td>⚡⚡⚡</td>
+                        <td>⭐⭐⭐</td>
+                      </tr>
+                      <tr>
+                        <td>mistral:7b</td>
+                        <td>4GB</td>
+                        <td>⚡⚡</td>
+                        <td>⭐⭐⭐⭐</td>
+                      </tr>
+                      <tr>
+                        <td>llama3.1:8b</td>
+                        <td>5GB</td>
+                        <td>⚡</td>
+                        <td>⭐⭐⭐⭐⭐</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                  <small>
+                    <i class="bi bi-lightbulb me-1"></i>
+                    <strong>Tip:</strong> Start with llama3.2:3b for the best balance of speed and quality.
+                  </small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-12">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-tools me-2"></i>Troubleshooting
+                </h6>
+                <div class="accordion" id="troubleshootingAccordion">
+                  <div class="accordion-item bg-dark border-secondary">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button bg-dark text-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Ollama not responding
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                      <div class="accordion-body small text-muted">
+                        <ol>
+                          <li>Make sure Ollama is running: <code>ollama serve</code></li>
+                          <li>Check if the model is installed: <code>ollama list</code></li>
+                          <li>Verify Ollama is running on port 11434</li>
+                          <li>Try restarting Ollama: <code>pkill ollama && ollama serve</code></li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="accordion-item bg-dark border-secondary">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button bg-dark text-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        <i class="bi bi-clock me-2"></i>Slow responses
+                      </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                      <div class="accordion-body small text-muted">
+                        <ol>
+                          <li>Try a smaller model: <code>ollama pull llama3.2:3b</code></li>
+                          <li>Reduce max_tokens in the API call</li>
+                          <li>Use GPU acceleration if available: <code>OLLAMA_GPU=1 ollama serve</code></li>
+                          <li>Close other applications to free up memory</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="accordion-item bg-dark border-secondary">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button bg-dark text-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        <i class="bi bi-shield-check me-2"></i>Security & Privacy
+                      </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                      <div class="accordion-body small text-muted">
+                        <p><strong>Why Ollama is secure:</strong></p>
+                        <ul>
+                          <li>All data stays on your computer</li>
+                          <li>No data sent to external servers</li>
+                          <li>No API keys required</li>
+                          <li>Works completely offline</li>
+                          <li>Open source and auditable</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="testOllamaConnection()">
+              <i class="bi bi-wifi me-1"></i>Test Connection
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
