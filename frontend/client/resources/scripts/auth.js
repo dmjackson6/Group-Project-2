@@ -1,251 +1,270 @@
-/**
- * WasteNaut Authentication Manager
- * Handles user authentication and session management
- */
+// WasteNaut Authentication System (Frontend-Only Demo)
+// This is a demo system for presentation purposes
 
 class AuthManager {
     constructor() {
         this.currentUser = null;
-        this.isAuthenticated = false;
         this.init();
     }
 
     init() {
-        // Check for existing token on page load
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            this.verifyToken();
-        }
+        // Load user from localStorage on initialization
+        this.loadUser();
     }
 
-    // Login user
-    async login(email, password) {
+    // Load user data from localStorage
+    loadUser() {
         try {
-            const response = await window.apiService.login(email, password);
-            
-            if (response.token) {
-                window.apiService.setToken(response.token);
-                this.currentUser = response.user;
-                this.isAuthenticated = true;
-                
-                // Store user data
-                localStorage.setItem('currentUser', JSON.stringify(response.user));
-                
-                if (window.showNotification) {
-                    window.showNotification(`Welcome back, ${response.user.name}!`, 'success');
-                }
-                
-                return response;
-            } else {
-                throw new Error('Invalid response from server');
+            const userData = localStorage.getItem('wastenaut_user');
+            if (userData) {
+                this.currentUser = JSON.parse(userData);
             }
         } catch (error) {
-            console.error('Login error:', error);
-            if (window.showNotification) {
-                window.showNotification(`Login failed: ${error.message}`, 'error');
-            } else {
-                alert(`Login failed: ${error.message}`);
-            }
-            throw error;
-        }
-    }
-
-    // Register new user
-    async register(userData) {
-        try {
-            const response = await window.apiService.register(userData);
-            
-            if (response.token) {
-                window.apiService.setToken(response.token);
-                this.currentUser = response.user;
-                this.isAuthenticated = true;
-                
-                // Store user data
-                localStorage.setItem('currentUser', JSON.stringify(response.user));
-                
-                if (window.showNotification) {
-                    window.showNotification(`Welcome to WasteNaut, ${response.user.name}!`, 'success');
-                }
-                
-                return response;
-            } else {
-                throw new Error('Invalid response from server');
-            }
-        } catch (error) {
-            console.error('Registration error:', error);
-            if (window.showNotification) {
-                window.showNotification(`Registration failed: ${error.message}`, 'error');
-            } else {
-                alert(`Registration failed: ${error.message}`);
-            }
-            throw error;
-        }
-    }
-
-    // Verify current token
-    async verifyToken() {
-        try {
-            const response = await window.apiService.verifyToken();
-            this.currentUser = response;
-            this.isAuthenticated = true;
-            return response;
-        } catch (error) {
-            console.error('Token verification failed:', error);
-            this.logout();
-            return null;
-        }
-    }
-
-    // Logout user
-    async logout() {
-        try {
-            if (this.isAuthenticated) {
-                await window.apiService.logout();
-            }
-        } catch (error) {
-            console.error('Logout error:', error);
-        } finally {
-            // Clear local data
+            console.error('Error loading user data:', error);
             this.currentUser = null;
-            this.isAuthenticated = false;
-            window.apiService.setToken(null);
-            localStorage.removeItem('currentUser');
-            
-            // Redirect to home page
-            window.location.href = '/';
         }
     }
 
-    // Check if user is authenticated
-    isLoggedIn() {
-        return this.isAuthenticated && this.currentUser !== null;
-    }
-
-    // Get current user
+    // Get current user info
     getCurrentUser() {
         return this.currentUser;
     }
 
+    // Check if user is authenticated
+    isAuthenticated() {
+        return this.currentUser && this.currentUser.authenticated === true;
+    }
+
     // Check if user has specific role
     hasRole(role) {
-        return this.isAuthenticated && this.currentUser && this.currentUser.role === role;
+        return this.isAuthenticated() && this.currentUser.role === role;
     }
 
     // Check if user has any of the specified roles
     hasAnyRole(roles) {
-        return this.isAuthenticated && this.currentUser && roles.includes(this.currentUser.role);
+        return this.isAuthenticated() && roles.includes(this.currentUser.role);
     }
 
-    // Check if user is admin
-    isAdmin() {
-        return this.hasRole('admin');
+    // Get user's role
+    getUserRole() {
+        return this.isAuthenticated() ? this.currentUser.role : 'guest';
     }
 
-    // Check if user is organization
-    isOrganization() {
-        return this.hasRole('organization');
+    // Get user's display name
+    getUserDisplayName() {
+        return this.isAuthenticated() ? this.currentUser.name : 'Guest';
     }
 
-    // Check if user is individual
-    isIndividual() {
-        return this.hasRole('individual');
+    // Login user with specific role (demo function)
+    login(role, customName = null) {
+        const userData = {
+            authenticated: true,
+            role: role,
+            userId: `${role}_${Date.now()}`,
+            name: customName || this.getRoleDisplayName(role),
+            loginTime: new Date().toISOString()
+        };
+
+        this.currentUser = userData;
+        localStorage.setItem('wastenaut_user', JSON.stringify(userData));
+        localStorage.setItem('wastenaut_token', `demo_token_${role}_${Date.now()}`);
+        
+        return userData;
     }
 
-    // Protect page - redirect if not authenticated or wrong role
-    protectPage(requiredRole = null) {
-        if (!this.isLoggedIn()) {
-            window.location.href = '/login.html';
-            return false;
+    // Logout user
+    logout() {
+        this.currentUser = null;
+        localStorage.removeItem('wastenaut_user');
+        localStorage.removeItem('wastenaut_token');
+    }
+
+    // Get display name for role
+    getRoleDisplayName(role) {
+        switch(role) {
+            case 'admin': return 'System Administrator';
+            case 'org': return 'Organization Manager';
+            case 'user': return 'Individual User';
+            default: return 'User';
+        }
+    }
+
+    // Redirect to appropriate dashboard based on role
+    redirectToDashboard() {
+        if (!this.isAuthenticated()) {
+            window.location.href = 'login.html';
+            return;
         }
 
-        if (requiredRole && !this.hasRole(requiredRole)) {
-            if (window.showNotification) {
-                window.showNotification('You do not have permission to access this page', 'error');
+        switch(this.currentUser.role) {
+            case 'admin':
+                window.location.href = 'admin-dashboard.html';
+                break;
+            case 'org':
+                window.location.href = 'organization-foodbank-dashboard.html';
+                break;
+            case 'individual':
+                window.location.href = 'individual-dashboard.html';
+                break;
+            case 'user':
+                window.location.href = 'dashboard.html';
+                break;
+            default:
+                window.location.href = 'index.html';
+        }
+    }
+
+    // Check if user can access a specific page
+    canAccessPage(pageRole) {
+        if (!this.isAuthenticated()) {
+            return pageRole === 'public';
+        }
+
+        // Admin can access everything
+        if (this.currentUser.role === 'admin') {
+            return true;
+        }
+
+        // Check specific role access
+        return this.currentUser.role === pageRole;
+    }
+
+    // Protect a page - redirect if unauthorized
+    protectPage(requiredRole) {
+        if (!this.canAccessPage(requiredRole)) {
+            if (!this.isAuthenticated()) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
             } else {
-                alert('You do not have permission to access this page');
+                // Wrong role - redirect to appropriate dashboard
+                this.redirectToDashboard();
             }
-            window.location.href = '/';
             return false;
         }
-
         return true;
     }
 
-    // Get user dashboard URL based on role
-    getDashboardUrl() {
-        if (!this.isLoggedIn()) {
-            return '/';
-        }
+    // Show access denied message
+    showAccessDenied() {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alertDiv.innerHTML = `
+          <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span>Access denied. You don't have permission to view this page.</span>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+        document.body.appendChild(alertDiv);
 
-        switch (this.currentUser.role) {
-            case 'admin':
-                return '/admin-dashboard.html';
-            case 'organization':
-                return '/organization-foodbank-dashboard.html';
-            case 'individual':
-                return '/individual-dashboard.html';
-            default:
-                return '/';
-        }
-    }
-
-    // Update user profile
-    async updateProfile(profileData) {
-        try {
-            if (!this.isAuthenticated) {
-                throw new Error('User not authenticated');
-            }
-
-            const response = await window.apiService.updateUser(this.currentUser.id, profileData);
-            
-            // Update local user data
-            this.currentUser = { ...this.currentUser, ...profileData };
-            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-            
-            if (window.showNotification) {
-                window.showNotification('Profile updated successfully', 'success');
-            }
-            
-            return response;
-        } catch (error) {
-            console.error('Profile update error:', error);
-            if (window.showNotification) {
-                window.showNotification(`Profile update failed: ${error.message}`, 'error');
-            } else {
-                alert(`Profile update failed: ${error.message}`);
-            }
-            throw error;
-        }
-    }
-
-    // Check if user account is active
-    isAccountActive() {
-        return this.isAuthenticated && this.currentUser && this.currentUser.status === 'active';
-    }
-
-    // Get account status message
-    getAccountStatusMessage() {
-        if (!this.isAuthenticated) {
-            return 'Not logged in';
-        }
-
-        switch (this.currentUser.status) {
-            case 'active':
-                return 'Account is active';
-            case 'pending':
-                return 'Account is pending approval';
-            case 'suspended':
-                return 'Account is suspended';
-            default:
-                return 'Unknown account status';
-        }
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.remove();
+          }
+        }, 5000);
     }
 }
 
-// Create global instance
+// Create global auth manager instance
 window.authManager = new AuthManager();
 
-// Export for module systems
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AuthManager;
-}
+// Utility functions for easy access
+window.isAuthenticated = () => window.authManager.isAuthenticated();
+window.hasRole = (role) => window.authManager.hasRole(role);
+window.hasAnyRole = (roles) => window.authManager.hasAnyRole(roles);
+window.getUserRole = () => window.authManager.getUserRole();
+window.getUserDisplayName = () => window.authManager.getUserDisplayName();
+window.logout = () => {
+    window.authManager.logout();
+    window.location.href = 'index.html';
+};
+
+// Navigation helper functions
+window.getNavigationForRole = (role, currentPage = '') => {
+    const baseNav = [];
+    
+    // Auto-detect current page if not provided
+    if (!currentPage) {
+        currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    }
+    
+    // Only add Home button if not on the home page
+    if (currentPage !== 'index.html' && currentPage !== '') {
+        baseNav.push({ text: 'Home', href: 'index.html', icon: 'bi-house' });
+    }
+
+    switch(role) {
+        case 'admin':
+            const nav = [...baseNav];
+            // Only show Admin Hub button if not already on admin dashboard page
+            if (currentPage !== 'admin-dashboard.html') {
+                nav.push({ text: 'Admin Hub', href: 'admin-dashboard.html', icon: 'bi-shield-check' });
+            }
+            // Only show Reports button if not already on reports page
+            if (currentPage !== 'reports.html') {
+                nav.push({ text: 'Reports', href: 'reports.html', icon: 'bi-graph-up' });
+            }
+            // Add Logout button as the last item
+            if (currentPage !== 'login.html') {
+                nav.push({ text: 'Log Out', href: '#', icon: 'bi-box-arrow-right', onclick: 'confirmLogout()' });
+            }
+            return nav;
+        case 'org':
+            const orgNav = [...baseNav];
+            // Only show Organization Hub button if not already on organization hub page
+            if (currentPage !== 'organization-foodbank-dashboard.html') {
+                orgNav.push({ text: 'Organization Hub', href: 'organization-foodbank-dashboard.html', icon: 'bi-building' });
+            }
+            // Only show Inventory button if not already on inventory page
+            if (currentPage !== 'inventory-management.html') {
+                orgNav.push({ text: 'Inventory', href: 'inventory-management.html', icon: 'bi-box-seam' });
+            }
+            // Only show Smart Matching button if not already on smart matching page
+            if (currentPage !== 'smart-matching.html') {
+                orgNav.push({ text: 'Smart Matching', href: 'smart-matching.html', icon: 'bi-diagram-3' });
+            }
+            // Only show Communication button if not already on communication page
+            if (currentPage !== 'communication-hub.html') {
+                orgNav.push({ text: 'Communication', href: 'communication-hub.html', icon: 'bi-chat-dots' });
+            }
+            // Add Logout button as the last item
+            if (currentPage !== 'login.html') {
+                orgNav.push({ text: 'Log Out', href: '#', icon: 'bi-box-arrow-right', onclick: 'confirmLogout()' });
+            }
+            return orgNav;
+        case 'individual':
+            const individualNav = [...baseNav];
+            // Only show Inventory button if not already on inventory page
+            if (currentPage !== 'inventory-management.html') {
+                individualNav.push({ text: 'Inventory', href: 'inventory-management.html', icon: 'bi-box-seam' });
+            }
+            // Only show Smart Matching button if not already on smart matching page
+            if (currentPage !== 'smart-matching.html') {
+                individualNav.push({ text: 'Smart Matching', href: 'smart-matching.html', icon: 'bi-search' });
+            }
+            // Only show Communication button if not already on communication page
+            if (currentPage !== 'communication-hub.html') {
+                individualNav.push({ text: 'Communication', href: 'communication-hub.html', icon: 'bi-chat-dots' });
+            }
+            // Add Logout button as the last item
+            if (currentPage !== 'login.html') {
+                individualNav.push({ text: 'Log Out', href: '#', icon: 'bi-box-arrow-right', onclick: 'confirmLogout()' });
+            }
+            return individualNav;
+        case 'user':
+            const userNav = [...baseNav];
+            // Add Logout button as the last item
+            if (currentPage !== 'login.html') {
+                userNav.push({ text: 'Log Out', href: '#', icon: 'bi-box-arrow-right', onclick: 'confirmLogout()' });
+            }
+            return userNav;
+        default:
+            const defaultNav = [...baseNav];
+            // Add Logout button as the last item for authenticated users
+            if (role && role !== 'guest' && currentPage !== 'login.html') {
+                defaultNav.push({ text: 'Log Out', href: '#', icon: 'bi-box-arrow-right', onclick: 'confirmLogout()' });
+            }
+            return defaultNav;
+    }
+};

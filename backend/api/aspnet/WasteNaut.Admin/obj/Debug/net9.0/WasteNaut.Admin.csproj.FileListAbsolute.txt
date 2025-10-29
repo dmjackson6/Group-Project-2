@@ -254,7 +254,6 @@ C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\De
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\scopedcss\bundle\WasteNaut.Admin.styles.css
-C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\z8lbwsnze2-nujjm7hy4m.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\f84f1ratwy-hlv1zc0eda.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\i0j0j7o98h-e8isl7j72q.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\x7qz7qsost-zzmnloo1g3.gz
@@ -268,7 +267,6 @@ C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\De
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\zy3821y8qp-3l5mx220nl.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\k2976rusb9-zj5868hof5.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\znh5tm6sl8-kmg8fhnho3.gz
-C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\21f4kd5cui-g8gy7hmvuo.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\kz0j0qrb4b-svbpdrywuq.gz
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\staticwebassets.build.json.cache
@@ -281,5 +279,10 @@ C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\De
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\WasteNaut.Admin.genruntimeconfig.cache
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\ref\WasteNaut.Admin.dll
 C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\ybkynfxwj1-iyi4ybb74k.gz
-C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\h0fv0xd6ja-komz76mid2.gz
-C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\7wrqcn1ycx-py1w6923qj.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\c55il6qpga-7xmxprfcy2.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\h0fv0xd6ja-7i8adfdamx.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\fnrm01ectf-0h2ridjhef.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\z8lbwsnze2-35t1c9orr8.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\7wrqcn1ycx-frjhm5ljid.gz
+C:\Users\acmcdavid\MIS\Group-Project-2\backend\api\aspnet\WasteNaut.Admin\obj\Debug\net9.0\compressed\21f4kd5cui-5dcw4kw8fq.gz
