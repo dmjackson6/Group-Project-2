@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WasteNaut.Admin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecabb790c7411895f296b625677e592095a08e0e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1916244f2a57100a3d41370ef215b0762a35bc78")]
 [assembly: System.Reflection.AssemblyProductAttribute("WasteNaut.Admin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WasteNaut.Admin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
