@@ -12,9 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add Entity Framework - Use MySQL database
-builder.Services.AddDbContext<WasteNautDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
-    Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.0-mysql")));
+// Temporarily disabled due to database connection issues
+// builder.Services.AddDbContext<WasteNautDbContext>(options =>
+//     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
+//     Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.0-mysql")));
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -85,16 +86,18 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Add Repository Pattern
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+// Temporarily disabled due to database connection issues
+// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 // Add Services
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IOrganizationService, OrganizationService>();
-builder.Services.AddScoped<IDonationService, DonationService>();
-builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<IMatchService, MatchService>();
-builder.Services.AddScoped<IAuditService, AuditService>();
+// Temporarily disabled due to database connection issues
+// builder.Services.AddScoped<IAdminService, AdminService>();
+// builder.Services.AddScoped<IUserService, UserService>();
+// builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+// builder.Services.AddScoped<IDonationService, DonationService>();
+// builder.Services.AddScoped<IReportService, ReportService>();
+// builder.Services.AddScoped<IMatchService, MatchService>();
+// builder.Services.AddScoped<IAuditService, AuditService>();
 
 var app = builder.Build();
 
@@ -128,17 +131,19 @@ app.UseAuthorization();
 app.MapGet("/", () => Results.Redirect("/index.html"));
 
 
-app.MapControllers();
+// Temporarily disabled due to database connection issues
+// app.MapControllers();
 
 // Auto-migrate database in development
-if (app.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetRequiredService<WasteNautDbContext>();
-        context.Database.EnsureCreated();
-    }
-}
+// Temporarily disabled due to database connection issues
+// if (app.Environment.IsDevelopment())
+// {
+//     using (var scope = app.Services.CreateScope())
+//     {
+//         var context = scope.ServiceProvider.GetRequiredService<WasteNautDbContext>();
+//         context.Database.EnsureCreated();
+//     }
+// }
 
 // Start Ollama service if available
 try

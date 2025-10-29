@@ -35,32 +35,62 @@
               <div class="card-body p-5">
                 <div class="text-center mb-4">
                   <h2 class="h2 text-gradient mb-3">Welcome Back</h2>
-                  <p class="text-muted">Choose your role to access your dashboard</p>
+                  <p class="text-muted">Choose your login type to continue</p>
                 </div>
 
-                <div class="d-grid gap-3">
+                <!-- Login Type Selection -->
+                <div id="login-type-selection" class="d-grid gap-3">
                   <!-- Individual User Login -->
-                  <button class="btn btn-outline-primary btn-lg" onclick="loginAs('individual')">
+                  <button class="btn btn-outline-primary btn-lg" onclick="selectLoginType('individual')">
                     <i class="bi bi-person me-2"></i>
-                    Login as Individual User
+                    Individual User
                   </button>
 
                   <!-- Organization Login -->
-                  <button class="btn btn-outline-success btn-lg" onclick="loginAs('org')">
+                  <button class="btn btn-outline-success btn-lg" onclick="selectLoginType('org')">
                     <i class="bi bi-building me-2"></i>
-                    Login as Organization
+                    Organization
                   </button>
 
                   <!-- Admin Login -->
-                  <button class="btn btn-outline-warning btn-lg" onclick="loginAs('admin')">
+                  <button class="btn btn-outline-warning btn-lg" onclick="selectLoginType('admin')">
                     <i class="bi bi-shield-check me-2"></i>
-                    Login as Admin
+                    Administrator
                   </button>
+                </div>
+
+                <!-- Login Form (Hidden Initially) -->
+                <div id="login-form" class="d-none">
+                  <div class="text-center mb-4">
+                    <h4 class="h4 text-gradient mb-2" id="selected-role-title">Login</h4>
+                    <p class="text-muted" id="selected-role-description">Enter your credentials</p>
+                  </div>
+
+                  <form id="credentials-form">
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email Address</label>
+                      <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-4">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                      <button type="submit" class="btn btn-primary btn-lg" id="login-submit-btn">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Login
+                      </button>
+                      <button type="button" class="btn btn-outline-secondary" onclick="goBackToTypeSelection()">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Back to Login Type
+                      </button>
+                    </div>
+                  </form>
                 </div>
 
                 <div class="text-center mt-4">
                   <small class="text-muted">
-                    Demo Mode: Click any button to login with that role
+                    Demo Mode: Select a login type to continue
                   </small>
                 </div>
               </div>
@@ -107,14 +137,83 @@
     <script src="../resources/scripts/header-include.js"></script>
     <script src="../resources/scripts/header.js"></script>
     <script>
-      // Authentication functions
-      function loginAs(role) {
+      let selectedLoginType = null;
+
+      // Login type selection function
+      function selectLoginType(role) {
+        selectedLoginType = role;
+        
+        // Update the form title and description
+        const titleElement = document.getElementById('selected-role-title');
+        const descriptionElement = document.getElementById('selected-role-description');
+        
+        switch(role) {
+          case 'individual':
+            titleElement.textContent = 'Individual User Login';
+            descriptionElement.textContent = 'Enter your email and password to access your personal dashboard';
+            break;
+          case 'org':
+            titleElement.textContent = 'Organization Login';
+            descriptionElement.textContent = 'Enter your organization credentials to access your management dashboard';
+            break;
+          case 'admin':
+            titleElement.textContent = 'Administrator Login';
+            descriptionElement.textContent = 'Enter your admin credentials to access the system administration panel';
+            break;
+        }
+        
+        // Hide type selection and show login form
+        document.getElementById('login-type-selection').classList.add('d-none');
+        document.getElementById('login-form').classList.remove('d-none');
+        
+        // Focus on email field
+        setTimeout(() => {
+          document.getElementById('email').focus();
+        }, 100);
+      }
+
+      // Go back to type selection
+      function goBackToTypeSelection() {
+        selectedLoginType = null;
+        document.getElementById('login-form').classList.add('d-none');
+        document.getElementById('login-type-selection').classList.remove('d-none');
+        
+        // Clear form fields
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+      }
+
+      // Handle form submission
+      function handleLogin(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+          showAlert('Please enter both email and password', 'warning');
+          return;
+        }
+        
+        if (!selectedLoginType) {
+          showAlert('Please select a login type first', 'warning');
+          return;
+        }
+        
+        // For demo purposes, we'll still use the same login logic
+        // In a real application, you would validate credentials here
+        loginAs(selectedLoginType, email);
+      }
+
+      // Authentication function (updated to accept email parameter)
+      function loginAs(role, email = '') {
         // Create user data based on role
         const userData = {
           authenticated: true,
           role: role,
           userId: `${role}_${Date.now()}`,
           name: getRoleDisplayName(role),
+          email: email,
           loginTime: new Date().toISOString()
         };
 
@@ -131,11 +230,17 @@
         }, 1000);
       }
 
-      // Auto-select role if coming from role selection
+      // Initialize page
       document.addEventListener('DOMContentLoaded', function() {
         // Clear any existing authentication state when visiting login page
         if (window.authManager) {
           window.authManager.logout();
+        }
+        
+        // Set up form submission handler
+        const credentialsForm = document.getElementById('credentials-form');
+        if (credentialsForm) {
+          credentialsForm.addEventListener('submit', handleLogin);
         }
         
         const selectedRole = localStorage.getItem('selectedRole');
@@ -143,9 +248,9 @@
           // Clear the stored role selection
           localStorage.removeItem('selectedRole');
           
-          // Auto-login with the selected role
+          // Auto-select the login type and show form
           setTimeout(() => {
-            loginAs(selectedRole);
+            selectLoginType(selectedRole);
           }, 500);
         }
       });

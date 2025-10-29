@@ -21,6 +21,44 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../resources/styles/main.css" />
+    
+    <!-- Interactive Arrow Button Styles -->
+    <style>
+      .back-arrow-btn {
+        transition: color 0.2s ease-in-out;
+        padding: 8px !important;
+        margin: -8px;
+      }
+      
+      .back-arrow-btn:hover {
+        transform: none;
+        background: none !important;
+        box-shadow: none;
+      }
+      
+      .back-arrow-btn:active {
+        transform: none;
+        background: none !important;
+      }
+      
+      .back-arrow-btn:focus {
+        outline: 2px solid rgba(255, 255, 255, 0.5);
+        outline-offset: 2px;
+      }
+      
+      /* Color-specific hover effects - just change the arrow color */
+      .text-primary.back-arrow-btn:hover {
+        color: #6ea8fe !important;
+      }
+      
+      .text-success.back-arrow-btn:hover {
+        color: #75b798 !important;
+      }
+      
+      .text-warning.back-arrow-btn:hover {
+        color: #ffda6a !important;
+      }
+    </style>
   </head>
   <body>
     <!-- Header Container -->
@@ -39,9 +77,9 @@
               Connect surplus food with those who need it. Our platform makes it easy to reduce food waste while helping your community access fresh, nutritious meals.
             </p>
             <div class="d-flex justify-content-start gap-3 flex-wrap" id="hero-buttons">
-              <a href="role-selection.html" class="btn btn-primary btn-lg" id="hero-get-started-btn">
-                <i class="bi bi-person-plus me-2"></i>Get Started
-              </a>
+              <button type="button" class="btn btn-primary btn-lg" id="hero-get-started-btn" style="text-transform: none !important;" data-bs-toggle="modal" data-bs-target="#roleSelectionModal">
+                <i class="bi bi-person-plus me-2"></i>Sign up
+              </button>
               <button type="button" class="btn btn-outline-light btn-lg" id="hero-login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Log In
               </button>
@@ -186,11 +224,6 @@
                   </div>
                 </div>
               </div>
-              <div class="d-flex gap-3">
-                <button class="btn btn-warning btn-lg" onclick="showComingSoon('WasteBot')">
-                  <i class="bi bi-robot me-2"></i>Coming Soon
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -275,16 +308,32 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form id="loginForm">
-              <div class="mb-3">
-                <label for="loginRole" class="form-label text-light">Account Type</label>
-                <select class="form-select bg-dark border-success text-light" id="loginRole" required>
-                  <option value="">Select your account type</option>
-                  <option value="individual">Individual Donor</option>
-                  <option value="organization">Organization/Food Bank</option>
-                  <option value="admin">Administrator</option>
-                </select>
+            <!-- Step 1: Login Type Selection -->
+            <div id="loginTypeSelection">
+              <div class="text-center mb-4">
+                <h6 class="text-light mb-3">Choose your account type</h6>
               </div>
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-outline-primary" onclick="selectLoginType('individual')">
+                  <i class="bi bi-person me-2"></i>Individual Donor
+                </button>
+                <button type="button" class="btn btn-outline-success" onclick="selectLoginType('organization')">
+                  <i class="bi bi-building me-2"></i>Organization/Food Bank
+                </button>
+                <button type="button" class="btn btn-outline-warning" onclick="selectLoginType('admin')">
+                  <i class="bi bi-shield-check me-2"></i>Administrator
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 2: Login Form (Hidden Initially) -->
+            <div id="loginFormContainer" class="d-none">
+              <div class="text-center mb-3">
+                <h6 class="text-light" id="selectedRoleTitle">Login</h6>
+                <small class="text-muted" id="selectedRoleDescription">Enter your credentials</small>
+              </div>
+              
+            <form id="loginForm">
               <div class="mb-3">
                 <label for="loginEmail" class="form-label text-light">Email Address</label>
                 <input type="email" class="form-control bg-dark border-success text-light" id="loginEmail" 
@@ -311,18 +360,284 @@
                 <button type="submit" class="btn btn-success btn-lg" id="loginSubmitBtn">
                   <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                 </button>
-                <button type="button" class="btn btn-outline-light" onclick="showForgotPassword()">
+                  <button type="button" class="btn btn-outline-light" onclick="goBackToTypeSelection()">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Account Type
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary" onclick="showForgotPassword()">
                   <i class="bi bi-question-circle me-2"></i>Forgot Password?
                 </button>
               </div>
             </form>
+            </div>
           </div>
           
           <div class="modal-footer border-top border-success">
             <p class="text-muted mb-0">
               Don't have an account? 
-              <a href="role-selection.html" class="text-success text-decoration-none">Sign up here</a>
+              <a href="#" class="text-success text-decoration-none" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#roleSelectionModal">Sign up here</a>
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role Selection Modal -->
+    <div class="modal fade" id="roleSelectionModal" tabindex="-1" aria-labelledby="roleSelectionModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark border border-primary">
+          <div class="modal-header border-bottom border-primary">
+            <h5 class="modal-title text-primary" id="roleSelectionModalLabel">
+              <i class="bi bi-person-plus me-2"></i>Choose Your Role
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center mb-4">
+              <p class="text-muted">Select how you'd like to help fight food waste and feed your community</p>
+            </div>
+            
+            <div class="row g-3">
+              <!-- Individual Recipient Card -->
+              <div class="col-md-4">
+                <div class="card role-card h-100">
+                  <div class="card-body text-center">
+                    <div class="mb-3">
+                      <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title text-light">Individual Recipient</h5>
+                    <p class="card-text text-muted">Seeking supplies for personal or family use? Connect with local food banks and donors to access fresh food and essential supplies.</p>
+                    <ul class="list-unstyled text-start">
+                      <li class="text-success"><i class="bi bi-check-circle me-2"></i>Find nearby food banks and donors</li>
+                    </ul>
+                    <button class="btn btn-primary w-100" onclick="selectRole('individual')">
+                      Continue as Individual
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Organization Recipient Card -->
+              <div class="col-md-4">
+                <div class="card role-card h-100">
+                  <div class="card-body text-center">
+                    <div class="mb-3">
+                      <i class="bi bi-building text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title text-light">Organization Recipient</h5>
+                    <p class="card-text text-muted">Non-profit, shelter, or community group seeking supplies for distribution? Connect with donors and manage inventory for your community.</p>
+                    <ul class="list-unstyled text-start">
+                      <li class="text-success"><i class="bi bi-check-circle me-2"></i>Access surplus food donations</li>
+                    </ul>
+                    <button class="btn btn-success w-100" onclick="selectRole('organization')">
+                      Continue as Organization
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Donor Card -->
+              <div class="col-md-4">
+                <div class="card role-card h-100">
+                  <div class="card-body text-center">
+                    <div class="mb-3">
+                      <i class="bi bi-gift text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title text-light">Want to Donate Food?</h5>
+                    <p class="card-text text-muted">Individual or business with surplus food? Submit donation listings and coordinate with food banks to reduce waste and help your community.</p>
+                    <ul class="list-unstyled text-start">
+                      <li class="text-success"><i class="bi bi-check-circle me-2"></i>Connect with local food banks</li>
+                    </ul>
+                    <button class="btn btn-primary w-100" onclick="selectRole('donor')">
+                      Start Donating
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Sign-up Modal -->
+    <div class="modal fade" id="individualSignupModal" tabindex="-1" aria-labelledby="individualSignupModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-primary">
+          <div class="modal-header border-bottom border-primary d-flex justify-content-between align-items-center">
+            <h5 class="modal-title text-primary" id="individualSignupModalLabel">
+              <i class="bi bi-person me-2"></i>Individual Sign-up
+            </h5>
+            <button type="button" class="btn btn-link text-primary p-0 back-arrow-btn" onclick="goBackToRoleSelection()" aria-label="Back" style="border: none; background: none;">
+              <i class="bi bi-arrow-left fs-4"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info mb-3">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Demo Mode:</strong> Email and password are pre-filled for testing. You can use these credentials to log in after sign-up.
+            </div>
+            <form id="individualSignupForm">
+              <div class="mb-3">
+                <label for="individualName" class="form-label text-light">Full Name</label>
+                <input type="text" class="form-control bg-dark border-primary text-light" id="individualName" required>
+              </div>
+              <div class="mb-3">
+                <label for="individualEmail" class="form-label text-light">Email Address</label>
+                <input type="email" class="form-control bg-dark border-primary text-light" id="individualEmail" value="demo@individual.com" required>
+              </div>
+              <div class="mb-3">
+                <label for="individualPhone" class="form-label text-light">Phone Number</label>
+                <input type="tel" class="form-control bg-dark border-primary text-light" id="individualPhone">
+              </div>
+              <div class="mb-3">
+                <label for="individualPassword" class="form-label text-light">Password</label>
+                <input type="password" class="form-control bg-dark border-primary text-light" id="individualPassword" value="demo123" required>
+              </div>
+              <div class="mb-3">
+                <label for="individualAddress" class="form-label text-light">Address</label>
+                <textarea class="form-control bg-dark border-primary text-light" id="individualAddress" rows="2"></textarea>
+              </div>
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input border-primary" id="individualTerms" required>
+                <label class="form-check-label text-light" for="individualTerms">
+                  I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                </label>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="bi bi-person-plus me-2"></i>Create Individual Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organization Sign-up Modal -->
+    <div class="modal fade" id="organizationSignupModal" tabindex="-1" aria-labelledby="organizationSignupModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-success">
+          <div class="modal-header border-bottom border-success d-flex justify-content-between align-items-center">
+            <h5 class="modal-title text-success" id="organizationSignupModalLabel">
+              <i class="bi bi-building me-2"></i>Organization Sign-up
+            </h5>
+            <button type="button" class="btn btn-link text-success p-0 back-arrow-btn" onclick="goBackToRoleSelection()" aria-label="Back" style="border: none; background: none;">
+              <i class="bi bi-arrow-left fs-4"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info mb-3">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Demo Mode:</strong> Email and password are pre-filled for testing. You can use these credentials to log in after sign-up.
+            </div>
+            <form id="organizationSignupForm">
+              <div class="mb-3">
+                <label for="orgName" class="form-label text-light">Organization Name</label>
+                <input type="text" class="form-control bg-dark border-success text-light" id="orgName" required>
+              </div>
+              <div class="mb-3">
+                <label for="orgType" class="form-label text-light">Organization Type</label>
+                <select class="form-select bg-dark border-success text-light" id="orgType" required>
+                  <option value="">Select organization type</option>
+                  <option value="foodbank">Food Bank</option>
+                  <option value="shelter">Homeless Shelter</option>
+                  <option value="community">Community Center</option>
+                  <option value="church">Religious Organization</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="orgContactName" class="form-label text-light">Contact Person</label>
+                <input type="text" class="form-control bg-dark border-success text-light" id="orgContactName" required>
+              </div>
+              <div class="mb-3">
+                <label for="orgEmail" class="form-label text-light">Email Address</label>
+                <input type="email" class="form-control bg-dark border-success text-light" id="orgEmail" value="demo@organization.com" required>
+              </div>
+              <div class="mb-3">
+                <label for="orgPhone" class="form-label text-light">Phone Number</label>
+                <input type="tel" class="form-control bg-dark border-success text-light" id="orgPhone" required>
+              </div>
+              <div class="mb-3">
+                <label for="orgPassword" class="form-label text-light">Password</label>
+                <input type="password" class="form-control bg-dark border-success text-light" id="orgPassword" value="demo123" required>
+              </div>
+              <div class="mb-3">
+                <label for="orgAddress" class="form-label text-light">Organization Address</label>
+                <textarea class="form-control bg-dark border-success text-light" id="orgAddress" rows="2" required></textarea>
+              </div>
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input border-success" id="orgTerms" required>
+                <label class="form-check-label text-light" for="orgTerms">
+                  I agree to the <a href="#" class="text-success">Terms of Service</a> and <a href="#" class="text-success">Privacy Policy</a>
+                </label>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                  <i class="bi bi-building-add me-2"></i>Create Organization Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donor Sign-up Modal -->
+    <div class="modal fade" id="donorSignupModal" tabindex="-1" aria-labelledby="donorSignupModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-warning">
+          <div class="modal-header border-bottom border-warning d-flex justify-content-between align-items-center">
+            <h5 class="modal-title text-warning" id="donorSignupModalLabel">
+              <i class="bi bi-gift me-2"></i>Donor Sign-up
+            </h5>
+            <button type="button" class="btn btn-link text-warning p-0 back-arrow-btn" onclick="goBackToRoleSelection()" aria-label="Back" style="border: none; background: none;">
+              <i class="bi bi-arrow-left fs-4"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info mb-3">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Demo Mode:</strong> Email and password are pre-filled for testing. You can use these credentials to log in after sign-up.
+            </div>
+            <form id="donorSignupForm">
+              <div class="mb-3">
+                <label for="donorName" class="form-label text-light">Full Name</label>
+                <input type="text" class="form-control bg-dark border-warning text-light" id="donorName" required>
+              </div>
+              <div class="mb-3">
+                <label for="donorEmail" class="form-label text-light">Email Address</label>
+                <input type="email" class="form-control bg-dark border-warning text-light" id="donorEmail" value="demo@donor.com" required>
+              </div>
+              <div class="mb-3">
+                <label for="donorPhone" class="form-label text-light">Phone Number</label>
+                <input type="tel" class="form-control bg-dark border-warning text-light" id="donorPhone">
+              </div>
+              <div class="mb-3">
+                <label for="donorPassword" class="form-label text-light">Password</label>
+                <input type="password" class="form-control bg-dark border-warning text-light" id="donorPassword" value="demo123" required>
+              </div>
+              <div class="mb-3">
+                <label for="donorBusiness" class="form-label text-light">Business/Organization (Optional)</label>
+                <input type="text" class="form-control bg-dark border-warning text-light" id="donorBusiness">
+              </div>
+              <div class="mb-3">
+                <label for="donorAddress" class="form-label text-light">Address</label>
+                <textarea class="form-control bg-dark border-warning text-light" id="donorAddress" rows="2"></textarea>
+              </div>
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input border-warning" id="donorTerms" required>
+                <label class="form-check-label text-light" for="donorTerms">
+                  I agree to the <a href="#" class="text-warning">Terms of Service</a> and <a href="#" class="text-warning">Privacy Policy</a>
+                </label>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-warning btn-lg">
+                  <i class="bi bi-gift me-2"></i>Create Donor Account
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -360,6 +675,94 @@
             alertDiv.remove();
           }
         }, 5000);
+      }
+
+      // Role Selection Functions
+      function selectRole(role) {
+        console.log('selectRole called with:', role);
+        
+        // Close the role selection modal
+        const roleModal = bootstrap.Modal.getInstance(document.getElementById('roleSelectionModal'));
+        if (roleModal) {
+          roleModal.hide();
+        }
+        
+        // Open the appropriate sign-up modal
+        setTimeout(() => {
+          const modalId = `${role}SignupModal`;
+          const modalElement = document.getElementById(modalId);
+          console.log('Opening sign-up modal:', modalId);
+          
+          if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log('Sign-up modal shown');
+          } else {
+            console.error('Sign-up modal not found:', modalId);
+          }
+        }, 300); // Small delay to ensure role modal is closed
+      }
+
+      // Sign-up form handling
+      function handleSignup(role, form) {
+        console.log('handleSignup called with role:', role);
+        
+        // Show success message
+        alert(`Account created successfully! Welcome to WasteNaut as a ${role}.`);
+        
+        // Close the sign-up modal
+        const modalId = `${role}SignupModal`;
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+          const modal = bootstrap.Modal.getInstance(modalElement);
+          if (modal) {
+            modal.hide();
+          }
+        }
+        
+        // Clear form
+        form.reset();
+        
+        // Redirect to appropriate dashboard (demo)
+        setTimeout(() => {
+          switch(role) {
+            case 'individual':
+              window.location.href = 'individual-dashboard.html';
+              break;
+            case 'organization':
+              window.location.href = 'organization-foodbank-dashboard.html';
+              break;
+            case 'donor':
+              window.location.href = 'individual-dashboard.html'; // Donors use individual dashboard
+              break;
+            default:
+              window.location.href = 'index.html';
+          }
+        }, 1500);
+      }
+
+      // Go back to role selection modal
+      function goBackToRoleSelection() {
+        console.log('Going back to role selection');
+        
+        // Close current sign-up modal
+        const currentModal = document.querySelector('.modal.show');
+        if (currentModal) {
+          const modal = bootstrap.Modal.getInstance(currentModal);
+          if (modal) {
+            modal.hide();
+          }
+        }
+        
+        // Open role selection modal after a short delay
+        setTimeout(() => {
+          const roleModal = document.getElementById('roleSelectionModal');
+          if (roleModal) {
+            const modal = new bootstrap.Modal(roleModal);
+            modal.show();
+            console.log('Role selection modal opened');
+          }
+        }, 300);
       }
 
       // Footer button popup functionality
@@ -613,67 +1016,111 @@
         }
       }
 
+      let selectedLoginType = null;
+      let isProcessingLogin = false;
+
+      // Login type selection function
+      function selectLoginType(role) {
+        selectedLoginType = role;
+        
+        // Update the form title and description
+        const titleElement = document.getElementById('selectedRoleTitle');
+        const descriptionElement = document.getElementById('selectedRoleDescription');
+        
+        switch(role) {
+          case 'individual':
+            titleElement.textContent = 'Individual Donor Login';
+            descriptionElement.textContent = 'Enter your email and password to access your personal dashboard';
+            break;
+          case 'organization':
+            titleElement.textContent = 'Organization Login';
+            descriptionElement.textContent = 'Enter your organization credentials to access your management dashboard';
+            break;
+          case 'admin':
+            titleElement.textContent = 'Administrator Login';
+            descriptionElement.textContent = 'Enter your admin credentials to access the system administration panel';
+            break;
+        }
+        
+        // Hide type selection and show login form
+        document.getElementById('loginTypeSelection').classList.add('d-none');
+        document.getElementById('loginFormContainer').classList.remove('d-none');
+        
+        // Show demo credentials
+        updateDemoCredentials(role);
+        
+        // Focus on email field
+        setTimeout(() => {
+          document.getElementById('loginEmail').focus();
+        }, 100);
+      }
+
+      // Go back to type selection
+      function goBackToTypeSelection() {
+        selectedLoginType = null;
+        document.getElementById('loginFormContainer').classList.add('d-none');
+        document.getElementById('loginTypeSelection').classList.remove('d-none');
+        
+        // Clear form fields
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('rememberMe').checked = false;
+        
+        // Reset login button state
+        const loginBtn = document.getElementById('loginSubmitBtn');
+        if (loginBtn) {
+          loginBtn.disabled = false;
+          loginBtn.removeAttribute('disabled');
+          loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Log In';
+        }
+        
+        // Hide demo credentials
+        document.getElementById('demoEmailText').style.display = 'none';
+        document.getElementById('demoPasswordText').style.display = 'none';
+      }
+
       // Handle role selection to show demo credentials
-      function updateDemoCredentials() {
-        const roleSelect = document.getElementById('loginRole');
+      function updateDemoCredentials(role) {
         const demoEmailText = document.getElementById('demoEmailText');
         const demoPasswordText = document.getElementById('demoPasswordText');
         const demoEmailValue = document.getElementById('demoEmailValue');
         const demoPasswordValue = document.getElementById('demoPasswordValue');
         
-        if (!roleSelect) return;
-        
-        const selectedRole = roleSelect.value;
-        
-        // Hide demo text by default
-        if (demoEmailText) demoEmailText.style.display = 'none';
-        if (demoPasswordText) demoPasswordText.style.display = 'none';
-        
-        // Show appropriate demo credentials based on selection
-        if (selectedRole === 'individual') {
-          if (demoEmailText && demoEmailValue) {
-            demoEmailValue.textContent = 'demo@individual.com';
-            demoEmailText.style.display = 'block';
-          }
-          if (demoPasswordText && demoPasswordValue) {
-            demoPasswordValue.textContent = 'demo123';
-            demoPasswordText.style.display = 'block';
-          }
-        } else if (selectedRole === 'organization') {
-          if (demoEmailText && demoEmailValue) {
-            demoEmailValue.textContent = 'demo@organization.com';
-            demoEmailText.style.display = 'block';
-          }
-          if (demoPasswordText && demoPasswordValue) {
-            demoPasswordValue.textContent = 'demo123';
-            demoPasswordText.style.display = 'block';
-          }
-        } else if (selectedRole === 'admin') {
-          if (demoEmailText && demoEmailValue) {
-            demoEmailValue.textContent = 'demo@admin.com';
-            demoEmailText.style.display = 'block';
-          }
-          if (demoPasswordText && demoPasswordValue) {
-            demoPasswordValue.textContent = 'demo123';
-            demoPasswordText.style.display = 'block';
-          }
+        if (!demoEmailText || !demoPasswordText) {
+          console.log('Required elements not found for demo credentials');
+          return;
         }
+        
+        console.log('Role selected:', role);
+        
+        if (role) {
+          // Show demo credentials based on role
+          const credentials = getDemoCredentials(role);
+          demoEmailValue.textContent = credentials.email;
+          demoPasswordValue.textContent = credentials.password;
+            demoEmailText.style.display = 'block';
+            demoPasswordText.style.display = 'block';
+        } else {
+          demoEmailText.style.display = 'none';
+          demoPasswordText.style.display = 'none';
+        }
+      }
+
+      function getDemoCredentials(role) {
+        const credentials = {
+          individual: { email: 'demo@individual.com', password: 'demo123' },
+          organization: { email: 'demo@organization.com', password: 'demo123' },
+          admin: { email: 'demo@admin.com', password: 'demo123' }
+        };
+        return credentials[role] || { email: 'demo@example.com', password: 'demo123' };
       }
 
       // Handle login form submission
       document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM loaded, setting up login form...');
         const loginForm = document.getElementById('loginForm');
-        const roleSelect = document.getElementById('loginRole');
         
         console.log('Login form found:', loginForm);
-        console.log('Role select found:', roleSelect);
-        
-        // Add event listener to role dropdown
-        if (roleSelect) {
-          roleSelect.addEventListener('change', updateDemoCredentials);
-          console.log('Role select event listener added');
-        }
         
         // Add click handler to login button as backup
         const loginBtn = document.getElementById('loginSubmitBtn');
@@ -699,7 +1146,23 @@
         function handleLogin() {
           console.log('handleLogin function called');
           
-          const role = document.getElementById('loginRole').value;
+          // Prevent duplicate processing
+          if (isProcessingLogin) {
+            console.log('Login already in progress, ignoring duplicate call');
+            return;
+          }
+          
+          isProcessingLogin = true;
+          
+          const loginBtn = document.getElementById('loginSubmitBtn');
+          
+          // Disable button during processing
+          if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Processing...';
+          }
+          
+          const role = selectedLoginType;
           const email = document.getElementById('loginEmail').value;
           const password = document.getElementById('loginPassword').value;
           const rememberMe = document.getElementById('rememberMe').checked;
@@ -709,6 +1172,14 @@
           // Basic validation
           if (!role || !email || !password) {
             console.log('Validation failed: missing fields');
+            
+            // Re-enable button
+            if (loginBtn) {
+              loginBtn.disabled = false;
+              loginBtn.removeAttribute('disabled');
+              loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Log In';
+            }
+            
             if (window.showNotification) {
               window.showNotification('Please fill in all fields', 'error');
             } else {
@@ -741,13 +1212,14 @@
           
           console.log('Validation result:', { isValidCredentials, expectedEmail, expectedPassword });
           
+          // Only show logging in notification for valid credentials
+          if (isValidCredentials) {
           // Simulate login process
           if (window.showNotification) {
             window.showNotification('Logging in...', 'info');
           }
           
           // Immediate login processing
-          if (isValidCredentials) {
             console.log('Login successful!');
             
             // Store login state in the format expected by auth system
@@ -793,6 +1265,7 @@
             }, 500); // Reduced delay to 500ms
           } else {
             console.log('Login failed - invalid credentials');
+            
             // Show specific error message based on what's wrong
             let errorMessage = 'Invalid credentials. ';
             if (email !== expectedEmail) {
@@ -808,7 +1281,83 @@
             } else {
               alert(errorMessage);
             }
+            
+            // Re-enable button after 1.5 seconds
+            setTimeout(() => {
+              const loginBtn = document.getElementById('loginSubmitBtn');
+              if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.removeAttribute('disabled');
+                loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Log In';
+                
+                // Remove loading class that's causing pointer-events: none
+                loginBtn.classList.remove('loading');
+                
+                // Reset processing flag
+                isProcessingLogin = false;
+                
+                // Force re-attach event listeners
+                loginBtn.onclick = function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Button clicked after re-enable');
+                  handleLogin();
+                };
+                
+                // Also ensure form submission is handled
+                const form = document.getElementById('loginForm');
+                if (form) {
+                  form.onsubmit = function(e) {
+                    e.preventDefault();
+                    console.log('Form submitted after re-enable');
+                    handleLogin();
+                  };
+                }
+                
+                console.log('Login button re-enabled after failed attempt');
+                console.log('Button disabled state:', loginBtn.disabled);
+                console.log('Button has disabled attribute:', loginBtn.hasAttribute('disabled'));
+                console.log('Button onclick handler:', loginBtn.onclick);
+                console.log('Button computed style pointer-events:', window.getComputedStyle(loginBtn).pointerEvents);
+              }
+            }, 1500);
           }
+        }
+        
+        // Reset modal when closed
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+          loginModal.addEventListener('hidden.bs.modal', function () {
+            goBackToTypeSelection();
+          });
+        }
+
+        // Sign-up form event listeners
+        const individualForm = document.getElementById('individualSignupForm');
+        if (individualForm) {
+          individualForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Individual form submitted!');
+            handleSignup('individual', this);
+          });
+        }
+
+        const organizationForm = document.getElementById('organizationSignupForm');
+        if (organizationForm) {
+          organizationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Organization form submitted!');
+            handleSignup('organization', this);
+          });
+        }
+
+        const donorForm = document.getElementById('donorSignupForm');
+        if (donorForm) {
+          donorForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Donor form submitted!');
+            handleSignup('donor', this);
+          });
         }
       });
     </script>

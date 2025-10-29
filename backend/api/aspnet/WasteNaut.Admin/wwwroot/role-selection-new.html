@@ -10,70 +10,15 @@
     <!-- Cache bust: Updated 2025-10-29 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="resources/styles/main.css" />
-    
-    <style>
-        .role-card {
-            background: rgba(10, 10, 10, 0.8) !important;
-            border: 1px solid rgba(0, 255, 136, 0.3) !important;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
-        }
-        
-        .role-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 255, 136, 0.6) !important;
-            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.2);
-        }
-        
-        .role-card .card-title {
-            color: #00ff88 !important;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .role-card .card-text {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-        
-        .role-card .text-success {
-            color: #00ff88 !important;
-        }
-        
-        .display-4 {
-            background: linear-gradient(45deg, #00ff88, #00d4aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
-        }
-        
-        .lead {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
-            min-height: 100vh;
-        }
-    </style>
 </head>
 <body>
-    <!-- Header Container -->
-    <div id="header-container"></div>
-    
-    <!-- Main Content with Background -->
-    <div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);">
-        <div class="container">
+    <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-5">
-                    <h1 class="display-4 text-light mb-3">CHOOSE YOUR ROLE</h1>
-                    <p class="lead text-muted">Select how you'd like to help fight food waste and feed your community</p>
+                    <h1 class="display-4 text-light mb-3">Choose Your Role</h1>
+                    <p class="lead text-muted">Select how you'd like to contribute to reducing food waste</p>
+                    <small class="text-muted">Updated: October 29, 2025</small>
                 </div>
                 
                 <div class="row">
@@ -83,11 +28,9 @@
                                 <div class="mb-3">
                                     <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
                                 </div>
-                                <h5 class="card-title text-light">Individual Recipient</h5>
-                                <p class="card-text text-muted">Seeking supplies for personal or family use? Connect with local food banks and donors to access fresh food and essential supplies.</p>
-                                <ul class="list-unstyled text-start">
-                                    <li class="text-success"><i class="bi bi-check-circle me-2"></i>Find nearby food banks and donors</li>
-                                </ul>
+                                <h5 class="card-title text-light">Individual Donor</h5>
+                                <p class="card-text text-muted">Donate excess food from your home or business</p>
+                                <small class="text-success">✓ Updated Version</small>
                                 <button class="btn btn-primary w-100" onclick="selectRole('individual')">
                                     Continue as Individual
                                 </button>
@@ -101,11 +44,8 @@
                                 <div class="mb-3">
                                     <i class="bi bi-building text-success" style="font-size: 3rem;"></i>
                                 </div>
-                                <h5 class="card-title text-light">Organization Recipient</h5>
-                                <p class="card-text text-muted">Non-profit, shelter, or community group seeking supplies for distribution? Connect with donors and manage inventory for your community.</p>
-                                <ul class="list-unstyled text-start">
-                                    <li class="text-success"><i class="bi bi-check-circle me-2"></i>Access surplus food donations</li>
-                                </ul>
+                                <h5 class="card-title text-light">Organization/Food Bank</h5>
+                                <p class="card-text text-muted">Manage donations and distribute food to those in need</p>
                                 <button class="btn btn-success w-100" onclick="selectRole('organization')">
                                     Continue as Organization
                                 </button>
@@ -119,12 +59,9 @@
                                 <div class="mb-3">
                                     <i class="bi bi-gift text-warning" style="font-size: 3rem;"></i>
                                 </div>
-                                <h5 class="card-title text-light">Want to Donate Food?</h5>
-                                <p class="card-text text-muted">Individual or business with surplus food? Submit donation listings and coordinate with food banks to reduce waste and help your community.</p>
-                                <ul class="list-unstyled text-start">
-                                    <li class="text-success"><i class="bi bi-check-circle me-2"></i>Connect with local food banks</li>
-                                </ul>
-                                <button class="btn btn-primary w-100" onclick="selectRole('donor')">
+                                <h5 class="card-title text-light">Donor</h5>
+                                <p class="card-text text-muted">Start donating food and make a difference</p>
+                                <button class="btn btn-warning w-100" onclick="selectRole('donor')">
                                     Start Donating
                                 </button>
                             </div>
@@ -314,15 +251,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Header and App Scripts -->
-    <script src="resources/scripts/main.js"></script>
-    <script src="resources/scripts/auth.js"></script>
-    <script src="resources/scripts/header-include.js"></script>
-    <script src="resources/scripts/header.js"></script>
-    
     <script>
-        console.log('Role selection JavaScript loaded!');
+        console.log('Role selection JavaScript loaded! - Updated: 2025-10-29 04:20');
         
         function selectRole(role) {
             console.log('selectRole called with:', role);
@@ -339,6 +269,36 @@
                 console.error('Modal not found:', modalId);
             }
         }
+
+        // Handle form submissions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Individual sign-up form
+            const individualForm = document.getElementById('individualSignupForm');
+            if (individualForm) {
+                individualForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleSignup('individual', this);
+                });
+            }
+
+            // Organization sign-up form
+            const organizationForm = document.getElementById('organizationSignupForm');
+            if (organizationForm) {
+                organizationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleSignup('organization', this);
+                });
+            }
+
+            // Donor sign-up form
+            const donorForm = document.getElementById('donorSignupForm');
+            if (donorForm) {
+                donorForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleSignup('donor', this);
+                });
+            }
+        });
 
         function handleSignup(role, form) {
             console.log('handleSignup called with role:', role);
@@ -376,72 +336,6 @@
                 }
             }, 1500);
         }
-
-        // Handle form submissions - MORE ROBUST VERSION
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, setting up form handlers');
-            
-            // Individual sign-up form
-            const individualForm = document.getElementById('individualSignupForm');
-            console.log('Individual form found:', individualForm);
-            if (individualForm) {
-                individualForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    console.log('Individual form submitted!');
-                    handleSignup('individual', this);
-                });
-                
-                // Also add click handler to the button directly
-                const individualBtn = individualForm.querySelector('button[type="submit"]');
-                if (individualBtn) {
-                    individualBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('Individual button clicked!');
-                        handleSignup('individual', individualForm);
-                    });
-                }
-            }
-
-            // Organization sign-up form
-            const organizationForm = document.getElementById('organizationSignupForm');
-            console.log('Organization form found:', organizationForm);
-            if (organizationForm) {
-                organizationForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    console.log('Organization form submitted!');
-                    handleSignup('organization', this);
-                });
-                
-                const orgBtn = organizationForm.querySelector('button[type="submit"]');
-                if (orgBtn) {
-                    orgBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('Organization button clicked!');
-                        handleSignup('organization', organizationForm);
-                    });
-                }
-            }
-
-            // Donor sign-up form
-            const donorForm = document.getElementById('donorSignupForm');
-            console.log('Donor form found:', donorForm);
-            if (donorForm) {
-                donorForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    console.log('Donor form submitted!');
-                    handleSignup('donor', this);
-                });
-                
-                const donorBtn = donorForm.querySelector('button[type="submit"]');
-                if (donorBtn) {
-                    donorBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('Donor button clicked!');
-                        handleSignup('donor', donorForm);
-                    });
-                }
-            }
-        });
     </script>
 </body>
 </html>

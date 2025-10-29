@@ -653,11 +653,15 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4 {
   border: 1px solid var(--wastenaut-green);
   color: var(--wastenaut-dark);
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  text-transform: none !important;
+}
+
+#hero-get-started-btn {
+  text-transform: none !important;
 }
 
 .btn-primary::before {
