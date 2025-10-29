@@ -11,11 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add Entity Framework - Use MySQL database
-// Temporarily disabled due to database connection issues
-// builder.Services.AddDbContext<WasteNautDbContext>(options =>
-//     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
-//     Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.0-mysql")));
+// Add Entity Framework - Use MySQL database with AWS RDS
+builder.Services.AddDbContext<WasteNautDbContext>(options =>
+    options.UseMySql("Server=ehc1u4pmphj917qf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com;Database=p7on9pts3ap3rhin;Uid=root;Pwd=password;Port=3306;", 
+    Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.0-mysql"), 
+    mySqlOptions => mySqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(30),
+        errorNumbersToAdd: null)));
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -86,18 +89,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Add Repository Pattern
-// Temporarily disabled due to database connection issues
-// builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 // Add Services
-// Temporarily disabled due to database connection issues
-// builder.Services.AddScoped<IAdminService, AdminService>();
-// builder.Services.AddScoped<IUserService, UserService>();
-// builder.Services.AddScoped<IOrganizationService, OrganizationService>();
-// builder.Services.AddScoped<IDonationService, DonationService>();
-// builder.Services.AddScoped<IReportService, ReportService>();
-// builder.Services.AddScoped<IMatchService, MatchService>();
-// builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IDonationService, DonationService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 
 var app = builder.Build();
 
@@ -131,19 +132,27 @@ app.UseAuthorization();
 app.MapGet("/", () => Results.Redirect("/index.html"));
 
 
-// Temporarily disabled due to database connection issues
-// app.MapControllers();
+// Map API controllers
+app.MapControllers();
 
 // Auto-migrate database in development
-// Temporarily disabled due to database connection issues
-// if (app.Environment.IsDevelopment())
-// {
-//     using (var scope = app.Services.CreateScope())
-//     {
-//         var context = scope.ServiceProvider.GetRequiredService<WasteNautDbContext>();
-//         context.Database.EnsureCreated();
-//     }
-// }
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<WasteNautDbContext>();
+        try
+        {
+            context.Database.EnsureCreated();
+            Console.WriteLine("✅ Database connection successful and tables created.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Database connection failed: {ex.Message}");
+            Console.WriteLine("⚠️  Continuing without database - some features may not work.");
+        }
+    }
+}
 
 // Start Ollama service if available
 try
