@@ -7,8 +7,191 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../resources/styles/main.css" rel="stylesheet">
+    <style>
+        /* Walkthrough Tutorial Styles */
+        .walkthrough-highlight {
+            position: relative;
+            z-index: 9999 !important;
+            border: 3px solid #0d6efd !important;
+            box-shadow: 0 0 30px rgba(13, 110, 253, 0.8) !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            pointer-events: auto !important;
+            animation: pulseHighlight 2s infinite;
+        }
+        
+        @keyframes pulseHighlight {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(13, 110, 253, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(13, 110, 253, 1);
+            }
+        }
+        
+        .walkthrough-tooltip {
+            position: fixed;
+            z-index: 10000;
+            background: #212529;
+            border: 2px solid #0d6efd;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 380px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            animation: fadeInSlide 0.3s ease;
+            pointer-events: auto;
+        }
+        
+        .walkthrough-tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .walkthrough-close-btn {
+            background: transparent;
+            border: none;
+            color: #e9ecef;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .walkthrough-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .walkthrough-tooltip::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+        
+        .walkthrough-tooltip.top::after {
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top-color: #0d6efd;
+        }
+        
+        .walkthrough-tooltip.bottom::after {
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-color: #0d6efd;
+        }
+        
+        .walkthrough-tooltip.left::after {
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left-color: #0d6efd;
+        }
+        
+        .walkthrough-tooltip.right::after {
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-right-color: #0d6efd;
+        }
+        
+        .walkthrough-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d6efd;
+            margin-bottom: 10px;
+        }
+        
+        .walkthrough-message {
+            color: #e9ecef;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+        
+        .walkthrough-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    </style>
 </head>
 <body>
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-secondary">
+                <div class="modal-header bg-dark border-secondary">
+                    <h5 class="modal-title" id="editProfileModalLabel">
+                        <i class="bi bi-person-circle me-2"></i>Edit Profile
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="mb-3">
+                            <label for="profileName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="profileName" placeholder="Enter your full name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profileEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control bg-dark text-light border-secondary" id="profileEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control bg-dark text-light border-secondary" id="profilePhone" placeholder="Enter your phone number">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profileLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="profileLocation" placeholder="Enter your city/address">
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePrimaryNeed" class="form-label">Primary Need</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="profilePrimaryNeed">
+                                <option value="">Select your primary need</option>
+                                <option value="Food">Food</option>
+                                <option value="Supplies">Supplies</option>
+                                <option value="Both">Both</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Bio/Description</label>
+                            <textarea class="form-control bg-dark text-light border-secondary" id="profileBio" rows="3" placeholder="Tell us about yourself (optional)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-dark border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfile()">
+                        <i class="bi bi-check-circle me-1"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Header Container -->
     <div id="header-container"></div>
 
@@ -59,7 +242,7 @@
             <!-- Quick Stats -->
             <div class="col-lg-8">
                 <div class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card border-0 bg-dark text-center">
                             <div class="card-body">
                                 <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
@@ -70,7 +253,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card border-0 bg-dark text-center">
                             <div class="card-body">
                                 <div class="bg-info rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
@@ -81,7 +264,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card border-0 bg-dark text-center">
                             <div class="card-body">
                                 <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
@@ -91,6 +274,140 @@
                                 <small class="text-muted">Pending Requests</small>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 bg-dark text-center">
+                            <div class="card-body">
+                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-bell text-white"></i>
+                                </div>
+                                <h5 class="mb-0" id="unreadNotifications">0</h5>
+                                <small class="text-muted">Notifications</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onboarding Progress (shown if incomplete) -->
+        <div class="row g-4 mb-4" id="onboardingSection" style="display: none; margin-top: 2rem;">
+            <div class="col-12">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-check-circle me-2"></i>Getting Started
+                            <button class="btn btn-sm btn-outline-light float-end" onclick="toggleOnboarding()">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar" id="onboardingProgress" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <p class="text-muted mb-3"><span id="onboardingPercent">0%</span> Complete</p>
+                        <div id="onboardingItems"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reputation & Badges -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-star me-2"></i>Reputation & Badges
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="bi bi-award text-white fs-3"></i>
+                            </div>
+                            <h4 class="mb-0" id="reputationScore">50</h4>
+                            <p class="text-muted small">Reputation Score</p>
+                        </div>
+                        <div id="badgesList" class="d-flex flex-wrap gap-2 justify-content-center">
+                            <!-- Badges will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Program -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-people me-2"></i>Referral Program
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                                <i class="bi bi-gift text-white fs-3"></i>
+                            </div>
+                            <h4 class="mb-0">$<span id="referralCredits">0.00</span></h4>
+                            <p class="text-muted small">Available Credits</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="small text-muted">Refer friends and earn credits for each successful referral!</p>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control bg-dark text-light border-secondary" id="referralCode" readonly placeholder="Your Referral Code">
+                                <button class="btn btn-outline-primary" onclick="copyReferralCode()">
+                                    <i class="bi bi-copy"></i>
+                                </button>
+                            </div>
+                            <button class="btn btn-primary btn-sm w-100" onclick="showReferralModal()">
+                                <i class="bi bi-plus-circle me-1"></i>Create New Referral
+                            </button>
+                        </div>
+                        <div class="small">
+                            <strong>Stats:</strong> <span id="totalReferrals">0</span> referrals · <span id="successfulReferrals">0</span> successful
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax Receipts & Documents -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-receipt me-2"></i>Tax Receipts
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="taxReceiptsList" class="mb-3">
+                            <!-- Tax receipts will be loaded here -->
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm w-100" onclick="generateTaxReceipt()">
+                            <i class="bi bi-download me-1"></i>Generate 2024 Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Hub & Resources -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-book me-2"></i>Resources & Training
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="contentHubItems" class="list-group list-group-flush">
+                            <!-- Content items will be loaded here -->
+                        </div>
+                        <button class="btn btn-outline-info btn-sm w-100 mt-2" onclick="openContentHub()">
+                            <i class="bi bi-arrow-right me-1"></i>View All Resources
+                        </button>
                     </div>
                 </div>
             </div>
@@ -252,6 +569,665 @@
             
             // Restore requested items state
             restoreRequestedItems();
+            
+            // Load integrated features
+            loadNotifications();
+            loadOnboarding();
+            loadReputation();
+            loadReferralStats();
+            loadTaxReceipts();
+            loadContentHub();
+        }
+
+        async function loadNotifications() {
+            try {
+                const res = await fetch('/api/notifications/inbox?audience=Donor');
+                const notifications = await res.json();
+                const unread = notifications.filter(n => !n.read).length;
+                document.getElementById('unreadNotifications').textContent = unread;
+            } catch (e) { console.error('Failed to load notifications:', e); }
+        }
+
+        async function loadOnboarding() {
+            try {
+                const res = await fetch('/api/onboarding/Donor/user-001');
+                const checklist = await res.json();
+                if (checklist.completionPercentage < 100) {
+                    document.getElementById('onboardingSection').style.display = 'block';
+                    document.getElementById('onboardingProgress').style.width = checklist.completionPercentage + '%';
+                    document.getElementById('onboardingPercent').textContent = checklist.completionPercentage + '%';
+                    const itemsDiv = document.getElementById('onboardingItems');
+                    itemsDiv.innerHTML = '';
+                    checklist.items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'd-flex justify-content-between align-items-center mb-2';
+                        div.innerHTML = `
+                            <div>
+                                <strong>${item.title}</strong><br>
+                                <small class="text-muted">${item.description}</small>
+                            </div>
+                            <button class="btn btn-sm ${item.completed ? 'btn-success' : 'btn-outline-primary'}" 
+                                    onclick="completeOnboardingItem('${item.itemId}')" ${item.completed ? 'disabled' : ''}>
+                                ${item.completed ? '<i class="bi bi-check"></i>' : 'Complete'}
+                            </button>
+                        `;
+                        itemsDiv.appendChild(div);
+                    });
+                }
+            } catch (e) { console.error('Failed to load onboarding:', e); }
+        }
+
+        // Walkthrough Tutorial System
+        let currentWalkthrough = null;
+        let walkthroughTooltip = null;
+        let profileWalkthroughFields = ['profileName', 'profileEmail', 'profilePhone', 'profileLocation', 'profilePrimaryNeed', 'profileBio'];
+        let currentFieldIndex = 0;
+        let profileWalkthroughOnComplete = null;
+        
+        function showWalkthrough(targetElement, title, message, position = 'bottom', onComplete = null, focusElement = null) {
+            // Hide any existing walkthrough
+            hideWalkthrough();
+            
+            // Highlight target element
+            if (targetElement) {
+                targetElement.classList.add('walkthrough-highlight');
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                
+                // Wait for scroll to complete
+                setTimeout(() => {
+                    // Create tooltip (non-blocking)
+                    walkthroughTooltip = document.createElement('div');
+                    walkthroughTooltip.className = `walkthrough-tooltip ${position}`;
+                    walkthroughTooltip.innerHTML = `
+                        <div class="walkthrough-tooltip-header">
+                            <div class="walkthrough-title">
+                                <i class="bi bi-info-circle me-2"></i>${title}
+                            </div>
+                            <button class="walkthrough-close-btn" onclick="hideWalkthrough()" title="Close">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        <div class="walkthrough-message">${message}</div>
+                        <div class="walkthrough-actions">
+                            <button class="btn btn-sm btn-primary" onclick="completeWalkthroughStep()">Done</button>
+                        </div>
+                    `;
+                    
+                    // Position tooltip
+                    positionTooltip(targetElement, walkthroughTooltip, position);
+                    document.body.appendChild(walkthroughTooltip);
+                    
+                    // Focus on the target element if it's an input
+                    if (focusElement) {
+                        setTimeout(() => {
+                            focusElement.focus();
+                            if (focusElement.select) {
+                                focusElement.select();
+                            }
+                        }, 500);
+                    } else if (targetElement.tagName === 'INPUT' || targetElement.tagName === 'TEXTAREA' || targetElement.tagName === 'SELECT') {
+                        setTimeout(() => {
+                            targetElement.focus();
+                            if (targetElement.select) {
+                                targetElement.select();
+                            }
+                        }, 500);
+                    } else if (targetElement.tagName === 'BUTTON' || targetElement.tagName === 'A') {
+                        // For buttons, focus them so user can press Enter or click
+                        setTimeout(() => {
+                            targetElement.focus();
+                        }, 500);
+                    }
+                }, 400);
+            } else {
+                // No target element - show centered tooltip
+                walkthroughTooltip = document.createElement('div');
+                walkthroughTooltip.className = 'walkthrough-tooltip';
+                walkthroughTooltip.style.position = 'fixed';
+                walkthroughTooltip.style.top = '50%';
+                walkthroughTooltip.style.left = '50%';
+                walkthroughTooltip.style.transform = 'translate(-50%, -50%)';
+                walkthroughTooltip.innerHTML = `
+                    <div class="walkthrough-tooltip-header">
+                        <div class="walkthrough-title">
+                            <i class="bi bi-info-circle me-2"></i>${title}
+                        </div>
+                        <button class="walkthrough-close-btn" onclick="hideWalkthrough()" title="Close">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                    <div class="walkthrough-message">${message}</div>
+                    <div class="walkthrough-actions">
+                        <button class="btn btn-sm btn-primary" onclick="completeWalkthroughStep()">Done</button>
+                    </div>
+                `;
+                document.body.appendChild(walkthroughTooltip);
+            }
+            
+            currentWalkthrough = { targetElement, onComplete, focusElement, _isProfileWalkthrough: false };
+        }
+        
+        function positionTooltip(target, tooltip, position) {
+            const targetRect = target.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let top, left;
+            
+            switch(position) {
+                case 'top':
+                    top = targetRect.top - tooltipRect.height - 15;
+                    left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+                    break;
+                case 'bottom':
+                    top = targetRect.bottom + 15;
+                    left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+                    break;
+                case 'left':
+                    top = targetRect.top + (targetRect.height / 2) - (tooltipRect.height / 2);
+                    left = targetRect.left - tooltipRect.width - 15;
+                    break;
+                case 'right':
+                    top = targetRect.top + (targetRect.height / 2) - (tooltipRect.height / 2);
+                    left = targetRect.right + 15;
+                    break;
+                default:
+                    top = targetRect.bottom + 15;
+                    left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+            }
+            
+            // Ensure tooltip stays within viewport
+            const padding = 20;
+            if (left < padding) left = padding;
+            if (left + tooltipRect.width > window.innerWidth - padding) {
+                left = window.innerWidth - tooltipRect.width - padding;
+            }
+            if (top < padding) top = padding;
+            if (top + tooltipRect.height > window.innerHeight - padding) {
+                top = targetRect.top - tooltipRect.height - 15;
+            }
+            
+            tooltip.style.position = 'fixed';
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+        }
+        
+        function hideWalkthrough() {
+            if (walkthroughTooltip) {
+                walkthroughTooltip.remove();
+                walkthroughTooltip = null;
+            }
+            
+            // Remove highlight from all elements
+            document.querySelectorAll('.walkthrough-highlight').forEach(el => {
+                el.classList.remove('walkthrough-highlight');
+            });
+            
+            currentWalkthrough = null;
+        }
+        
+        function completeWalkthroughStep() {
+            if (currentWalkthrough && currentWalkthrough.onComplete) {
+                currentWalkthrough.onComplete();
+            }
+            hideWalkthrough();
+        }
+        
+        function startProfileWalkthrough(title, description) {
+            // Get the field IDs and labels (bio is skipped, goes straight to Save button)
+            const fieldConfig = [
+                { id: 'profileName', label: 'Full Name', required: true },
+                { id: 'profileEmail', label: 'Email Address', required: true },
+                { id: 'profilePhone', label: 'Phone Number', required: false },
+                { id: 'profileLocation', label: 'Location', required: false },
+                { id: 'profilePrimaryNeed', label: 'Primary Need', required: false, isSelect: true }
+                // Bio field is intentionally skipped - goes straight to Save button
+            ];
+            
+            if (currentFieldIndex >= fieldConfig.length) {
+                // All fields done, show completion message on Save button
+                const saveButton = document.querySelector('#editProfileModal .btn-primary');
+                if (saveButton && profileWalkthroughOnComplete) {
+                    // Position tooltip above the button area
+                    showWalkthrough(
+                        saveButton,
+                        title,
+                        `Now save your results in the area below`,
+                        'top',
+                        profileWalkthroughOnComplete
+                    );
+                }
+                return;
+            }
+            
+            const currentField = fieldConfig[currentFieldIndex];
+            const fieldElement = document.getElementById(currentField.id);
+            
+            if (!fieldElement) {
+                // Field not found, skip to next
+                currentFieldIndex++;
+                startProfileWalkthrough(title, description);
+                return;
+            }
+            
+            // Check if field already has a value - if so and it's not required, skip it
+            const hasValue = fieldElement.value && fieldElement.value.trim() !== '';
+            if (hasValue && !currentField.required) {
+                // Optional field is already filled, skip to next
+                currentFieldIndex++;
+                startProfileWalkthrough(title, description);
+                return;
+            }
+            
+            // Build message
+            const fieldMessages = {
+                'profileName': 'Start by entering your full name. Press Enter when done.',
+                'profileEmail': 'Next, enter your email address. Press Enter when done.',
+                'profilePhone': 'Enter your phone number (optional). Press Enter when done or Tab to skip.',
+                'profileLocation': 'Enter your city or address. Press Enter when done or Tab to skip.',
+                'profilePrimaryNeed': 'Select your primary need from the dropdown. Press Enter when done or Tab to skip.'
+            };
+            
+            const message = fieldMessages[currentField.id] || `Fill in your ${currentField.label.toLowerCase()}. Press Enter when done.`;
+            
+            // Show walkthrough for current field
+            showWalkthrough(
+                fieldElement,
+                title,
+                `${description}\n\n${message}`,
+                'bottom',
+                null, // Don't auto-complete, wait for user input
+                fieldElement
+            );
+            
+            // Mark as profile walkthrough
+            if (currentWalkthrough) {
+                currentWalkthrough._isProfileWalkthrough = true;
+            }
+            
+            // Set up event listeners for this field
+            const moveToNext = () => {
+                const value = fieldElement.value ? fieldElement.value.trim() : '';
+                if (currentField.required || value) {
+                    // Field has content (or is optional and can be skipped), move to next
+                    removeFieldListeners(fieldElement);
+                    currentFieldIndex++;
+                    startProfileWalkthrough(title, description);
+                }
+            };
+            
+            // Add listeners
+            fieldElement.addEventListener('keydown', handleFieldKeydown);
+            fieldElement.addEventListener('blur', handleFieldBlur);
+            
+            // For select dropdowns, also listen to change events
+            if (currentField.isSelect) {
+                const changeHandler = () => {
+                    // Small delay to ensure value is set
+                    setTimeout(() => {
+                        moveToNext();
+                    }, 100);
+                };
+                fieldElement.addEventListener('change', changeHandler);
+                fieldElement._walkthroughChangeHandler = changeHandler;
+            }
+            
+            // Store moveToNext function on element for cleanup
+            fieldElement._walkthroughMoveNext = moveToNext;
+        }
+        
+        function handleFieldKeydown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                const moveNext = event.target._walkthroughMoveNext;
+                if (moveNext) {
+                    moveNext();
+                }
+            }
+        }
+        
+        function handleFieldBlur(event) {
+            // Wait a bit to see if focus moved to next field naturally
+            setTimeout(() => {
+                const moveNext = event.target._walkthroughMoveNext;
+                if (moveNext && event.target.value && event.target.value.trim()) {
+                    // Field has content and lost focus, check if it's time to move
+                    const activeElement = document.activeElement;
+                    const fieldConfig = ['profileName', 'profileEmail', 'profilePhone', 'profileLocation', 'profilePrimaryNeed', 'profileBio'];
+                    const currentIndex = fieldConfig.indexOf(event.target.id);
+                    const nextFieldId = fieldConfig[currentIndex + 1];
+                    
+                    // If focus moved to next field in sequence, move walkthrough
+                    if (nextFieldId && activeElement && activeElement.id === nextFieldId) {
+                        moveNext();
+                    }
+                }
+            }, 100);
+        }
+        
+        function removeFieldListeners(element) {
+            if (element) {
+                element.removeEventListener('keydown', handleFieldKeydown);
+                element.removeEventListener('blur', handleFieldBlur);
+                // Remove change listener if it was a select
+                if (element.tagName === 'SELECT') {
+                    element.removeEventListener('change', element._walkthroughChangeHandler);
+                    delete element._walkthroughChangeHandler;
+                }
+                delete element._walkthroughMoveNext;
+            }
+        }
+
+        async function completeOnboardingItem(itemId) {
+            // Get the item details to know what action to take
+            try {
+                const res = await fetch('/api/onboarding/Donor/user-001');
+                const checklist = await res.json();
+                const item = checklist.items.find(i => i.itemId === itemId);
+                
+                if (!item) {
+                    console.error('Item not found:', itemId);
+                    return;
+                }
+                
+                // Based on the item, guide user to complete the action
+                if (itemId === 'item-1') {
+                    // Complete Profile - Open the profile modal and focus on first input
+                    const profileHeaders = Array.from(document.querySelectorAll('.card-header h5'));
+                    const profileHeader = profileHeaders.find(h => h.textContent.includes('Profile Summary'));
+                    const profileCard = profileHeader?.closest('.card');
+                    
+                    if (profileCard) {
+                        // Open the profile modal
+                        editProfile();
+                        
+                        // Reset field tracking
+                        currentFieldIndex = 0;
+                        profileWalkthroughOnComplete = async () => {
+                await fetch(`/api/onboarding/complete?userId=user-001&itemId=${itemId}`, {method: 'POST'});
+                loadOnboarding();
+                        };
+                        
+                        // Wait for modal to open, then start progressive walkthrough
+                        setTimeout(() => {
+                            startProfileWalkthrough(item.title, item.description);
+                        }, 500);
+                    } else {
+                        showWalkthrough(null, item.title, `${item.description}\n\nPlease update your profile information in the Profile Summary section.`, 'bottom',
+                            async () => {
+                                await fetch(`/api/onboarding/complete?userId=user-001&itemId=${itemId}`, {method: 'POST'});
+                                loadOnboarding();
+                            }
+                        );
+                    }
+                } else if (itemId === 'item-2') {
+                    // Explore Dashboard - Show informational walkthrough about key features
+                    const quickStats = document.querySelector('#nearbyFoodBanks')?.closest('.card');
+                    if (quickStats) {
+                        quickStats.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                        setTimeout(() => {
+                            showWalkthrough(
+                                quickStats,
+                                item.title,
+                                `${item.description}\n\nTake a look at the dashboard overview above. You can see:\n\n• Nearby Food Banks - Find food banks close to you\n• Available Donations - See food items available to request\n• Pending Requests - Track your food requests\n• Recent Activity - View your recent interactions\n\nFamiliarize yourself with these sections, then click "Done" below.`,
+                                'top',
+                                async () => {
+                                    await fetch(`/api/onboarding/complete?userId=user-001&itemId=${itemId}`, {method: 'POST'});
+                                    loadOnboarding();
+                                }
+                            );
+                        }, 400);
+                    } else {
+                        showWalkthrough(
+                            null,
+                            item.title,
+                            `${item.description}\n\nExplore the dashboard to see:\n\n• Quick stats showing nearby food banks and available donations\n• Your pending requests\n• Recent activity\n\nFamiliarize yourself with the dashboard layout, then click "Done" below.`,
+                            'bottom',
+                            async () => {
+                                await fetch(`/api/onboarding/complete?userId=user-001&itemId=${itemId}`, {method: 'POST'});
+                                loadOnboarding();
+                            }
+                        );
+                    }
+                } else if (itemId === 'item-3') {
+                    // First Request - Guide user to request a food item
+                    // Find the "Available Resources Near You" section
+                    const availableResourcesSection = document.querySelector('#availableResources');
+                    const requestButtons = availableResourcesSection 
+                        ? Array.from(availableResourcesSection.querySelectorAll('button[onclick*="requestItem"]'))
+                        : [];
+                    
+                    // Find the first available "Request Item" button that's not already requested
+                    const firstRequestButton = requestButtons.find(btn => {
+                        const text = btn.textContent.toLowerCase();
+                        return !text.includes('requested') && !btn.disabled;
+                    });
+                    
+                    if (firstRequestButton) {
+                        // Scroll to the available resources section
+                        const sectionHeader = document.querySelector('h5')?.parentElement?.closest('.card');
+                        const targetSection = availableResourcesSection?.closest('.card') || sectionHeader;
+                        
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                            
+                            // Wait for scroll to complete, then show walkthrough
+                            setTimeout(() => {
+                                showWalkthrough(
+                                    firstRequestButton,
+                                    'First Request',
+                                    `Click the "Request Item" button highlighted above to make your first request for this food item.\n\nAfter requesting an item, return to the Getting Started section and click Complete again.`,
+                                    'top',
+                                    null, // Don't auto-complete - user needs to actually request
+                                    firstRequestButton
+                                );
+                            }, 400);
+                        } else {
+                            showWalkthrough(
+                                firstRequestButton,
+                                'First Request',
+                                `Click the "Request Item" button above to make your first request. After requesting, return to the Getting Started section and click Complete again.`,
+                                'top',
+                                null
+                            );
+                        }
+                    } else {
+                        // No available request buttons found
+                        const availableSection = document.querySelector('#availableResources')?.closest('.card');
+                        if (availableSection) {
+                            availableSection.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                            setTimeout(() => {
+                                showWalkthrough(
+                                    availableSection,
+                                    'First Request',
+                                    `Look for available food items in the "Available Resources Near You" section above. Click "Request Item" on any available item to make your first request.\n\nAfter requesting an item, return to the Getting Started section and click Complete again.`,
+                                    'top',
+                                    null
+                                );
+                            }, 400);
+                        } else {
+                            showWalkthrough(
+                                null,
+                                'First Request',
+                                `To make your first request:\n1. Look for the "Available Resources Near You" section\n2. Find an available food item\n3. Click "Request Item" on that item\n\nAfter requesting an item, return here and click Complete again.`,
+                                'bottom',
+                                null
+                            );
+                        }
+                    }
+                } else {
+                    // Generic completion for other items
+                    showWalkthrough(
+                        null,
+                        item.title,
+                        `${item.description}\n\nClick "Got it!" to mark this as complete.`,
+                        'bottom',
+                        async () => {
+                            await fetch(`/api/onboarding/complete?userId=user-001&itemId=${itemId}`, {method: 'POST'});
+                            loadOnboarding();
+                        }
+                    );
+                }
+            } catch (e) { 
+                console.error('Failed to complete item:', e);
+                showWalkthrough(null, 'Error', 'Failed to process request. Please try again.', 'bottom', null);
+            }
+        }
+
+        function toggleOnboarding() {
+            document.getElementById('onboardingSection').style.display = 'none';
+        }
+
+        async function loadReputation() {
+            try {
+                const userId = 'user-001';
+                const res = await fetch(`/api/reputation/${userId}`);
+                const profile = await res.json();
+                document.getElementById('reputationScore').textContent = profile.reputationScore || 50;
+                const badgesDiv = document.getElementById('badgesList');
+                badgesDiv.innerHTML = '';
+                if (profile.badges && profile.badges.length > 0) {
+                    profile.badges.forEach(badge => {
+                        const span = document.createElement('span');
+                        span.className = 'badge bg-primary';
+                        span.textContent = badge.badgeName;
+                        badgesDiv.appendChild(span);
+                    });
+                } else {
+                    badgesDiv.innerHTML = '<p class="text-muted small">No badges yet. Complete actions to earn badges!</p>';
+                }
+            } catch (e) { console.error('Failed to load reputation:', e); }
+        }
+
+        async function loadReferralStats() {
+            try {
+                const userId = 'user-001';
+                const res = await fetch(`/api/referrals/stats/${userId}`);
+                const stats = await res.json();
+                document.getElementById('referralCredits').textContent = stats.availableCredits.toFixed(2);
+                document.getElementById('totalReferrals').textContent = stats.totalReferrals;
+                document.getElementById('successfulReferrals').textContent = stats.successfulReferrals;
+                
+                // Load or generate referral code
+                const referrals = await (await fetch(`/api/referrals/${userId}`)).json();
+                if (referrals.length > 0) {
+                    document.getElementById('referralCode').value = referrals[0].referralCode;
+                }
+            } catch (e) { console.error('Failed to load referral stats:', e); }
+        }
+
+        async function showReferralModal() {
+            const code = prompt('Enter referral code (or leave blank to generate):');
+            try {
+                const res = await fetch(`/api/referrals?referrerId=user-001&referralCode=${encodeURIComponent(code || '')}`, {method: 'POST'});
+                const referral = await res.json();
+                if (window.showNotification) {
+                    window.showNotification(`Referral created! Code: ${referral.referralCode}`, 'success');
+                }
+                loadReferralStats();
+            } catch (e) { console.error('Failed to create referral:', e); }
+        }
+
+        function copyReferralCode() {
+            const code = document.getElementById('referralCode').value;
+            navigator.clipboard.writeText(code);
+            if (window.showNotification) {
+                window.showNotification('Referral code copied!', 'success');
+            }
+        }
+
+        async function loadTaxReceipts() {
+            try {
+                const userId = 'user-001';
+                const res = await fetch(`/api/tax-receipts/${userId}`);
+                const receipts = await res.json();
+                const listDiv = document.getElementById('taxReceiptsList');
+                listDiv.innerHTML = '';
+                if (receipts.length > 0) {
+                    receipts.forEach(receipt => {
+                        const div = document.createElement('div');
+                        div.className = 'd-flex justify-content-between align-items-center mb-2 p-2 bg-secondary rounded';
+                        div.innerHTML = `
+                            <div>
+                                <strong>Tax Year ${receipt.taxYear}</strong><br>
+                                <small class="text-muted">$${receipt.totalDonationValue.toFixed(2)} · ${receipt.totalDonations} donations</small>
+                            </div>
+                            <a href="${receipt.pdfUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        `;
+                        listDiv.appendChild(div);
+                    });
+                } else {
+                    listDiv.innerHTML = '<p class="text-muted small">No tax receipts yet. Generate one after making donations!</p>';
+                }
+            } catch (e) { console.error('Failed to load tax receipts:', e); }
+        }
+
+        async function generateTaxReceipt() {
+            try {
+                const userId = 'user-001';
+                const taxYear = '2024';
+                
+                // Generate the receipt record (optional - for tracking)
+                try {
+                    await fetch(`/api/tax-receipts/generate?donorId=${encodeURIComponent(userId)}&taxYear=${encodeURIComponent(taxYear)}`, {method: 'POST'});
+                } catch (e) {
+                    console.log('Receipt record generation skipped:', e);
+                }
+                
+                // Download the PDF receipt
+                const filename = `${userId}-${taxYear}.pdf`;
+                const pdfUrl = `/receipts/${filename}`;
+                
+                // Create a temporary link and trigger download
+                const link = document.createElement('a');
+                link.href = pdfUrl;
+                link.download = filename;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                if (window.showNotification) {
+                    window.showNotification('Tax receipt downloaded successfully!', 'success');
+                }
+                
+                // Reload the receipts list
+                loadTaxReceipts();
+            } catch (e) { 
+                console.error('Failed to generate receipt:', e);
+                if (window.showNotification) {
+                    window.showNotification('Failed to download receipt. Please try again.', 'error');
+                }
+            }
+        }
+
+        async function loadContentHub() {
+            try {
+                const res = await fetch('/api/content-hub/resources?category=');
+                const resources = await res.json();
+                const itemsDiv = document.getElementById('contentHubItems');
+                itemsDiv.innerHTML = '';
+                resources.slice(0, 3).forEach(resource => {
+                    const item = document.createElement('a');
+                    item.href = resource.url;
+                    item.target = '_blank';
+                    item.className = 'list-group-item list-group-item-action bg-dark border-secondary';
+                    item.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="mb-1">${resource.title}</h6>
+                                <small class="text-muted">${resource.description}</small>
+                            </div>
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+                    `;
+                    itemsDiv.appendChild(item);
+                });
+            } catch (e) { console.error('Failed to load content hub:', e); }
+        }
+
+        function openContentHub() {
+            window.location.href = '/content-hub-demo.html';
         }
 
         function restoreRequestedItems() {
@@ -276,10 +1252,136 @@
         }
 
         function editProfile() {
-            window.location.href = 'individual-profile.html';
+            // Clean up any existing field listeners
+            profileWalkthroughFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    removeFieldListeners(field);
+                }
+            });
+            
+            // Load current profile data into the modal
+            const userNameEl = document.getElementById('userName');
+            const userEmailEl = document.getElementById('userEmail');
+            const userLocationEl = document.getElementById('userLocation');
+            const primaryNeedEl = document.getElementById('primaryNeed');
+            
+            const userName = userNameEl?.textContent?.trim() || '';
+            const userEmail = userEmailEl?.textContent?.trim() || '';
+            const userLocation = userLocationEl?.textContent?.trim() || '';
+            const primaryNeed = primaryNeedEl?.textContent?.trim() || '';
+            
+            // Populate form fields (only if values are meaningful, not "Loading...")
+            document.getElementById('profileName').value = userName && userName !== 'Loading...' ? userName : '';
+            document.getElementById('profileEmail').value = userEmail && userEmail !== 'Loading...' && userEmail !== 'No email provided' ? userEmail : '';
+            document.getElementById('profileLocation').value = userLocation && userLocation !== 'Loading...' && userLocation !== 'Not set' ? userLocation : '';
+            document.getElementById('profilePrimaryNeed').value = primaryNeed && primaryNeed !== 'Loading...' && primaryNeed !== 'Not set' ? primaryNeed : '';
+            
+            // Hide walkthrough if open (unless it's a profile walkthrough)
+            if (!currentWalkthrough || !currentWalkthrough._isProfileWalkthrough) {
+                hideWalkthrough();
+            }
+            
+            // Show modal
+            const modalElement = document.getElementById('editProfileModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modal.show();
+        }
+        
+        async function saveProfile() {
+            try {
+                const profileData = {
+                    name: document.getElementById('profileName').value,
+                    email: document.getElementById('profileEmail').value,
+                    phone: document.getElementById('profilePhone').value,
+                    location: document.getElementById('profileLocation').value,
+                    primaryNeed: document.getElementById('profilePrimaryNeed').value,
+                    bio: document.getElementById('profileBio').value
+                };
+                
+                // Validate required fields
+                if (!profileData.name || !profileData.email) {
+                    if (window.showNotification) {
+                        window.showNotification('Please fill in at least your name and email address.', 'error');
+                    } else {
+                        alert('Please fill in at least your name and email address.');
+                    }
+                    return;
+                }
+                
+                // Save to localStorage (matching loadUserData format)
+                const user = JSON.parse(localStorage.getItem('wastenaut_user') || '{}');
+                user.name = profileData.name;
+                user.email = profileData.email;
+                user.phone = profileData.phone;
+                user.address = profileData.location;
+                user.primaryNeed = profileData.primaryNeed;
+                user.bio = profileData.bio;
+                localStorage.setItem('wastenaut_user', JSON.stringify(user));
+                
+                // Update the display
+                document.getElementById('userName').textContent = profileData.name;
+                document.getElementById('userEmail').textContent = profileData.email || 'No email provided';
+                if (document.getElementById('userLocation')) {
+                    document.getElementById('userLocation').textContent = profileData.location || 'No address provided';
+                }
+                if (document.getElementById('primaryNeed')) {
+                    document.getElementById('primaryNeed').textContent = profileData.primaryNeed || 'Not specified';
+                }
+                
+                // TODO: Add API call to save profile to backend
+                // await fetch('/api/users/profile', { method: 'PUT', body: JSON.stringify(profileData), headers: {'Content-Type': 'application/json'} });
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                modal.hide();
+                
+                // Complete walkthrough if it was active
+                if (currentWalkthrough && currentWalkthrough._isProfileWalkthrough && profileWalkthroughOnComplete) {
+                    // Clean up field listeners
+                    profileWalkthroughFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            removeFieldListeners(field);
+                        }
+                    });
+                    // Complete the onboarding item
+                    profileWalkthroughOnComplete();
+                    hideWalkthrough();
+                } else {
+                    // If not in walkthrough mode, still complete the "Complete Profile" onboarding item
+                    // Check if profile has required fields filled
+                    if (profileData.name && profileData.email) {
+                        try {
+                            await fetch(`/api/onboarding/complete?userId=user-001&itemId=item-1`, {method: 'POST'});
+                            loadOnboarding();
+                        } catch (e) {
+                            console.error('Failed to complete onboarding item:', e);
+                        }
+                    }
+                }
+                
+                // Show success message
+                if (window.showNotification) {
+                    window.showNotification('Profile updated successfully!', 'success');
+                } else {
+                    alert('Profile updated successfully!');
+                }
+                
+                // TODO: Add API call to save profile
+                // await fetch('/api/users/profile', { method: 'PUT', body: JSON.stringify(profileData), headers: {'Content-Type': 'application/json'} });
+                
+            } catch (e) {
+                console.error('Failed to save profile:', e);
+                if (window.showNotification) {
+                    window.showNotification('Failed to save profile. Please try again.', 'error');
+                } else {
+                    alert('Failed to save profile. Please try again.');
+                }
+            }
         }
 
-        function requestItem(itemId) {
+        async function requestItem(itemId) {
             console.log('requestItem called with:', itemId);
             
             // Find the button that was clicked
@@ -298,6 +1400,8 @@
             
             // Store the requested item in localStorage
             const requestedItems = JSON.parse(localStorage.getItem('requestedItems') || '[]');
+            const isFirstRequest = requestedItems.length === 0;
+            
             if (!requestedItems.includes(itemId)) {
                 requestedItems.push(itemId);
                 localStorage.setItem('requestedItems', JSON.stringify(requestedItems));
@@ -313,6 +1417,20 @@
             const pendingCount = document.getElementById('pendingRequests');
             if (pendingCount) {
                 pendingCount.textContent = requestedItems.length;
+            }
+            
+            // If this is the first request, complete the "First Request" onboarding item
+            if (isFirstRequest) {
+                try {
+                    await fetch(`/api/onboarding/complete?userId=user-001&itemId=item-3`, {method: 'POST'});
+                    loadOnboarding();
+                    // Hide walkthrough if it's showing
+                    if (currentWalkthrough && currentWalkthrough.targetElement === clickedButton) {
+                        hideWalkthrough();
+                    }
+                } catch (e) {
+                    console.error('Failed to complete onboarding item:', e);
+                }
             }
         }
     </script>

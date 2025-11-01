@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Receipt Generation - WasteNaut</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../resources/styles/main.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="bi bi-receipt text-white fs-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="h3 mb-1 text-gradient">Tax Receipt Generation</h1>
+                        <p class="text-muted mb-0">IRS/CRA-compliant receipts, yearly summaries, donor statements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Generate Receipt -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-file-earmark-pdf me-2"></i>Generate Receipt
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Donor ID</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" id="donorId" value="donor-001">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tax Year</label>
+                            <select class="form-select bg-dark text-light border-secondary" id="taxYear">
+                                <option>2024</option>
+                                <option>2023</option>
+                                <option>2022</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary w-100 mb-3" onclick="generate()">
+                            <i class="bi bi-file-earmark-pdf me-2"></i>Generate Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Receipts -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-dark">
+                    <div class="card-header bg-dark border-bottom">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-ul me-2"></i>All Receipts for Donor
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="list" class="list-group list-group-flush">
+                            <div class="text-center py-5">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted mt-3">Loading receipts...</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary w-100 mt-3" onclick="loadAll()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../resources/scripts/main.js"></script>
+    <script src="../resources/scripts/auth.js"></script>
+    <script src="../resources/scripts/header-include.js"></script>
+    <script src="../resources/scripts/header.js"></script>
+    <script>
+        async function generate(){
+            const donorId = document.getElementById('donorId').value || 'donor-001';
+            const taxYear = document.getElementById('taxYear').value || '2024';
+            try {
+                // Generate the receipt record (optional - for tracking)
+                try {
+                    await fetch(`/api/tax-receipts/generate?donorId=${encodeURIComponent(donorId)}&taxYear=${encodeURIComponent(taxYear)}`, {method:'POST'});
+                } catch (e) {
+                    console.log('Receipt record generation skipped:', e);
+                }
+                
+                // Download the PDF receipt
+                const filename = `${donorId}-${taxYear}.pdf`;
+                const pdfUrl = `/receipts/${filename}`;
+                
+                // Create a temporary link and trigger download
+                const link = document.createElement('a');
+                link.href = pdfUrl;
+                link.download = filename;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                loadAll();
+            } catch (e) {
+                console.error('Error generating receipt:', e);
+                alert('Failed to generate receipt. Please try again.');
+            }
+        }
+        async function loadAll(){
+            const donorId = document.getElementById('donorId').value || 'donor-001';
+            try {
+                const list = await (await fetch(`/api/tax-receipts/${encodeURIComponent(donorId)}`)).json();
+                const ul = document.getElementById('list');
+                ul.innerHTML = '';
+                if (list.length === 0) {
+                    ul.innerHTML = '<div class="text-center py-5 text-muted"><i class="bi bi-inbox fs-1 mb-3"></i><p>No receipts found</p></div>';
+                    return;
+                }
+                for (const r of list){
+                    const li = document.createElement('div');
+                    li.className = 'list-group-item bg-dark border-secondary mb-2 rounded';
+                    li.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Tax Year ${r.taxYear}</h6>
+                                <p class="mb-0 small text-muted">
+                                    <i class="bi bi-cash me-1"></i>$${r.totalDonationValue.toFixed(2)} · 
+                                    <i class="bi bi-box me-1"></i>${r.totalDonations} donations
+                                </p>
+                            </div>
+                            <a href="${r.pdfUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        </div>
+                    `;
+                    ul.appendChild(li);
+                }
+            } catch (e) {
+                document.getElementById('list').innerHTML = '<div class="alert alert-danger">Error loading receipts: ' + e.message + '</div>';
+            }
+        }
+        window.addEventListener('DOMContentLoaded', loadAll);
+    </script>
+</body>
+</html>

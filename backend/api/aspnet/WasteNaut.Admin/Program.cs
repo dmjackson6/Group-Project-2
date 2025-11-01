@@ -5,8 +5,20 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using WasteNaut.Admin.Data;
 using WasteNaut.Admin.Services;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Initialize QuestPDF license at application startup
+try
+{
+    QuestPDF.Settings.License = LicenseType.Community;
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"⚠️  Warning: QuestPDF license initialization failed: {ex.Message}");
+    Console.WriteLine("   PDF generation may not work correctly.");
+}
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -89,15 +101,26 @@ builder.Services.AddSwaggerGen(c =>
 // Temporarily disabled due to database connection issues
 // builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-// Add Services
-// Temporarily disabled due to database connection issues
-// builder.Services.AddScoped<IAdminService, AdminService>();
-// builder.Services.AddScoped<IUserService, UserService>();
-// builder.Services.AddScoped<IOrganizationService, OrganizationService>();
-// builder.Services.AddScoped<IDonationService, DonationService>();
-// builder.Services.AddScoped<IReportService, ReportService>();
-// builder.Services.AddScoped<IMatchService, MatchService>();
-// builder.Services.AddScoped<IAuditService, AuditService>();
+// Add Services (demo in-memory services)
+builder.Services.AddSingleton<IOrchestrationService, OrchestrationService>();
+builder.Services.AddSingleton<ISchedulingService, SchedulingService>();
+builder.Services.AddSingleton<IAnalyticsService, AnalyticsService>();
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+builder.Services.AddSingleton<IMarketplaceService, MarketplaceService>();
+builder.Services.AddSingleton<IWaitlistService, WaitlistService>();
+builder.Services.AddSingleton<IMultiOrgService, MultiOrgService>();
+builder.Services.AddSingleton<IDisputeService, DisputeService>();
+builder.Services.AddSingleton<IOnboardingService, OnboardingService>();
+builder.Services.AddSingleton<IForecastingService, ForecastingService>();
+builder.Services.AddSingleton<IQualityScoringService, QualityScoringService>();
+builder.Services.AddSingleton<IRetentionService, RetentionService>();
+builder.Services.AddSingleton<ITaxReceiptService, TaxReceiptService>();
+builder.Services.AddSingleton<IABTestingService, ABTestingService>();
+builder.Services.AddSingleton<ISubscriptionService, SubscriptionService>();
+builder.Services.AddSingleton<ISponsorshipService, SponsorshipService>();
+builder.Services.AddSingleton<IReferralService, ReferralService>();
+builder.Services.AddSingleton<IReputationService, ReputationService>();
+builder.Services.AddSingleton<IContentHubService, ContentHubService>();
 
 var app = builder.Build();
 
@@ -131,8 +154,7 @@ app.UseAuthorization();
 app.MapGet("/", () => Results.Redirect("/index.html"));
 
 
-// Temporarily disabled due to database connection issues
-// app.MapControllers();
+app.MapControllers();
 
 // Auto-migrate database in development
 // Temporarily disabled due to database connection issues
